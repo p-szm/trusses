@@ -10,6 +10,7 @@
 
 int selected_particle_id = -1;
 int particles_number = 0;
+int bars_number = 0;
 
 float random(float range)
 {
@@ -30,24 +31,24 @@ Particle Particle::create(double a, double b, bool fixed)
     
     p.acceleration = Vector2d(0.0, 0.0);
     
-    if (particles.size() == 0)
+    if (particles_number == 0)
     {
         p.r01 = 0.0;
         p.r02 = 0.0;
     }
-    if (particles.size() == 1)
+    if (particles_number == 1)
     {
-        double r = (p.position - particles[particles.size()-1].position).abs();
+        double r = (p.position - particles[particles_number-1].position).abs();
         p.r01 = r;
         p.r02 = r;
         particles[0].r01 = r;
         particles[0].r02 = r;
     }
-    else if (particles.size() > 1)
+    else if (particles_number > 1)
     {
-        p.r01 = (p.position - particles[particles.size()-1].position).abs();
+        p.r01 = (p.position - particles[particles_number-1].position).abs();
         p.r02 = (p.position - particles[0].position).abs();
-        particles[particles.size()-1].r02 = p.r01;
+        particles[particles_number-1].r02 = p.r01;
         particles[0].r01 = p.r02;
     }
     
@@ -74,7 +75,41 @@ void Particle::unfix()
 
 ////
 
+Bar Bar::create(int id1, int id2)
+{
+    Bar b = Bar(id1, id2);
+    
+    b.k = 100.0;
+    b.lambda = 10.0;
+    b.r0 = b.length();
+    
+    b.id = particles_number;
+    bars_number++;
+    
+    return b;
+}
+
 double Bar::length()
 {
     return (particles[p1_id].position - particles[p2_id].position).abs();
+}
+
+Vector2d Bar::unit12()
+{
+    return (particles[p1_id].position - particles[p2_id].position).norm();
+}
+
+Vector2d Bar::unit21()
+{
+    return -unit12();
+}
+
+double Bar::extension_rate()
+{
+    return unit21() * (particles[p2_id].velocity - particles[p1_id].velocity);
+}
+
+double Bar::tension()
+{
+    return (length()-r0)*k;
 }

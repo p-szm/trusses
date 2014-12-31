@@ -36,11 +36,11 @@ double energy(std::vector<Particle>& particles)
 {
     return 0.0;
     
-    if (particles.size() == 0)
+    if (particles_number == 0)
         return 0.0;
     
     double total_energy;
-    for (int i = 0; i < particles.size(); i++)
+    for (int i = 0; i < particles_number; i++)
     {
         double kinetic_energy = 0.5 * particles[i].mass * particles[i].velocity.abs2();
         double potential_energy = (gravity) ? particles[i].mass * g * (particles[i].position.y + 1.0) : 0.0;
@@ -104,14 +104,23 @@ void integrate(Particle& p, Vector2d acc, double dt)
 
 void update_position(std::vector<Particle>& particles)
 {
-    size_t no_points = particles.size();
-    
-    for (int i = 0; i < no_points; i++)
+    // Zero the acceleration
+    for (int i = 0; i < particles_number; i++)
     {
-        if (particles[i].fixed || no_points == 1)
-            continue;
-        
         particles[i].acceleration = Vector2d(0.0, 0.0);
+    }
+    
+    for (int i = 0; i < bars_number; i++)
+    {
+        Vector2d acc = (bars[i].tension() + bars[i].extension_rate() * bars[i].lambda) * bars[i].unit21();
+        particles[bars[i].p1_id].acceleration += acc;
+        particles[bars[i].p2_id].acceleration += -acc;
+    }
+    
+    for (int i = 0; i < particles_number; i++)
+    {
+        if (particles[i].fixed)
+            continue;
         
         if (gravity)
             particles[i].acceleration = Vector2d(particles[i].acceleration.x, particles[i].acceleration.y - g);

@@ -29,9 +29,12 @@ struct Vector2d
     Vector2d operator- (const Vector2d &v) { return Vector2d(x-v.x, y-v.y); }
     double operator* (const Vector2d &v) { return (x*v.x + y*v.y); }
     friend Vector2d operator* (const double &a, const Vector2d &v) { return Vector2d(v.x*a, v.y*a); }
+    friend Vector2d operator- (const Vector2d &v) { return Vector2d(-v.x, -v.y); }
     double abs2() { return (x*x + y*y); }
     double abs() { return sqrt(this->abs2()); }
     Vector2d norm() { double s(this->abs()); if (s==0) return *this; else return Vector2d(x/s, y/s); }
+    Vector2d& operator+= (const Vector2d &v) { x+=v.x; y+=v.y; return *this; }
+    Vector2d& operator-= (const Vector2d &v) { x-=v.x; y-=v.y; return *this; }
 
 };
 
@@ -60,8 +63,18 @@ struct Bar
     int p2_id;
     double k;
     double lambda;
-    Bar(int id1, int id2) {p1_id = id1; p2_id = id2;}
     double length();
+    double extension_rate();
+    Vector2d unit12();
+    Vector2d unit21();
+    
+    static Bar create(int id1, int id2);
+    
+    int id;
+    double r0;
+    double tension();
+private:
+    Bar(int id1, int id2) {p1_id = id1; p2_id = id2;}
 };
 
 extern std::vector<Particle> particles;
@@ -69,5 +82,6 @@ extern std::vector<Bar> bars;
 
 extern int selected_particle_id;
 extern int particles_number;
+extern int bars_number;
 
 #endif /* defined(__Oscillator__particle__) */

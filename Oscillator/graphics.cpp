@@ -50,7 +50,7 @@ void display()
     glLoadIdentity();
     
     // Draw the particles
-    for (int i = 0; i < particles.size(); i++)
+    for (int i = 0; i < particles_number; i++)
     {
         draw_particle(particles[i]);
     }
@@ -62,7 +62,7 @@ void display()
     }
     
     // Draw the vectors
-    for (int i = 0; i < particles.size(); i++)
+    for (int i = 0; i < particles_number; i++)
     {
         if (!particles[i].fixed)
         {
@@ -99,7 +99,7 @@ void mouse_click (int button, int state, int x, int y)
     
     /*if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
     {
-        for (int i = 0; i < particles.size(); i++)
+        for (int i = 0; i < particles_number; i++)
         {
             Vector2d p_pos = particles[i].position;
             if (abs_d(x_coord - p_pos.x) < 0.1 && abs_d(y_coord - p_pos.y) < 0.1)
@@ -116,7 +116,7 @@ void mouse_click (int button, int state, int x, int y)
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
     {
         // Create the first particle
-        if (particles.size() == 0)
+        if (particles_number == 0)
         {
             Particle new_p = Particle::create(x_coord, y_coord, false);
             particles.push_back(new_p);
@@ -126,7 +126,7 @@ void mouse_click (int button, int state, int x, int y)
         {
             // See if any particle was clicked
             int clicked_particle_id = -1;
-            for (int i = 0; i < particles.size(); i++)
+            for (int i = 0; i < particles_number; i++)
             {
                 Vector2d p_pos = particles[i].position;
                 if (abs_d(x_coord - p_pos.x) < 0.1 && abs_d(y_coord - p_pos.y) < 0.1)
@@ -139,7 +139,7 @@ void mouse_click (int button, int state, int x, int y)
             // If a particle was clicked and one was already selected
             if (clicked_particle_id != -1 && selected_particle_id != -1)
             {
-                Bar new_b = Bar(clicked_particle_id, selected_particle_id);
+                Bar new_b = Bar::create(clicked_particle_id, selected_particle_id);
                 bars.push_back(new_b);
                 selected_particle_id = -1; // Unselect
             }
@@ -158,7 +158,7 @@ void mouse_click (int button, int state, int x, int y)
                 particles.push_back(new_p);
                 
                 // Create a new bar
-                Bar new_b = Bar(selected_particle_id, new_p.id);
+                Bar new_b = Bar::create(selected_particle_id, new_p.id);
                 bars.push_back(new_b);
                 
                 selected_particle_id = -1;
@@ -186,6 +186,7 @@ void key_pressed(unsigned char key, int x, int y)
         particles.clear();
         bars.clear();
         particles_number = 0;
+        bars_number = 0;
         std::cout << "Clear" << std::endl;
     }
     else if (key == 'g')
@@ -222,7 +223,7 @@ void mouse_passive(int x, int y)
     float x_coord = x * 2.0 / window_width - 1.0;
     float y_coord = -y * 2.0 / window_height + 1.0;
     
-    for (int i = 0; i < particles.size(); i++)
+    for (int i = 0; i < particles_number; i++)
     {
         Vector2d p_pos = particles[i].position;
         if (abs_d(x_coord - p_pos.x) < 0.1 && abs_d(y_coord - p_pos.y) < 0.1)
@@ -296,4 +297,9 @@ void draw_bar(Bar& b)
     s << b.length();
     
     glut_print(mid.x, mid.y, s.str());
+    
+    s.str("");
+    s << b.extension_rate();
+    
+    glut_print(mid.x, mid.y - 0.05, s.str());
 }
