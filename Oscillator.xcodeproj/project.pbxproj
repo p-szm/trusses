@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		CD74D2111A5214CC000B6F31 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD74D2101A5214CC000B6F31 /* main.cpp */; };
+		CD74D2181A52F51A000B6F31 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2171A52F51A000B6F31 /* OpenGL.framework */; };
+		CD74D21A1A52F520000B6F31 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2191A52F520000B6F31 /* GLUT.framework */; };
+		CD74D21D1A53126B000B6F31 /* particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD74D21B1A53126B000B6F31 /* particle.cpp */; };
+		CD74D2201A5314AE000B6F31 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD74D21E1A5314AE000B6F31 /* graphics.cpp */; };
+		CD74D2231A531983000B6F31 /* physics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD74D2211A531983000B6F31 /* physics.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +30,14 @@
 /* Begin PBXFileReference section */
 		CD74D20D1A5214CC000B6F31 /* Oscillator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Oscillator; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD74D2101A5214CC000B6F31 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		CD74D2171A52F51A000B6F31 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		CD74D2191A52F520000B6F31 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		CD74D21B1A53126B000B6F31 /* particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = particle.cpp; sourceTree = "<group>"; };
+		CD74D21C1A53126B000B6F31 /* particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = particle.h; sourceTree = "<group>"; };
+		CD74D21E1A5314AE000B6F31 /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graphics.cpp; sourceTree = "<group>"; };
+		CD74D21F1A5314AE000B6F31 /* graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = graphics.h; sourceTree = "<group>"; };
+		CD74D2211A531983000B6F31 /* physics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = physics.cpp; sourceTree = "<group>"; };
+		CD74D2221A531983000B6F31 /* physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = physics.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +45,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD74D21A1A52F520000B6F31 /* GLUT.framework in Frameworks */,
+				CD74D2181A52F51A000B6F31 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +56,8 @@
 		CD74D2041A5214CC000B6F31 = {
 			isa = PBXGroup;
 			children = (
+				CD74D2191A52F520000B6F31 /* GLUT.framework */,
+				CD74D2171A52F51A000B6F31 /* OpenGL.framework */,
 				CD74D20F1A5214CC000B6F31 /* Oscillator */,
 				CD74D20E1A5214CC000B6F31 /* Products */,
 			);
@@ -58,6 +75,12 @@
 			isa = PBXGroup;
 			children = (
 				CD74D2101A5214CC000B6F31 /* main.cpp */,
+				CD74D2211A531983000B6F31 /* physics.cpp */,
+				CD74D2221A531983000B6F31 /* physics.h */,
+				CD74D21B1A53126B000B6F31 /* particle.cpp */,
+				CD74D21C1A53126B000B6F31 /* particle.h */,
+				CD74D21E1A5314AE000B6F31 /* graphics.cpp */,
+				CD74D21F1A5314AE000B6F31 /* graphics.h */,
 			);
 			path = Oscillator;
 			sourceTree = "<group>";
@@ -119,6 +142,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD74D2111A5214CC000B6F31 /* main.cpp in Sources */,
+				CD74D21D1A53126B000B6F31 /* particle.cpp in Sources */,
+				CD74D2201A5314AE000B6F31 /* graphics.cpp in Sources */,
+				CD74D2231A531983000B6F31 /* physics.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +228,7 @@
 		CD74D2151A5214CC000B6F31 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -209,6 +236,7 @@
 		CD74D2161A5214CC000B6F31 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -232,6 +260,7 @@
 				CD74D2161A5214CC000B6F31 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
