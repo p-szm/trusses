@@ -32,7 +32,9 @@ void key_pressed(unsigned char key, int x, int y);
 void idle();
 void mouse_passive(int x, int y);
 
+void draw_particle(const Particle& p);
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b);
+void draw_bar(Bar& b);
 
 double abs_d(double x);
 

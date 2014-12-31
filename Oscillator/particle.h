@@ -49,10 +49,25 @@ struct Particle
     bool highlight;
     void fix();
     void unfix();
+    int id;
 private:
     Particle(double a, double b) {position.x = a; position.y = b;}
 };
 
+struct Bar
+{
+    int p1_id;
+    int p2_id;
+    double k;
+    double lambda;
+    Bar(int id1, int id2) {p1_id = id1; p2_id = id2;}
+    double length();
+};
+
 extern std::vector<Particle> particles;
+extern std::vector<Bar> bars;
+
+extern int selected_particle_id;
+extern int particles_number;
 
 #endif /* defined(__Oscillator__particle__) */

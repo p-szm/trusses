@@ -8,6 +8,9 @@
 
 #include "particle.h"
 
+int selected_particle_id = -1;
+int particles_number = 0;
+
 float random(float range)
 {
     float r = 1.0 * rand() / RAND_MAX;
@@ -18,6 +21,7 @@ Particle Particle::create(double a, double b, bool fixed)
 {
     Particle p(a, b);
     p.fixed = (fixed) ? true : false;
+    p.mass = 10.0;
     
     Vector2d velocity = (fixed) ? Vector2d(0.0, 0.0) : Vector2d(random(MAX_VELOCITY), random(MAX_VELOCITY));
     p.velocity = velocity;
@@ -26,7 +30,6 @@ Particle Particle::create(double a, double b, bool fixed)
     
     p.acceleration = Vector2d(0.0, 0.0);
     
-    p.mass = 10.0;
     if (particles.size() == 0)
     {
         p.r01 = 0.0;
@@ -50,6 +53,9 @@ Particle Particle::create(double a, double b, bool fixed)
     
     p.highlight = false;
     
+    p.id = particles_number;
+    particles_number++;
+    
     return p;
 }
 
@@ -63,4 +69,12 @@ void Particle::fix()
 void Particle::unfix()
 {
     fixed = false;
+}
+
+
+////
+
+double Bar::length()
+{
+    return (particles[p1_id].position - particles[p2_id].position).abs();
 }

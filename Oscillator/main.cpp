@@ -15,6 +15,7 @@
 #include <vector>
 
 std::vector<Particle> particles;
+std::vector<Bar> bars;
 
 int main(int argc, char * argv[])
 {

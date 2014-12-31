@@ -34,6 +34,8 @@ void update_time()
 
 double energy(std::vector<Particle>& particles)
 {
+    return 0.0;
+    
     if (particles.size() == 0)
         return 0.0;
     
@@ -102,12 +104,6 @@ void integrate(Particle& p, Vector2d acc, double dt)
 
 void update_position(std::vector<Particle>& particles)
 {
-    float k = 10.0;
-    float lambda = 10.0;
-    //float r0 = 0.2;
-    
-    spring_energy = 0.0;
-    
     size_t no_points = particles.size();
     
     for (int i = 0; i < no_points; i++)
@@ -115,29 +111,7 @@ void update_position(std::vector<Particle>& particles)
         if (particles[i].fixed || no_points == 1)
             continue;
         
-        Particle prev_p = (i > 0) ? particles[i-1] : particles[no_points-1];
-        Particle curr_p = particles[i];
-        Particle next_p = (i < no_points-1) ? particles[i+1] : particles[0];
-        
-        Vector2d r1 = curr_p.position - prev_p.position;
-        Vector2d r2 = curr_p.position - next_p.position;
-        
-        Vector2d unit_r1 = r1.norm();
-        Vector2d unit_r2 = r2.norm();
-        
-        Vector2d force1 = -k * (r1 - particles[i].r01 * unit_r1) - lambda * (curr_p.velocity * r1) * unit_r1;
-        Vector2d force2 = -k * (r2 - particles[i].r02 * unit_r2) - lambda * (curr_p.velocity * r2) * unit_r2;
-        
-        particles[i].acceleration = (1.0/particles[i].mass)*(force1 + force2);
-        
-        if (no_points == 2)
-        {
-            // There is only one link
-            particles[i].acceleration = 0.5 * particles[i].acceleration;
-            spring_energy += 0.25 * k * (r1 - particles[i].r01 * unit_r1).abs2();
-        }
-        else
-            spring_energy += 0.5 * k * (r1 - particles[i].r02 * unit_r1).abs2();
+        particles[i].acceleration = Vector2d(0.0, 0.0);
         
         if (gravity)
             particles[i].acceleration = Vector2d(particles[i].acceleration.x, particles[i].acceleration.y - g);
