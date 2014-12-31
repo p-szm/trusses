@@ -53,6 +53,8 @@ struct Particle
     void fix();
     void unfix();
     int id;
+    bool dragged;
+    Vector2d external_acceleration;
 private:
     Particle(double a, double b) {position.x = a; position.y = b;}
 };

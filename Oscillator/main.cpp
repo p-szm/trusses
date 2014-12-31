@@ -39,6 +39,7 @@ int main(int argc, char * argv[])
     glutKeyboardFunc(key_pressed);
     glutIdleFunc(idle);
     glutPassiveMotionFunc(mouse_passive);
+    glutMotionFunc(mouse_drag);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

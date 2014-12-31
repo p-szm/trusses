@@ -12,6 +12,11 @@
 int window_width = 500;
 int window_height = 500;
 
+bool accelerations = false;
+bool velocities = false;
+bool lengths = false;
+bool extension_rates = false;
+
 extern std::vector<Particle> particles;
 extern std::vector<Bar> bars;
 
@@ -67,10 +72,12 @@ void display()
         if (!particles[i].fixed)
         {
             // Draw the velocity vector
-            draw_vector(particles[i].velocity, particles[i].position, 0.0, 0.5, 0.0);
+            if (velocities)
+                draw_vector(particles[i].velocity, particles[i].position, 0.0, 0.5, 0.0);
             
             // Draw the acceleration vector
-            draw_vector(particles[i].acceleration, particles[i].position, 0.5, 0.0, 0.0);
+            if (accelerations)
+                draw_vector(particles[i].acceleration, particles[i].position, 0.5, 0.0, 0.0);
         }
     }
     
@@ -97,68 +104,69 @@ void mouse_click (int button, int state, int x, int y)
     float x_coord = x * 2.0 / window_width - 1.0;
     float y_coord = -y * 2.0 / window_height + 1.0;
     
-    /*if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+    // See if any particle was hit
+    int hit_particle_id = -1;
+    for (int i = 0; i < particles_number; i++)
     {
-        for (int i = 0; i < particles_number; i++)
+        Vector2d p_pos = particles[i].position;
+        if (abs_d(x_coord - p_pos.x) < 0.1 && abs_d(y_coord - p_pos.y) < 0.1 && button == GLUT_LEFT_BUTTON)
         {
-            Vector2d p_pos = particles[i].position;
-            if (abs_d(x_coord - p_pos.x) < 0.1 && abs_d(y_coord - p_pos.y) < 0.1)
-            {
-                if (particles[i].fixed)
-                    particles[i].unfix();
-                else
-                    particles[i].fix();
-                return;
-            }
+            hit_particle_id = particles[i].id;
+            break;
         }
-    }*/
+    }
     
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+    if (state == GLUT_UP)
     {
+        if (selected_particle_id != -1)
+        {
+            particles[selected_particle_id].external_acceleration = Vector2d(0.0, 0.0);
+            std::cout << "Unselected" << std::endl;
+        }
+        
+        if (hit_particle_id == -1)
+            selected_particle_id = -1;
+    }
+    
+    else if (state == GLUT_DOWN)
+    {
+        
         // Create the first particle
         if (particles_number == 0)
         {
-            Particle new_p = Particle::create(x_coord, y_coord, false);
-            particles.push_back(new_p);
+            if (button == GLUT_RIGHT_BUTTON)
+                particles.push_back(Particle::create(x_coord, y_coord, true));
+            else
+                particles.push_back(Particle::create(x_coord, y_coord, false));
         }
         // Particles already exist
         else
         {
-            // See if any particle was clicked
-            int clicked_particle_id = -1;
-            for (int i = 0; i < particles_number; i++)
-            {
-                Vector2d p_pos = particles[i].position;
-                if (abs_d(x_coord - p_pos.x) < 0.1 && abs_d(y_coord - p_pos.y) < 0.1)
-                {
-                    clicked_particle_id = particles[i].id;
-                    break;
-                }
-            }
-            
             // If a particle was clicked and one was already selected
-            if (clicked_particle_id != -1 && selected_particle_id != -1)
+            if (hit_particle_id != -1 && selected_particle_id != -1)
             {
-                Bar new_b = Bar::create(clicked_particle_id, selected_particle_id);
+                Bar new_b = Bar::create(hit_particle_id, selected_particle_id);
                 bars.push_back(new_b);
                 selected_particle_id = -1; // Unselect
             }
             
             // If a particle was clicked and no particle was selected
-            else if (clicked_particle_id != -1 && selected_particle_id == -1)
+            else if (hit_particle_id != -1 && selected_particle_id == -1)
             {
-                selected_particle_id = clicked_particle_id;
+                selected_particle_id = hit_particle_id;
             }
             
             // If a particle was selected but no particle clicked
-            else if (clicked_particle_id == -1 && selected_particle_id != -1)
+            else if (hit_particle_id == -1 && selected_particle_id != -1)
             {
                 // Create a new particle
-                Particle new_p = Particle::create(x_coord, y_coord, false);
-                particles.push_back(new_p);
+                if (button == GLUT_RIGHT_BUTTON)
+                    particles.push_back(Particle::create(x_coord, y_coord, true));
+                else
+                    particles.push_back(Particle::create(x_coord, y_coord, false));
                 
                 // Create a new bar
-                Bar new_b = Bar::create(selected_particle_id, new_p.id);
+                Bar new_b = Bar::create(selected_particle_id, particles_number-1);
                 bars.push_back(new_b);
                 
                 selected_particle_id = -1;
@@ -198,6 +206,22 @@ void key_pressed(unsigned char key, int x, int y)
     {
         std::exit(0);
     }
+    else if (key == 'a')
+    {
+        accelerations = !accelerations;
+    }
+    else if (key == 'v')
+    {
+        velocities = !velocities;
+    }
+    else if (key == 'l')
+    {
+        lengths = !lengths;
+    }
+    else if (key == 'e')
+    {
+        extension_rates = !extension_rates;
+    }
     
     glutPostRedisplay();
 }
@@ -235,10 +259,22 @@ void mouse_passive(int x, int y)
     }
 }
 
+void mouse_drag(int x, int y)
+{
+    float x_coord = x * 2.0 / window_width - 1.0;
+    float y_coord = -y * 2.0 / window_height + 1.0;
+    
+    if (selected_particle_id != -1)
+    {
+        Vector2d pos = particles[selected_particle_id].position;
+        particles[selected_particle_id].external_acceleration = Vector2d(x_coord - pos.x, y_coord - pos.y);
+    }
+}
+
 void draw_particle(const Particle& p)
 {
     Vector2d pos = p.position;
-    if (p.highlight)
+    if (p.highlight || selected_particle_id == p.id)
     {
         glPointSize(10);
         glBegin(GL_POINTS);
@@ -294,12 +330,16 @@ void draw_bar(Bar& b)
     
     std::stringstream s;
     s.precision(3);
-    s << b.length();
     
-    glut_print(mid.x, mid.y, s.str());
-    
-    s.str("");
-    s << b.extension_rate();
-    
-    glut_print(mid.x, mid.y - 0.05, s.str());
+    if (lengths)
+    {
+        s << b.length();
+        glut_print(mid.x, mid.y, s.str());
+    }
+    if (extension_rates)
+    {
+        s.str("");
+        s << b.extension_rate();
+        glut_print(mid.x, mid.y - 0.05, s.str());
+    }
 }

@@ -122,6 +122,8 @@ void update_position(std::vector<Particle>& particles)
         if (particles[i].fixed)
             continue;
         
+        particles[i].acceleration += particles[i].external_acceleration;
+        
         if (gravity)
             particles[i].acceleration = Vector2d(particles[i].acceleration.x, particles[i].acceleration.y - g);
         

@@ -24,12 +24,14 @@ Particle Particle::create(double a, double b, bool fixed)
     p.fixed = (fixed) ? true : false;
     p.mass = 10.0;
     
-    Vector2d velocity = (fixed) ? Vector2d(0.0, 0.0) : Vector2d(random(MAX_VELOCITY), random(MAX_VELOCITY));
+    //Vector2d velocity = (fixed) ? Vector2d(0.0, 0.0) : Vector2d(random(MAX_VELOCITY), random(MAX_VELOCITY));
+    Vector2d velocity = Vector2d(0.0, 0.0);
     p.velocity = velocity;
     
     p.prev_position = p.position - delta_t * p.velocity;
     
     p.acceleration = Vector2d(0.0, 0.0);
+    p.external_acceleration = Vector2d(0.0, 0.0);
     
     if (particles_number == 0)
     {
@@ -53,6 +55,7 @@ Particle Particle::create(double a, double b, bool fixed)
     }
     
     p.highlight = false;
+    p.dragged = false;
     
     p.id = particles_number;
     particles_number++;

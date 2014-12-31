@@ -31,6 +31,7 @@ void mouse_click (int button, int state, int x, int y);
 void key_pressed(unsigned char key, int x, int y);
 void idle();
 void mouse_passive(int x, int y);
+void mouse_drag(int x, int y);
 
 void draw_particle(const Particle& p);
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b);
