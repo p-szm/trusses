@@ -22,7 +22,7 @@ int main(int argc, char * argv[])
     glutInit(&argc, argv);
     
     // Setup for the new window
-    glutInitWindowPosition(200, 200);
+    glutInitWindowPosition(160, 80);
     glutInitWindowSize(window_width, window_height);
     glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
     

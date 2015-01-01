@@ -12,7 +12,7 @@
 unsigned long long int t = 0.0;
 unsigned long long int prev_t = 0.0;
 double delta_t = 0.0;
-double g = 1.0;
+double g = 10.0;
 double spring_energy = 0.0;
 double energy_absorption = 0.5;
 
@@ -135,17 +135,18 @@ void update_position(std::vector<Particle>& particles)
         particles[i].acceleration = Vector2d(0.0, 0.0);
     }
     
-    for (int j = 0; j < 3; j++)
+    int iterations = 10;
+    for (int j = 0; j < iterations; j++)
     {
-    for (int i = 0; i < bars_number; i++)
-    {
-        Bar* b = &bars[i];
-        double extension = b->length() - b->r0;
-        if (!particles[b->p1_id].fixed)
-            particles[b->p1_id].position += 0.5 * extension * b->unit21();
-        if (!particles[b->p2_id].fixed)
-            particles[b->p2_id].position += 0.5 * extension * b->unit12();
-    }
+        for (int i = 0; i < bars_number; i++)
+        {
+            Bar* b = &bars[i];
+            double extension = b->length() - b->r0;
+            if (!particles[b->p1_id].fixed)
+                particles[b->p1_id].position += 0.5 * extension * b->unit21();
+            if (!particles[b->p2_id].fixed)
+                particles[b->p2_id].position += 0.5 * extension * b->unit12();
+        }
     }
     
     for (int i = 0; i < particles_number; i++)

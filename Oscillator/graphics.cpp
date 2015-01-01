@@ -10,9 +10,10 @@
 #include <sstream>
 #include "save.h"
 #include "physics.h"
+#include <cmath>
 
-int window_width = 600;
-int window_height = 500;
+int window_width = 1400;
+int window_height = 900;
 
 bool accelerations = false;
 bool velocities = false;
@@ -23,10 +24,13 @@ bool ids = false;
 
 int min_click_dist = 8; // pixels
 
-double scale = 50.0; // pixels/metre
+double scale = 150.0; // pixels/metre
 
 int selected_particle_id = -1;
-bool control_key_down = false;
+
+bool snap = true;
+bool snapped = false;
+Vector2d snapped_point(0.0, 0.0);
 
 extern std::vector<Particle> particles;
 extern std::vector<Bar> bars;
@@ -117,6 +121,18 @@ void display()
         draw_wall(walls[i]);
     }
     
+    // Draw the snapped point
+    if (snap && snapped)
+    {
+        Vector2d pos_gl(snapped_point.x*2.0*scale/window_width, snapped_point.y*2.0*scale/window_height);
+        
+        glColor3f(1.0, 1.0, 1.0);
+        glPointSize(20);
+        glBegin(GL_POINTS);
+        glVertex2d(pos_gl.x, pos_gl.y);
+        glEnd();
+    }
+    
     display_fps(delta_t);
     display_energy();
     draw_gravity_indicator();
@@ -139,10 +155,22 @@ void mouse_click (int button, int state, int x, int y)
     // GLUT_LEFT_BUTTON, GLUT_MIDDLE_BUTTON, or GLUT_RIGHT_BUTTON
     // GLUT_UP or GLUT_DOWN
     
-    double x_px = x - window_width / 2.0;
-    double y_px = -y  + window_height / 2.0;
-    double x_metres = x_px / scale;
-    double y_metres = y_px / scale;
+    double x_px, y_px, x_metres, y_metres;
+    
+    if (snap && snapped)
+    {
+        x_metres = snapped_point.x;
+        y_metres = snapped_point.y;
+        x_px = x_metres * scale;
+        y_px = y_metres * scale;
+    }
+    else
+    {
+        x_px = x - window_width / 2.0;
+        y_px = -y  + window_height / 2.0;
+        x_metres = x_px / scale;
+        y_metres = y_px / scale;
+    }
     
     // See if any particle was hit
     int hit_particle_id = -1;
@@ -291,12 +319,31 @@ double abs_d(double x)
         return -x;
 }
 
+double round(double x)
+{
+    x += 0.5;
+    return floor(x);
+}
+
 void mouse_passive(int x, int y)
 {
     double x_px = x - window_width / 2.0;
     double y_px = -y  + window_height / 2.0;
-    //double x_metres = x_px / scale;
-    //double y_metres = y_px / scale;
+    double x_metres = x_px / scale;
+    double y_metres = y_px / scale;
+    
+    double closest_x = round(x_metres);
+    double closest_y = round(y_metres);
+    
+    if (abs_d(closest_x*scale-x_px) < min_click_dist && abs_d(closest_y*scale-y_px) < min_click_dist)
+    {
+        snapped = true;
+        snapped_point = Vector2d(closest_x, closest_y);
+    }
+    else
+    {
+        snapped = false;
+    }
     
     for (int i = 0; i < particles_number; i++)
     {
@@ -307,6 +354,11 @@ void mouse_passive(int x, int y)
         }
         else
             particles[i].highlight = false;
+    }
+    
+    if (snap)
+    {
+        
     }
 }
 
