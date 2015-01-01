@@ -97,9 +97,6 @@ Bar Bar::create(int id1, int id2)
     }
     
     Bar b = Bar(id1, id2);
-    
-    b.k = 1000.0;
-    b.lambda = 0.0;
     b.r0 = b.length();
     
     b.id = bars_number;
@@ -126,11 +123,6 @@ Vector2d Bar::unit21() const
 double Bar::extension_rate() const
 {
     return unit21() * (particles[p2_id].velocity - particles[p1_id].velocity);
-}
-
-double Bar::tension() const
-{
-    return (length()-r0)*k;
 }
 
 /////

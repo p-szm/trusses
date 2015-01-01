@@ -261,7 +261,7 @@ void key_pressed(unsigned char key, int x, int y)
     }
     else if (key == 'p')
     {
-        load("/Users/patrick/Desktop/save.txt");
+        load("/Users/patrick/Desktop/cantilever.txt");
     }
     else if (key == 'i')
     {
@@ -390,7 +390,19 @@ void draw_vector(Vector2d v, Vector2d start, float r, float g, float b)
 
 void draw_bar(const Bar& b)
 {
-    glColor3f(1.0, 1.0, 1.0);
+    double epsilon = (b.length() - b.r0)/b.r0;
+    if (epsilon > 1.0)
+        epsilon = 1.0;
+    else if (epsilon < -1.0)
+        epsilon = -1.0;
+    
+    int multiplier = 20;
+    
+    if (epsilon > 0.0)
+        glColor3f(1.0, 1.0-epsilon*multiplier, 1.0-epsilon*multiplier);
+    else
+        glColor3f(1.0+epsilon*multiplier, 1.0, 1.0);
+    
     glLineWidth(1.0);
     
     Vector2d start = particles[b.p1_id].position;

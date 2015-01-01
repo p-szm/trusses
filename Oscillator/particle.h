@@ -65,8 +65,6 @@ struct Bar
 {
     int p1_id;
     int p2_id;
-    double k;
-    double lambda;
     double length() const;
     double extension_rate() const;
     Vector2d unit12() const;

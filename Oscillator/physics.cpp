@@ -135,11 +135,17 @@ void update_position(std::vector<Particle>& particles)
         particles[i].acceleration = Vector2d(0.0, 0.0);
     }
     
+    for (int j = 0; j < 3; j++)
+    {
     for (int i = 0; i < bars_number; i++)
     {
-        Vector2d force = (bars[i].tension() + bars[i].extension_rate() * bars[i].lambda) * bars[i].unit21();
-        particles[bars[i].p1_id].acceleration += (1.0/particles[bars[i].p1_id].mass) * force;
-        particles[bars[i].p2_id].acceleration += -(1.0/particles[bars[i].p2_id].mass) * force;
+        Bar* b = &bars[i];
+        double extension = b->length() - b->r0;
+        if (!particles[b->p1_id].fixed)
+            particles[b->p1_id].position += 0.5 * extension * b->unit21();
+        if (!particles[b->p2_id].fixed)
+            particles[b->p2_id].position += 0.5 * extension * b->unit12();
+    }
     }
     
     for (int i = 0; i < particles_number; i++)
