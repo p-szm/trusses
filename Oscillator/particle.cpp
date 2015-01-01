@@ -8,7 +8,6 @@
 
 #include "particle.h"
 
-int selected_particle_id = -1;
 int particles_number = 0;
 int bars_number = 0;
 int walls_number = 0;
@@ -25,6 +24,9 @@ float random(float range)
 
 Particle Particle::create(double a, double b, bool fixed)
 {
+    // TODO
+    // Check if a particle of this id already exists
+    
     Particle p(a, b);
     p.fixed = (fixed) ? true : false;
     p.mass = 1.0;
@@ -65,8 +67,6 @@ Particle Particle::create(double a, double b, bool fixed)
     p.id = particles_number;
     particles_number++;
     
-    std::cout << "Created a particle at " << a << " " << b << std::endl;
-    
     return p;
 }
 
@@ -86,6 +86,10 @@ void Particle::unfix()
 
 Bar Bar::create(int id1, int id2)
 {
+    // TODO
+    // Check if this bar already exists (connecting two particles)
+    // Check if a bar of this id already exists
+    
     if (id1 == id2)
     {
         // TODO
@@ -98,7 +102,7 @@ Bar Bar::create(int id1, int id2)
     b.lambda = 0.0;
     b.r0 = b.length();
     
-    b.id = particles_number;
+    b.id = bars_number;
     bars_number++;
     
     return b;
@@ -131,9 +135,9 @@ double Bar::tension() const
 
 /////
 
-Wall Wall::create(double w, double h, Vector2d c)
+Wall Wall::create(Vector2d c, double w, double h)
 {
-    Wall wl = Wall(w, h, c);
+    Wall wl = Wall(c, w, h);
     
     wl.id = walls_number;
     walls_number ++;

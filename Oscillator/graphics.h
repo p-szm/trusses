@@ -32,7 +32,7 @@ void key_pressed(unsigned char key, int x, int y);
 void idle();
 void mouse_passive(int x, int y);
 void mouse_drag(int x, int y);
-void special_key(int key, int x, int y);
+void special_key_down(int key, int x, int y);
 
 void draw_particle(const Particle& p);
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b);
@@ -41,5 +41,7 @@ void draw_coords();
 void draw_wall(const Wall& w);
 
 double abs_d(double x);
+
+extern int selected_particle_id;
 
 #endif /* defined(__Oscillator__graphics__) */

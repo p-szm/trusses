@@ -11,11 +11,8 @@
 
 #include <iostream>
 
-void print_particles();
-void print_bars();
-void print_time();
-
 int load(std::string filename);
+void save(std::string filename);
 
 void reset();
 

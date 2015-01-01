@@ -8,48 +8,11 @@
 
 #include "save.h"
 #include "particle.h"
+#include "graphics.h"
 #include <time.h>
 #include <fstream>
 #include <sstream>
 #include <vector>
-
-void print_particles()
-{
-    if (particles_number == 0)
-    {
-        std::cout << "Nothing to save" << std::endl;
-        return;
-    }
-    
-    for (int i = 0; i < particles_number; i++)
-    {
-        std::cout << 'p' << particles[i].id << ' ' << particles[i].position;
-        if (particles[i].fixed == true)
-            std::cout << " f";
-        std::cout << std::endl;
-    }
-}
-
-void print_bars()
-{
-    for (int i = 0; i < bars_number; i++)
-    {
-        std::cout << 'b' << bars[i].id << ' ' << bars[i].p1_id << ' ' << bars[i].p2_id << std::endl;
-    }
-}
-
-void print_time()
-{
-    time_t rawtime;
-    struct tm * timeinfo;
-    
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
-    
-    //std::cout << asctime (timeinfo) << std::endl;
-    std::cout << timeinfo->tm_year + 1900 << '-' << timeinfo->tm_mon + 1 << '-' << timeinfo->tm_mday << ' ';
-    std::cout << timeinfo->tm_hour << ':' << timeinfo->tm_min << ':' << timeinfo->tm_sec << std::endl;
-}
 
 // struct tm {
 // int	tm_sec;		/* seconds after the minute [0-60] */
@@ -96,7 +59,6 @@ int load(std::string filename)
 {
     // TODO
     // Check if the file is valid
-    // Load fixed particles
     
     // Remove all the existing particles and bars
     reset();
@@ -126,6 +88,15 @@ int load(std::string filename)
             particles.push_back(Particle::create(v[0], v[1], false));
         }
         
+        // A fixed particle
+        else if (line.substr(0, 1) == "f")
+        {
+            std::vector<double> v;
+            read_numbers(line, v);
+            
+            particles.push_back(Particle::create(v[0], v[1], true));
+        }
+        
         // A bar
         else if (line.substr(0, 1) == "b")
         {
@@ -133,6 +104,15 @@ int load(std::string filename)
             read_numbers(line, v);
             
             bars.push_back(Bar::create(v[0], v[1]));
+        }
+        
+        // A wall
+        else if (line.substr(0, 1) == "w")
+        {
+            std::vector<int> v;
+            read_numbers(line, v);
+            
+            walls.push_back(Wall::create(Vector2d(v[0], v[1]), v[2], v[3]));
         }
     }
     
@@ -142,11 +122,59 @@ int load(std::string filename)
     return 0;
 }
 
+void save(std::string filename)
+{
+    // Open the file
+    std::ofstream file(filename);
+    
+    // Print time
+    time_t rawtime;
+    struct tm * timeinfo;
+    
+    time ( &rawtime );
+    timeinfo = localtime ( &rawtime );
+    
+    //std::cout << asctime (timeinfo) << std::endl;
+    file << timeinfo->tm_year + 1900 << '-' << timeinfo->tm_mon + 1 << '-' << timeinfo->tm_mday << ' ';
+    file << timeinfo->tm_hour << ':' << timeinfo->tm_min << ':' << timeinfo->tm_sec << std::endl << std::endl;
+    
+    // Print particles
+    for (int i = 0; i < particles_number; i++)
+    {
+        file << 'p' << particles[i].id << ' ' << particles[i].position;
+        if (particles[i].fixed == true)
+            file << " f";
+        file << std::endl;
+    }
+    file << std::endl;
+    
+    // Print bars
+    for (int i = 0; i < bars_number; i++)
+    {
+        file << 'b' << bars[i].id << ' ' << bars[i].p1_id << ' ' << bars[i].p2_id << std::endl;
+    }
+    file << std::endl;
+    
+    // Print walls
+    for (int i = 0; i < walls_number; i++)
+    {
+        file << 'w' << walls[i].id << ' ' << walls[i].centre << ' ' << walls[i].width << ' ' << walls[i].height << std::endl;
+    }
+    file << std::endl;
+    
+    // Close the file
+    file.close();
+}
+
 void reset()
 {
     particles.clear();
     bars.clear();
+    walls.clear();
+    
     particles_number = 0;
     bars_number = 0;
+    walls_number = 0;
+    
     selected_particle_id = -1;
 }

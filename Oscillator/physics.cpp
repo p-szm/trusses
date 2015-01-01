@@ -74,15 +74,10 @@ void check_boundaries(Particle& p)
         // If the particle entered the wall
         if (pos.x >= wall_left && pos.x <= wall_right && pos.y >= wall_bottom && pos.y <= wall_top)
         {
-            // Particle penetrated the top wall
-            if (prev_pos.y >= wall_top && pos.y <= wall_top)
-            {
-                p.position.y = wall_top;
-                p.velocity = Vector2d(eng_regained_par*vel.x, -eng_regained_perp*vel.y);
-            }
+            
             
             // Particle penetrated the bottom wall
-            else if (prev_pos.y <= wall_bottom && pos.y >= wall_bottom)
+            if (prev_pos.y <= wall_bottom && pos.y >= wall_bottom)
             {
                 p.position.y = wall_bottom;
                 p.velocity = Vector2d(eng_regained_par*vel.x, -eng_regained_perp*vel.y);
@@ -96,10 +91,17 @@ void check_boundaries(Particle& p)
             }
             
             // Particle penetrated the right wall
-            else
+            else if (prev_pos.x >= wall_right && pos.x <= wall_right)
             {
                 p.position.x = wall_right;
                 p.velocity = Vector2d(-eng_regained_perp*vel.x, eng_regained_par*vel.y);
+            }
+            
+            // Particle penetrated the top wall
+            else
+            {
+                p.position.y = wall_top;
+                p.velocity = Vector2d(eng_regained_par*vel.x, -eng_regained_perp*vel.y);
             }
             
             // So it doesn't break the Verlet integrator

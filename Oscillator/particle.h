@@ -86,8 +86,8 @@ struct Wall
     double width;
     double height;
     Vector2d centre;
-    Wall(double w, double h, Vector2d c) {width = w; height = h; centre = c;}
-    static Wall create(double w, double h, Vector2d c);
+    Wall(Vector2d c, double w, double h) {width = w; height = h; centre = c;}
+    static Wall create(Vector2d c, double w, double h);
     
     int id;
 };
@@ -96,7 +96,6 @@ extern std::vector<Particle> particles;
 extern std::vector<Bar> bars;
 extern std::vector<Wall> walls;
 
-extern int selected_particle_id;
 extern int particles_number;
 extern int bars_number;
 extern int walls_number;

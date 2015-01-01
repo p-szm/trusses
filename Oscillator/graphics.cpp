@@ -25,6 +25,9 @@ int min_click_dist = 8; // pixels
 
 double scale = 50.0; // pixels/metre
 
+int selected_particle_id = -1;
+bool control_key_down = false;
+
 extern std::vector<Particle> particles;
 extern std::vector<Bar> bars;
 
@@ -166,61 +169,54 @@ void mouse_click (int button, int state, int x, int y)
     
     else if (state == GLUT_DOWN)
     {
-        
-        // Create the first particle
-        if (particles_number == 0)
+
+        // If a particle was clicked and one was already selected
+        if (hit_particle_id != -1 && selected_particle_id != -1)
         {
+            Bar new_b = Bar::create(hit_particle_id, selected_particle_id);
+            bars.push_back(new_b);
+            selected_particle_id = -1; // Unselect
+        }
+        
+        // If a particle was clicked and no particle was selected
+        else if (hit_particle_id != -1 && selected_particle_id == -1)
+        {
+            selected_particle_id = hit_particle_id;
+        }
+        
+        // If a particle was selected but no particle clicked
+        else if (hit_particle_id == -1 && selected_particle_id != -1)
+        {
+            // Create a new particle
             if (button == GLUT_RIGHT_BUTTON)
                 particles.push_back(Particle::create(x_metres, y_metres, true));
             else
                 particles.push_back(Particle::create(x_metres, y_metres, false));
+            
+            // Create a new bar
+            Bar new_b = Bar::create(selected_particle_id, particles_number-1);
+            bars.push_back(new_b);
+            
+            selected_particle_id = -1;
         }
-        // Particles already exist
+        
+        // A click on an empty space
         else
         {
-            // If a particle was clicked and one was already selected
-            if (hit_particle_id != -1 && selected_particle_id != -1)
+            /*if (GLUT_ACTIVE_CTRL)
             {
-                Bar new_b = Bar::create(hit_particle_id, selected_particle_id);
-                bars.push_back(new_b);
-                selected_particle_id = -1; // Unselect
+                walls.push_back(Wall::create(Vector2d(x_metres, y_metres), 1.0, 1.0));
+                std::cout << 1 << std::endl;
             }
             
-            // If a particle was clicked and no particle was selected
-            else if (hit_particle_id != -1 && selected_particle_id == -1)
-            {
-                selected_particle_id = hit_particle_id;
-            }
-            
-            // If a particle was selected but no particle clicked
-            else if (hit_particle_id == -1 && selected_particle_id != -1)
-            {
-                // Create a new particle
-                if (button == GLUT_RIGHT_BUTTON)
-                    particles.push_back(Particle::create(x_metres, y_metres, true));
-                else
-                    particles.push_back(Particle::create(x_metres, y_metres, false));
-                
-                // Create a new bar
-                Bar new_b = Bar::create(selected_particle_id, particles_number-1);
-                bars.push_back(new_b);
-                
-                selected_particle_id = -1;
-            }
+            else*/ if (button == GLUT_RIGHT_BUTTON)
+                particles.push_back(Particle::create(x_metres, y_metres, true));
+            else
+                particles.push_back(Particle::create(x_metres, y_metres, false));
         }
         
         glutPostRedisplay();
     }
-    
-    /*else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
-    {
-        Particle new_p = Particle::create(x_coord, y_coord, true);
-        particles.push_back(new_p);
-        
-        particles.push_back(new_p);
-        
-        glutPostRedisplay();
-    }*/
 }
 
 void key_pressed(unsigned char key, int x, int y)
@@ -261,9 +257,7 @@ void key_pressed(unsigned char key, int x, int y)
     }
     else if (key == 's')
     {
-        print_time();
-        print_particles();
-        print_bars();
+        save("/Users/patrick/Desktop/test_save.txt");
     }
     else if (key == 'p')
     {
@@ -275,7 +269,7 @@ void key_pressed(unsigned char key, int x, int y)
     }
     else if (key == 'w')
     {
-        walls.push_back(Wall::create(2, 0.3, Vector2d(0.0, -0.5)));
+        walls.push_back(Wall::create(Vector2d(0.0, -1.0), 10, 0.1));
     }
     
     glutPostRedisplay();
@@ -328,7 +322,7 @@ void mouse_drag(int x, int y)
     }
 }
 
-void special_key(int key, int x, int y)
+void special_key_down(int key, int x, int y)
 {
     if (key == GLUT_KEY_UP)
     {
