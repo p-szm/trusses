@@ -88,7 +88,7 @@ void display()
     }
     
     // Draw the bars
-    for (int i = 0; i < bars.size(); i++)
+    for (int i = 0; i < bars_number; i++)
     {
         draw_bar(bars[i]);
     }
@@ -106,6 +106,12 @@ void display()
             if (accelerations)
                 draw_vector(particles[i].acceleration, particles[i].position, 0.5, 0.0, 0.0);
         }
+    }
+    
+    // Draw the walls
+    for (int i = 0; i < walls_number; i++)
+    {
+        draw_wall(walls[i]);
     }
     
     display_fps(delta_t);
@@ -267,6 +273,10 @@ void key_pressed(unsigned char key, int x, int y)
     {
         ids = !ids;
     }
+    else if (key == 'w')
+    {
+        walls.push_back(Wall::create(2, 0.3, Vector2d(0.0, -0.5)));
+    }
     
     glutPostRedisplay();
 }
@@ -384,7 +394,7 @@ void draw_vector(Vector2d v, Vector2d start, float r, float g, float b)
     glColor3f(1.0, 1.0, 1.0);
 }
 
-void draw_bar(Bar& b)
+void draw_bar(const Bar& b)
 {
     glColor3f(1.0, 1.0, 1.0);
     glLineWidth(1.0);
@@ -450,5 +460,18 @@ void draw_coords()
         glVertex2f(-i*2.0*scale/window_width, 2.0*scale_size/window_height);
     }
     
+    glEnd();
+}
+
+void draw_wall(const Wall& w)
+{
+    glColor3f(1.0, 1.0, 1.0);
+    glLineWidth(1.0);
+    
+    glBegin(GL_LINE_LOOP);
+    glVertex2f((w.centre.x-w.width/2.0)*2.0*scale/window_width, (w.centre.y+w.height/2.0)*2.0*scale/window_height);
+    glVertex2f((w.centre.x+w.width/2.0)*2.0*scale/window_width, (w.centre.y+w.height/2.0)*2.0*scale/window_height);
+    glVertex2f((w.centre.x+w.width/2.0)*2.0*scale/window_width, (w.centre.y-w.height/2.0)*2.0*scale/window_height);
+    glVertex2f((w.centre.x-w.width/2.0)*2.0*scale/window_width, (w.centre.y-w.height/2.0)*2.0*scale/window_height);
     glEnd();
 }

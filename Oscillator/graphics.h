@@ -36,8 +36,9 @@ void special_key(int key, int x, int y);
 
 void draw_particle(const Particle& p);
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b);
-void draw_bar(Bar& b);
+void draw_bar(const Bar& b);
 void draw_coords();
+void draw_wall(const Wall& w);
 
 double abs_d(double x);
 

@@ -11,9 +11,11 @@
 int selected_particle_id = -1;
 int particles_number = 0;
 int bars_number = 0;
+int walls_number = 0;
 
 std::vector<Particle> particles;
 std::vector<Bar> bars;
+std::vector<Wall> walls;
 
 float random(float range)
 {
@@ -25,7 +27,7 @@ Particle Particle::create(double a, double b, bool fixed)
 {
     Particle p(a, b);
     p.fixed = (fixed) ? true : false;
-    p.mass = 10.0;
+    p.mass = 1.0;
     
     //Vector2d velocity = (fixed) ? Vector2d(0.0, 0.0) : Vector2d(random(MAX_VELOCITY), random(MAX_VELOCITY));
     Vector2d velocity = Vector2d(0.0, 0.0);
@@ -92,8 +94,8 @@ Bar Bar::create(int id1, int id2)
     
     Bar b = Bar(id1, id2);
     
-    b.k = 200.0;
-    b.lambda = 50.0;
+    b.k = 1000.0;
+    b.lambda = 0.0;
     b.r0 = b.length();
     
     b.id = particles_number;
@@ -102,27 +104,39 @@ Bar Bar::create(int id1, int id2)
     return b;
 }
 
-double Bar::length()
+double Bar::length() const
 {
     return (particles[p1_id].position - particles[p2_id].position).abs();
 }
 
-Vector2d Bar::unit12()
+Vector2d Bar::unit12() const
 {
     return (particles[p1_id].position - particles[p2_id].position).norm();
 }
 
-Vector2d Bar::unit21()
+Vector2d Bar::unit21() const
 {
     return -unit12();
 }
 
-double Bar::extension_rate()
+double Bar::extension_rate() const
 {
     return unit21() * (particles[p2_id].velocity - particles[p1_id].velocity);
 }
 
-double Bar::tension()
+double Bar::tension() const
 {
     return (length()-r0)*k;
+}
+
+/////
+
+Wall Wall::create(double w, double h, Vector2d c)
+{
+    Wall wl = Wall(w, h, c);
+    
+    wl.id = walls_number;
+    walls_number ++;
+    
+    return wl;
 }

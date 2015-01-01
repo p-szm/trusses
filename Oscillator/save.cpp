@@ -82,7 +82,6 @@ void read_numbers(std::string str, std::vector<T> & target_v)
         if (s >> n)
         {
             numbers.push_back(n);
-            std::cout << n << std::endl;
         }
     }
     
