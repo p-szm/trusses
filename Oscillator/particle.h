@@ -9,7 +9,7 @@
 #ifndef __Oscillator__particle__
 #define __Oscillator__particle__
 
-#include <stdio.h>
+#include <iostream>
 #include <random>
 
 #define MAX_VELOCITY 0.1

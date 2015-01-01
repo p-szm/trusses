@@ -60,6 +60,8 @@ Particle Particle::create(double a, double b, bool fixed)
     p.id = particles_number;
     particles_number++;
     
+    std::cout << "Created a particle at " << a << " " << b << std::endl;
+    
     return p;
 }
 

@@ -12,6 +12,7 @@
 #include <iostream>
 #include <sys/time.h>
 #include "particle.h"
+#include "graphics.h"
 
 extern unsigned long long int t;
 extern unsigned long long int prev_t;

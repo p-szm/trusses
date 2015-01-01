@@ -11,8 +11,9 @@
 unsigned long long int t = 0.0;
 unsigned long long int prev_t = 0.0;
 double delta_t = 0.0;
-double g = 1.0;
+double g = 50.0;
 double spring_energy = 0.0;
+double energy_absorption = 0.5;
 
 bool euler = false;
 bool gravity = false;
@@ -56,31 +57,39 @@ void check_boundaries(Particle& p)
 {
     Vector2d vel = p.velocity;
     
-    if (p.position.x >= 1.0)
+    double min_x = -window_width/2.0;
+    double max_x = window_width/2.0;
+    double min_y = -window_height/2.0;
+    double max_y = window_height/2.0;
+    
+    double eng_regained_perp = 1 - energy_absorption;
+    double eng_regained_par = 1 - 0.1*energy_absorption;
+    
+    if (p.position.x >= max_x)
     {
-        p.position.x = 1.0;
-        p.velocity = Vector2d(-0.9*vel.x, 0.99*vel.y);
+        p.position.x = max_x;
+        p.velocity = Vector2d(-eng_regained_perp*vel.x, eng_regained_par*vel.y);
         p.prev_position = p.position - delta_t * p.velocity;
     }
     
-    else if (p.position.x <= -1.0)
+    else if (p.position.x <= min_x)
     {
-        p.position.x = -1.0;
-        p.velocity = Vector2d(-0.9*vel.x, 0.99*vel.y);
+        p.position.x = min_x;
+        p.velocity = Vector2d(-eng_regained_perp*vel.x, eng_regained_par*vel.y);
         p.prev_position = p.position - delta_t * p.velocity;
     }
     
-    if (p.position.y >= 1.0)
+    if (p.position.y >= max_y)
     {
-        p.position.y = 1.0;
-        p.velocity = Vector2d(0.99*vel.x, -0.9*vel.y);
+        p.position.y = max_y;
+        p.velocity = Vector2d(eng_regained_par*vel.x, -eng_regained_perp*vel.y);
         p.prev_position = p.position - delta_t * p.velocity;
     }
     
-    else if (p.position.y <= -1.0)
+    else if (p.position.y <= min_y)
     {
-        p.position.y = -1.0;
-        p.velocity = Vector2d(0.99*vel.x, -0.9*vel.y);
+        p.position.y = min_y;
+        p.velocity = Vector2d(eng_regained_par*vel.x, -eng_regained_perp*vel.y);
         p.prev_position = p.position - delta_t * p.velocity;
     }
 }

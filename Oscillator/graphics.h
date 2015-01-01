@@ -24,6 +24,7 @@ extern int window_height;
 void glut_print (float x, float y, std::string s);
 void display_fps(double dt);
 void display_energy();
+void draw_gravity_indicator();
 
 void display();
 void reshape(int width, int height);
