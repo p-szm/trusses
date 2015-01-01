@@ -16,7 +16,6 @@
 #include <vector>
 
 #include "particle.h"
-#include "physics.h"
 
 extern int window_width;
 extern int window_height;
@@ -33,10 +32,12 @@ void key_pressed(unsigned char key, int x, int y);
 void idle();
 void mouse_passive(int x, int y);
 void mouse_drag(int x, int y);
+void special_key(int key, int x, int y);
 
 void draw_particle(const Particle& p);
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b);
 void draw_bar(Bar& b);
+void draw_coords();
 
 double abs_d(double x);
 

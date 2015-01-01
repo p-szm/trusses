@@ -35,6 +35,8 @@ struct Vector2d
     Vector2d norm() { double s(this->abs()); if (s==0) return *this; else return Vector2d(x/s, y/s); }
     Vector2d& operator+= (const Vector2d &v) { x+=v.x; y+=v.y; return *this; }
     Vector2d& operator-= (const Vector2d &v) { x-=v.x; y-=v.y; return *this; }
+    
+    friend std::ostream& operator << (std::ostream &out, const Vector2d &v) { out << v.x << ' ' << v.y; return out; }
 
 };
 

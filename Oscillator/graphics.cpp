@@ -8,6 +8,8 @@
 
 #include "graphics.h"
 #include <sstream>
+#include "save.h"
+#include "physics.h"
 
 int window_width = 600;
 int window_height = 500;
@@ -16,8 +18,12 @@ bool accelerations = false;
 bool velocities = false;
 bool lengths = false;
 bool extension_rates = false;
+bool coords = true;
+bool ids = false;
 
-int min_click_dist = 8;
+int min_click_dist = 8; // pixels
+
+double scale = 50.0; // pixels/metre
 
 extern std::vector<Particle> particles;
 extern std::vector<Bar> bars;
@@ -27,33 +33,39 @@ void glut_print (float x, float y, std::string s)
 {
     unsigned short i;
     
-    glRasterPos2f(x*2.0/window_width, y*2.0/window_height);
+    glRasterPos2f(x*2.0*scale/window_width, y*2.0*scale/window_height);
     for (i = 0; i < s.length(); i++) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, s[i]);
 }
 
 void display_fps(double dt)
 {
+    glColor3f(1.0, 1.0, 1.0);
+    
     std::ostringstream s;
     s << "fps: " << int(1/dt);
-    glut_print(-window_width/2.0+30, -window_height/2.0+20, s.str());
+    glut_print((-window_width/2.0+30)/scale, (-window_height/2.0+20)/scale, s.str());
 }
 
 void display_energy()
 {
+    glColor3f(1.0, 1.0, 1.0);
+    
     std::ostringstream s;
     s.precision(3);
     s << "Energy: " << energy(particles);
-    glut_print(window_width/2.0-60, -window_height/2.0+20, s.str());
+    glut_print((window_width/2.0-60)/scale, (-window_height/2.0+20)/scale, s.str());
 }
 
 void draw_gravity_indicator()
 {
+    glColor3f(1.0, 1.0, 1.0);
+    
     std::string s;
     if (gravity)
         s = "Gravity ON";
     else
        s = "Gravity OFF";
-    glut_print(-window_width/2.0+20, window_height/2.0-20, s);
+    glut_print((-window_width/2.0+20)/scale, (window_height/2.0-20)/scale, s);
 }
 
 void display()
@@ -65,6 +77,9 @@ void display()
     glMatrixMode(GL_MODELVIEW);
     
     glLoadIdentity();
+    
+    if (coords)
+        draw_coords();
     
     // Draw the particles
     for (int i = 0; i < particles_number; i++)
@@ -115,15 +130,17 @@ void mouse_click (int button, int state, int x, int y)
     // GLUT_LEFT_BUTTON, GLUT_MIDDLE_BUTTON, or GLUT_RIGHT_BUTTON
     // GLUT_UP or GLUT_DOWN
     
-    float x_coord = x - window_width / 2.0;
-    float y_coord = -y  + window_height / 2.0;
+    double x_px = x - window_width / 2.0;
+    double y_px = -y  + window_height / 2.0;
+    double x_metres = x_px / scale;
+    double y_metres = y_px / scale;
     
     // See if any particle was hit
     int hit_particle_id = -1;
     for (int i = 0; i < particles_number; i++)
     {
         Vector2d p_pos = particles[i].position;
-        if (abs_d(x_coord - p_pos.x) < min_click_dist && abs_d(y_coord - p_pos.y) < min_click_dist && button == GLUT_LEFT_BUTTON)
+        if (abs_d(x_px - p_pos.x*scale) < min_click_dist && abs_d(y_px - p_pos.y*scale) < min_click_dist && button == GLUT_LEFT_BUTTON)
         {
             hit_particle_id = particles[i].id;
             break;
@@ -135,7 +152,6 @@ void mouse_click (int button, int state, int x, int y)
         if (selected_particle_id != -1)
         {
             particles[selected_particle_id].external_acceleration = Vector2d(0.0, 0.0);
-            std::cout << "Unselected" << std::endl;
         }
         
         if (hit_particle_id == -1)
@@ -149,9 +165,9 @@ void mouse_click (int button, int state, int x, int y)
         if (particles_number == 0)
         {
             if (button == GLUT_RIGHT_BUTTON)
-                particles.push_back(Particle::create(x_coord, y_coord, true));
+                particles.push_back(Particle::create(x_metres, y_metres, true));
             else
-                particles.push_back(Particle::create(x_coord, y_coord, false));
+                particles.push_back(Particle::create(x_metres, y_metres, false));
         }
         // Particles already exist
         else
@@ -175,9 +191,9 @@ void mouse_click (int button, int state, int x, int y)
             {
                 // Create a new particle
                 if (button == GLUT_RIGHT_BUTTON)
-                    particles.push_back(Particle::create(x_coord, y_coord, true));
+                    particles.push_back(Particle::create(x_metres, y_metres, true));
                 else
-                    particles.push_back(Particle::create(x_coord, y_coord, false));
+                    particles.push_back(Particle::create(x_metres, y_metres, false));
                 
                 // Create a new bar
                 Bar new_b = Bar::create(selected_particle_id, particles_number-1);
@@ -205,11 +221,7 @@ void key_pressed(unsigned char key, int x, int y)
 {
     if (key == 'r')
     {
-        particles.clear();
-        bars.clear();
-        particles_number = 0;
-        bars_number = 0;
-        selected_particle_id = -1;
+        reset();
         std::cout << "Clear" << std::endl;
     }
     else if (key == 'g')
@@ -237,6 +249,24 @@ void key_pressed(unsigned char key, int x, int y)
     {
         extension_rates = !extension_rates;
     }
+    else if (key == 'c')
+    {
+        coords = !coords;
+    }
+    else if (key == 's')
+    {
+        print_time();
+        print_particles();
+        print_bars();
+    }
+    else if (key == 'p')
+    {
+        load("/Users/patrick/Desktop/save.txt");
+    }
+    else if (key == 'i')
+    {
+        ids = !ids;
+    }
     
     glutPostRedisplay();
 }
@@ -259,13 +289,15 @@ double abs_d(double x)
 
 void mouse_passive(int x, int y)
 {
-    float x_coord = x - window_width / 2.0;
-    float y_coord = -y  + window_height / 2.0;
+    double x_px = x - window_width / 2.0;
+    double y_px = -y  + window_height / 2.0;
+    //double x_metres = x_px / scale;
+    //double y_metres = y_px / scale;
     
     for (int i = 0; i < particles_number; i++)
     {
         Vector2d p_pos = particles[i].position;
-        if (abs_d(x_coord - p_pos.x) < min_click_dist && abs_d(y_coord - p_pos.y) < min_click_dist)
+        if (abs_d(x_px - p_pos.x*scale) < min_click_dist && abs_d(y_px - p_pos.y*scale) < min_click_dist)
         {
             particles[i].highlight = true;
         }
@@ -276,8 +308,8 @@ void mouse_passive(int x, int y)
 
 void mouse_drag(int x, int y)
 {
-    float x_coord = x - window_width / 2.0;
-    float y_coord = -y  + window_height / 2.0;
+    double x_coord = (x - window_width / 2.0)/scale;
+    double y_coord = (-y  + window_height / 2.0)/scale;
     
     if (selected_particle_id != -1)
     {
@@ -286,45 +318,67 @@ void mouse_drag(int x, int y)
     }
 }
 
+void special_key(int key, int x, int y)
+{
+    if (key == GLUT_KEY_UP)
+    {
+        scale *= 1.1;
+    }
+    else if (key == GLUT_KEY_DOWN)
+    {
+        scale /= 1.1;
+    }
+}
+
+//////////
+
 void draw_particle(const Particle& p)
 {
+    glColor3f(1.0, 1.0, 1.0);
+    
     Vector2d pos = p.position;
+    Vector2d pos_gl(pos.x*2.0*scale/window_width, pos.y*2.0*scale/window_height);
+    
     if (p.highlight || selected_particle_id == p.id)
     {
         glPointSize(10);
         glBegin(GL_POINTS);
-        glVertex2f(pos.x*2.0/window_width, pos.y*2.0/window_height);
+        glVertex2f(pos_gl.x, pos_gl.y);
         glEnd();
     }
     else
     {
         glPointSize(5);
         glBegin(GL_POINTS);
-        glVertex2f(pos.x*2.0/window_width, pos.y*2.0/window_height);
+        glVertex2f(pos_gl.x, pos_gl.y);
         glEnd();
     }
     
-    std::stringstream s;
-    s << p.id;
-    
-    Vector2d vel = p.velocity;
-    
-    glut_print(pos.x - 0.04*vel.norm().x, pos.y - 0.04*vel.norm().y, s.str());
+    if (ids)
+    {
+        std::stringstream s;
+        s << p.id;
+        
+        Vector2d vel = p.velocity;
+        
+        glut_print(pos.x - 0.04*vel.norm().x, pos.y - 0.04*vel.norm().y, s.str());
+    }
 }
 
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b)
 {
     glColor3f(r, g, b);
+    glLineWidth(1.0);
     
     glBegin(GL_LINES);
-    glVertex2f(start.x*2.0/window_width, start.y*2.0/window_height);
-    glVertex2f((start.x + v.x)*2.0/window_width, (start.y + v.y)*2.0/window_height);
+    glVertex2f(start.x*2.0*scale/window_width, start.y*2.0*scale/window_height);
+    glVertex2f((start.x + v.x)*2.0*scale/window_width, (start.y + v.y)*2.0*scale/window_height);
     glEnd();
     
     glPointSize(5);
     
     glBegin(GL_POINTS);
-    glVertex2f((start.x + v.x)*2.0/window_width, (start.y + v.y)*2.0/window_height);
+    glVertex2f((start.x + v.x)*2.0*scale/window_width, (start.y + v.y)*2.0*scale/window_height);
     glEnd();
     
     glColor3f(1.0, 1.0, 1.0);
@@ -332,15 +386,16 @@ void draw_vector(Vector2d v, Vector2d start, float r, float g, float b)
 
 void draw_bar(Bar& b)
 {
+    glColor3f(1.0, 1.0, 1.0);
+    glLineWidth(1.0);
+    
     Vector2d start = particles[b.p1_id].position;
     Vector2d end = particles[b.p2_id].position;
     Vector2d mid(0.5*(start.x + end.x), 0.5*(start.y + end.y));
     
-    glColor3f(1.0, 1.0, 1.0);
-    
     glBegin(GL_LINES);
-    glVertex2f(start.x*2.0/window_width, start.y*2.0/window_height);
-    glVertex2f(end.x*2.0/window_width, end.y*2.0/window_height);
+    glVertex2f(start.x*2.0*scale/window_width, start.y*2.0*scale/window_height);
+    glVertex2f(end.x*2.0*scale/window_width, end.y*2.0*scale/window_height);
     glEnd();
     
     std::stringstream s;
@@ -355,6 +410,45 @@ void draw_bar(Bar& b)
     {
         s.str("");
         s << b.extension_rate();
-        glut_print(mid.x, mid.y - 10, s.str());
+        glut_print(mid.x, mid.y - 10/scale, s.str());
     }
+}
+
+void draw_coords()
+{
+    glColor3f(0.3, 0.3, 0.3);
+    glLineWidth(1.0);
+    
+    glBegin(GL_LINES);
+    
+    glVertex2f(0.0, 1.0);
+    glVertex2f(0.0, -1.0);
+    glVertex2f(-1.0, 0.0);
+    glVertex2f(1.0, 0.0);
+    
+    double scale_size = 5; // px
+    
+    for (int i = 1; i < window_height/(2.0*scale); i++)
+    {
+        // +ve y
+        glVertex2f(-2.0*scale_size/window_width, i*2.0*scale/window_height);
+        glVertex2f(2.0*scale_size/window_width, i*2.0*scale/window_height);
+        
+        // -ve y
+        glVertex2f(-2.0*scale_size/window_width, -i*2.0*scale/window_height);
+        glVertex2f(2.0*scale_size/window_width, -i*2.0*scale/window_height);
+    }
+    
+    for (int i = 1; i < window_width/(2.0*scale); i++)
+    {
+        // +ve x
+        glVertex2f(i*2.0*scale/window_width, -2.0*scale_size/window_height);
+        glVertex2f(i*2.0*scale/window_width, 2.0*scale_size/window_height);
+        
+        // -ve x
+        glVertex2f(-i*2.0*scale/window_width, -2.0*scale_size/window_height);
+        glVertex2f(-i*2.0*scale/window_width, 2.0*scale_size/window_height);
+    }
+    
+    glEnd();
 }

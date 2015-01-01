@@ -12,6 +12,9 @@ int selected_particle_id = -1;
 int particles_number = 0;
 int bars_number = 0;
 
+std::vector<Particle> particles;
+std::vector<Bar> bars;
+
 float random(float range)
 {
     float r = 1.0 * rand() / RAND_MAX;
@@ -77,15 +80,20 @@ void Particle::unfix()
     fixed = false;
 }
 
-
 ////
 
 Bar Bar::create(int id1, int id2)
 {
+    if (id1 == id2)
+    {
+        // TODO
+        std::cout << "Canot create a bar connecting the same particle" << std::endl;
+    }
+    
     Bar b = Bar(id1, id2);
     
-    b.k = 100.0;
-    b.lambda = 10.0;
+    b.k = 200.0;
+    b.lambda = 50.0;
     b.r0 = b.length();
     
     b.id = particles_number;

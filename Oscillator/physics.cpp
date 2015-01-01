@@ -7,11 +7,12 @@
 //
 
 #include "physics.h"
+#include "graphics.h"
 
 unsigned long long int t = 0.0;
 unsigned long long int prev_t = 0.0;
 double delta_t = 0.0;
-double g = 50.0;
+double g = 1.0;
 double spring_energy = 0.0;
 double energy_absorption = 0.5;
 
@@ -55,6 +56,8 @@ double energy(std::vector<Particle>& particles)
 
 void check_boundaries(Particle& p)
 {
+    return;
+    
     Vector2d vel = p.velocity;
     
     double min_x = -window_width/2.0;
@@ -121,9 +124,9 @@ void update_position(std::vector<Particle>& particles)
     
     for (int i = 0; i < bars_number; i++)
     {
-        Vector2d acc = (bars[i].tension() + bars[i].extension_rate() * bars[i].lambda) * bars[i].unit21();
-        particles[bars[i].p1_id].acceleration += acc;
-        particles[bars[i].p2_id].acceleration += -acc;
+        Vector2d force = (bars[i].tension() + bars[i].extension_rate() * bars[i].lambda) * bars[i].unit21();
+        particles[bars[i].p1_id].acceleration += (1.0/particles[bars[i].p1_id].mass) * force;
+        particles[bars[i].p2_id].acceleration += -(1.0/particles[bars[i].p2_id].mass) * force;
     }
     
     for (int i = 0; i < particles_number; i++)

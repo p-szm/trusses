@@ -11,11 +11,8 @@
 #include <OpenGL/gl.h>
 
 #include "graphics.h"
-#include "physics.h"
+#include "physics.h" // for time
 #include <vector>
-
-std::vector<Particle> particles;
-std::vector<Bar> bars;
 
 int main(int argc, char * argv[])
 {
@@ -40,6 +37,7 @@ int main(int argc, char * argv[])
     glutIdleFunc(idle);
     glutPassiveMotionFunc(mouse_passive);
     glutMotionFunc(mouse_drag);
+    glutSpecialFunc(special_key);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
