@@ -127,9 +127,11 @@ void save(std::string filename)
     // Print particles
     for (int i = 0; i < particles_number; i++)
     {
-        file << 'p' << particles[i].id << ' ' << particles[i].position;
-        if (particles[i].fixed == true)
-            file << " f";
+        if (particles[i].fixed)
+            file << 'f';
+        else
+            file << 'p';
+        file << particles[i].id << ' ' << particles[i].position;
         file << std::endl;
     }
     file << std::endl;
