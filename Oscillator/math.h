@@ -23,9 +23,9 @@ struct Vector2d
     double operator* (const Vector2d &v) { return (x*v.x + y*v.y); }
     friend Vector2d operator* (const double &a, const Vector2d &v) { return Vector2d(v.x*a, v.y*a); }
     friend Vector2d operator- (const Vector2d &v) { return Vector2d(-v.x, -v.y); }
-    double abs2() { return (x*x + y*y); }
-    double abs() { return sqrt(this->abs2()); }
-    Vector2d norm() { double s(this->abs()); if (s==0) return *this; else return Vector2d(x/s, y/s); }
+    double abs2() const { return (x*x + y*y); }
+    double abs() const { return sqrt(this->abs2()); }
+    Vector2d norm() const { double s(this->abs()); if (s==0) return *this; else return Vector2d(x/s, y/s); }
     Vector2d& operator+= (const Vector2d &v) { x+=v.x; y+=v.y; return *this; }
     Vector2d& operator-= (const Vector2d &v) { x-=v.x; y-=v.y; return *this; }
     

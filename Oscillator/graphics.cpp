@@ -52,7 +52,7 @@ void glut_print (float x, float y, std::string s, bool px)
     }
     
     glRasterPos2f(x, y);
-    for (i = 0; i < s.length(); i++) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, s[i]);
+    for (i = 0; i < s.length(); i++) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, s[i]);
 }
 
 void display_fps(double dt)
@@ -138,7 +138,7 @@ void display()
         Vector2d pos_gl(snapped_point.x*2.0*scale/window_width, snapped_point.y*2.0*scale/window_height);
         
         glColor3f(1.0, 1.0, 1.0);
-        glPointSize(20);
+        glPointSize(10);
         glBegin(GL_POINTS);
         glVertex2d(pos_gl.x, pos_gl.y);
         glEnd();
@@ -219,21 +219,20 @@ void mouse_click (int button, int state, int x, int y)
     
     else if (state == GLUT_DOWN)
     {
-        bool button_hit = false;
+        bool button_pressed = false;
         
-        // If a button was hit
-        for (int i = 0; i < buttons_number || button_hit == true; i++)
+        // Check if any button was pressed
+        for (int i = 0; i < buttons_number && button_pressed == false; i++)
         {
-            if (buttons[i].is_hit(x_px, y_px) && state == GLUT_DOWN)
+            if (buttons[i].highlighted_)
             {
                 buttons[i].execute_action();
-                std::cout << "Button " << buttons[i].id <<" was clicked" << std::endl;
-                button_hit = true;
-                return;
+                std::cout << "Button " << buttons[i].id_ <<" was clicked" << std::endl;
+                button_pressed = true;
             }
         }
 
-        if (button_hit)
+        if (button_pressed)
         {
             
         }
@@ -337,7 +336,11 @@ void key_pressed(unsigned char key, int x, int y)
     }
     else if (key == 'w')
     {
-        walls.push_back(Wall::create(Vector2d(0.0, -0.1), 10, 0.1));
+        walls.push_back(Wall::create(Vector2d(0.0, -1.0), 10, 0.1));
+    }
+    else if (key == 'o')
+    {
+        create_cloth(20, 0.1, Vector2d(0.0, 0.0), false);
     }
     
     glutPostRedisplay();
@@ -360,6 +363,21 @@ void mouse_passive(int x, int y)
     
     double closest_x = round(x_metres);
     double closest_y = round(y_metres);
+    
+    // Highlight the buttons
+    bool button_hit = false;
+    for (int i = 0; i < buttons_number && button_hit == false; i++)
+    {
+        if (buttons[i].is_hit(x_px, y_px))
+        {
+            buttons[i].highlighted_ = true;
+            button_hit = true;
+        }
+        else
+        {
+            buttons[i].highlighted_ = false;
+        }
+    }
     
     if (abs_d(closest_x*scale-x_px) < min_click_dist && abs_d(closest_y*scale-y_px) < min_click_dist)
     {
@@ -438,12 +456,13 @@ void draw_particle(const Particle& p)
     
     if (ids)
     {
+        glColor3f(0.8, 0.8, 0.0);
+        
         std::stringstream s;
         s << p.id;
         
-        Vector2d vel = p.velocity;
-        
-        glut_print(pos.x - 0.04*vel.norm().x, pos.y - 0.04*vel.norm().y, s.str());
+        // Add 5 pixels in eah direction
+        glut_print(pos.x + 5.0/scale, pos.y + 5.0/scale, s.str());
     }
 }
 
@@ -510,52 +529,81 @@ void draw_bar(const Bar& b)
 
 void draw_coords()
 {
+    // Draw the axis
+    glColor3f(0.3, 0.3, 0.3);
+    glLineWidth(2.0);
+    
+    glBegin(GL_LINES);
+    glVertex2f(0.0, 1.0);
+    glVertex2f(0.0, -1.0);
+    glVertex2f(-1.0, 0.0);
+    glVertex2f(1.0, 0.0);
+    glEnd();
+    
+    // Draw the scale
     glColor3f(0.3, 0.3, 0.3);
     glLineWidth(1.0);
     
     glBegin(GL_LINES);
     
-    // Draw the axis
-    glVertex2f(0.0, 1.0);
-    glVertex2f(0.0, -1.0);
-    glVertex2f(-1.0, 0.0);
-    glVertex2f(1.0, 0.0);
-    
-    // Draw the scale
+    bool short_scale = false;
     double scale_size = 5; // px
+    
+    // For +ve y and +ve x
+    double left_x, left_y, right_x, right_y, top_x, top_y, bottom_x, bottom_y;
+    if (short_scale)
+    {
+        // For +ve y
+        // left_y and right_y will be multiplied by i
+        left_x = -2.0*scale_size/window_width;
+        left_y = 2.0*scale/window_height;
+        right_x = -left_x;
+        right_y = left_y;
+        
+        // For +ve x
+        // top_x and bottom_x will be multiplied by i
+        bottom_x = 2.0*scale/window_width;
+        bottom_y = -2.0*scale_size/window_height;
+        top_x = bottom_x;
+        top_y = -bottom_y;
+    }
+    else
+    {
+        // For +ve y
+        // left_y and right_y will be multiplied by i
+        left_x = -1.0;
+        left_y = 2.0*scale/window_height;
+        right_x = -left_x;
+        right_y = left_y;
+        
+        // For +ve x
+        // top_x and bottom_x will be multiplied by i
+        bottom_x = 2.0*scale/window_width;
+        bottom_y = -1.0;
+        top_x = bottom_x;
+        top_y = -bottom_y;
+    }
     
     for (int i = 1; i < window_height/(2.0*scale); i++)
     {
-        // For +ve y
-        double left_x = -2.0*scale_size/window_width;
-        double left_y = i*2.0*scale/window_height;
-        double right_x = -left_x;
-        double right_y = left_y;
-        
         // +ve y
-        glVertex2f(left_x, left_y);
-        glVertex2f(right_x, right_y);
+        glVertex2f(left_x, i*left_y);
+        glVertex2f(right_x, i*right_y);
         
         // -ve y
-        glVertex2f(left_x, -left_y);
-        glVertex2f(right_x, -right_y);
+        glVertex2f(left_x, -i*left_y);
+        glVertex2f(right_x, -i*right_y);
     }
     
     for (int i = 1; i < window_width/(2.0*scale); i++)
     {
-        // For +ve x
-        double bottom_x = i*2.0*scale/window_width;
-        double bottom_y = -2.0*scale_size/window_height;
-        double top_x = bottom_x;
-        double top_y = -bottom_y;
-        
         // +ve x
-        glVertex2f(bottom_x, bottom_y);
-        glVertex2f(top_x, top_y);
+        glVertex2f(i*bottom_x, bottom_y);
+        glVertex2f(i*top_x, top_y);
         
         // -ve x
-        glVertex2f(-bottom_x, bottom_y);
-        glVertex2f(-top_x, top_y);
+        glVertex2f(-i*bottom_x, bottom_y);
+        glVertex2f(-i*top_x, top_y);
     }
     
     glEnd();
@@ -597,9 +645,6 @@ void draw_rectangle(Vector2d c, double w, double h, bool px)
         half_height = 0.5 * convert_to_gl_coords_y(h);
     }
     
-    glColor3f(1.0, 1.0, 1.0);
-    glLineWidth(1.0);
-    
     glBegin(GL_LINE_LOOP);
     glVertex2f(centre.x - half_width, centre.y + half_height);
     glVertex2f(centre.x + half_width, centre.y + half_height);
@@ -608,12 +653,27 @@ void draw_rectangle(Vector2d c, double w, double h, bool px)
     glEnd();
 }
 
-void draw_button(const Button& rect)
+void draw_button(const Button& b)
 {
-    draw_rectangle(rect.centre_, rect.width_, rect.height_, true);
+    if (b.highlighted_ || b.active_)
+    {
+        glColor3f(0.8, 0.0, 0.0);
+        glLineWidth(2.0);
+    }
+    else
+    {
+        glColor3f(1.0, 1.0, 1.0);
+        glLineWidth(1.0);
+    }
+    
+    draw_rectangle(b.centre_, b.width_, b.height_, true);
+    glut_print(b.centre_.x - b.width_/2.0 + 4, b.centre_.y - 4, b.text_, true);
 }
 
 void draw_wall(const Wall& w)
 {
+    glColor3f(1.0, 1.0, 1.0);
+    glLineWidth(1.0);
+    
     draw_rectangle(w.centre_, w.width_, w.height_, false);
 }

@@ -12,6 +12,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <cmath>
 
 #include "particle.h"
 #include "graphics.h"
@@ -167,4 +168,46 @@ void reset()
     walls_number = 0;
     
     selected_particle_id = -1;
+}
+
+void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)
+{
+    double x0 = bottom_left_corner.x;
+    double y0 = bottom_left_corner.y;
+    int id0 = particles_number;
+    
+    bool fixed = false;
+    
+    // Create particles
+    for (int j = 0; j < n; j++)
+    {
+        if (fix)
+            fixed = (j == n-1) ? true : false;
+        
+        for (int i = 0; i < n; i++)
+        {
+            if (fixed)
+                particles.push_back(Particle::create(x0 + i * d, y0 + j * d, true));
+            else
+                particles.push_back(Particle::create(x0 + i * d, y0 + j * d, false));
+        }
+    }
+    
+    // Create horizontal connections
+    for (int j = 0; j < n; j++)
+    {
+        for (int i = 0; i < n-1; i++)
+        {
+            bars.push_back(Bar::create(id0 + j * n + i, id0 + j * n + i + 1));
+        }
+    }
+    
+    // Create vertical connections
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n-1; j++)
+        {
+            bars.push_back(Bar::create(id0 + i + n * j, id0 + i + n * (j + 1)));
+        }
+    }
 }

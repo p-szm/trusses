@@ -72,40 +72,37 @@ void check_boundaries(Particle& p)
         double wall_left = w->centre_.x - w->width_/2.0;
         double wall_right = w->centre_.x + w->width_/2.0;
         
-        // If the particle entered the wall
-        if (pos.x >= wall_left && pos.x <= wall_right && pos.y >= wall_bottom && pos.y <= wall_top)
+        // Particle penetrated the bottom wall
+        if (prev_pos.y <= wall_bottom && pos.y >= wall_bottom)
         {
-            
-            
-            // Particle penetrated the bottom wall
-            if (prev_pos.y <= wall_bottom && pos.y >= wall_bottom)
-            {
-                p.position.y = wall_bottom;
-                p.velocity = Vector2d(eng_regained_par*vel.x, -eng_regained_perp*vel.y);
-            }
-            
-            // Particle penetrated the left wall
-            else if (prev_pos.x <= wall_left && pos.x >= wall_left)
-            {
-                p.position.x = wall_left;
-                p.velocity = Vector2d(-eng_regained_perp*vel.x, eng_regained_par*vel.y);
-            }
-            
-            // Particle penetrated the right wall
-            else if (prev_pos.x >= wall_right && pos.x <= wall_right)
-            {
-                p.position.x = wall_right;
-                p.velocity = Vector2d(-eng_regained_perp*vel.x, eng_regained_par*vel.y);
-            }
-            
-            // Particle penetrated the top wall
-            else
-            {
-                p.position.y = wall_top;
-                p.velocity = Vector2d(eng_regained_par*vel.x, -eng_regained_perp*vel.y);
-            }
+            p.position.y = wall_bottom;
+            p.velocity = Vector2d(eng_regained_par*vel.x, -eng_regained_perp*vel.y);
             
             // So it doesn't break the Verlet integrator
+            p.prev_position_verlet = p.position - delta_t * p.velocity;
+        }
+        
+        // Particle penetrated the left wall
+        else if (prev_pos.x <= wall_left && pos.x >= wall_left)
+        {
+            p.position.x = wall_left;
+            p.velocity = Vector2d(-eng_regained_perp*vel.x, eng_regained_par*vel.y);
+            p.prev_position_verlet = p.position - delta_t * p.velocity;
+        }
+        
+        // Particle penetrated the right wall
+        else if (prev_pos.x >= wall_right && pos.x <= wall_right)
+        {
+            p.position.x = wall_right;
+            p.velocity = Vector2d(-eng_regained_perp*vel.x, eng_regained_par*vel.y);
+            p.prev_position_verlet = p.position - delta_t * p.velocity;
+        }
+        
+        // Particle penetrated the top wall
+        else if (prev_pos.y >= wall_top && pos.y <= wall_top)
+        {
+            p.position.y = wall_top;
+            p.velocity = Vector2d(eng_regained_par*vel.x, -eng_regained_perp*vel.y);
             p.prev_position_verlet = p.position - delta_t * p.velocity;
         }
     }

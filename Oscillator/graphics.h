@@ -42,7 +42,7 @@ extern int selected_particle_id;
 void draw_rectangle(Vector2d c, double w, double h, bool px);
 
 void draw_wall(const Wall& w);
-void draw_button(const Button& rect);
+void draw_button(const Button& b);
 
 Vector2d convert_to_gl_coords(const Vector2d& v);
 double convert_to_gl_coords_x(double d);

@@ -18,14 +18,16 @@ class Button
 {
 public:
     // All in pixels relative to the top left corner
-    Button(double w, double h, double x_sh, double y_sh, void (*a)(void));
+    Button(double w, double h, double x_sh, double y_sh, void (*a)(void), std::string t);
     friend void draw();
     bool is_hit(double x, double y);
     void execute_action();
-    int id;
+    int id_;
     std::string text_;
     void update_position();
     friend void draw_button(const Button& rect);
+    bool highlighted_;
+    bool active_;
 private:
     void (*action)(void);
     double x_shift_;

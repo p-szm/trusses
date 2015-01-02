@@ -12,15 +12,18 @@
 int buttons_number = 0;
 std::vector<Button> buttons {};
 
-Button::Button(double w, double h, double x_sh, double y_sh, void (*a)(void))
+Button::Button(double w, double h, double x_sh, double y_sh, void (*a)(void), std::string t)
 {
     width_ = w;
     height_ = h;
     x_shift_ = x_sh;
     y_shift_ = y_sh;
     action = a;
+    highlighted_ = false;
+    text_ = t;
+    active_ = false;
     
-    id = buttons_number;
+    id_ = buttons_number;
     buttons_number ++;
     
     update_position(); // Updates the button's centre
@@ -42,6 +45,7 @@ bool Button::is_hit(double x, double y)
 void Button::execute_action()
 {
     action();
+    active_ = !active_;
 }
 
 void Button::update_position()
@@ -74,6 +78,6 @@ void button1_action(void)
 
 void create_buttons()
 {
-    buttons.push_back(Button(50, 30, -20, -20, &button0_action));
-    buttons.push_back(Button(50, 30, -20, -70, &button1_action));
+    buttons.push_back(Button(50, 30, -20, -20, &button0_action, "ids"));
+    buttons.push_back(Button(50, 30, -20, -70, &button1_action, "vels"));
 }
