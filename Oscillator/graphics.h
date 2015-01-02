@@ -44,9 +44,9 @@ void draw_rectangle(Vector2d c, double w, double h, bool px);
 void draw_wall(const Wall& w);
 void draw_button(const Button& b);
 
-Vector2d convert_to_gl_coords(const Vector2d& v);
-double convert_to_gl_coords_x(double d);
-double convert_to_gl_coords_y(double d);
+Vector2d metres_to_gl_coords(const Vector2d& v);
+double metres_to_gl_coords_x(double d);
+double metres_to_gl_coords_y(double d);
 
 extern bool ids;
 extern bool velocities;

@@ -34,6 +34,9 @@ int selected_particle_id = -1;
 bool snapped = false;
 Vector2d snapped_point(0.0, 0.0);
 
+// In pixels
+Vector2d screen_centre(0.0, 0.0);
+
 extern std::vector<Particle> particles;
 extern std::vector<Bar> bars;
 
@@ -42,8 +45,8 @@ void glut_print (float x, float y, std::string s, bool px)
 {
     unsigned short i;
     
-    x = convert_to_gl_coords_x(x);
-    y = convert_to_gl_coords_y(y);
+    x = metres_to_gl_coords_x(x);
+    y = metres_to_gl_coords_y(y);
     
     if (px)
     {
@@ -69,9 +72,9 @@ void display_energy()
     glColor3f(1.0, 1.0, 1.0);
     
     std::ostringstream s;
-    s.precision(3);
+    s.precision(5);
     s << "Energy: " << energy(particles);
-    glut_print(window_width/2.0-60, -window_height/2.0+20, s.str(), true);
+    glut_print(window_width/2.0-120, -window_height/2.0+20, s.str(), true);
 }
 
 void draw_gravity_indicator()
@@ -99,6 +102,12 @@ void display()
     if (coords)
         draw_coords();
     
+    // Draw the walls
+    for (int i = 0; i < walls_number; i++)
+    {
+        draw_wall(walls[i]);
+    }
+    
     // Draw the bars
     for (int i = 0; i < bars_number; i++)
     {
@@ -124,12 +133,6 @@ void display()
             if (accelerations)
                 draw_vector(particles[i].acceleration, particles[i].position, 0.5, 0.0, 0.0);
         }
-    }
-    
-    // Draw the walls
-    for (int i = 0; i < walls_number; i++)
-    {
-        draw_wall(walls[i]);
     }
     
     // Draw the snapped point
@@ -337,7 +340,8 @@ void key_pressed(unsigned char key, int x, int y)
     }
     else if (key == 'w')
     {
-        walls.push_back(Wall::create(Vector2d(0.0, -1.0), 10, 0.1));
+        walls.push_back(Wall::create(Vector2d(0.0, -1.0), 5, 1));
+        walls.push_back(Wall::create(Vector2d(3.0, 0.0), 0.5, 5));
     }
     else if (key == 'o')
     {
@@ -509,7 +513,7 @@ void draw_bar(const Bar& b)
     else
         glColor3f(1.0+epsilon*multiplier, 1.0, 1.0);
     
-    glLineWidth(1.0);
+    glLineWidth(2.0);
     
     Vector2d start = particles[b.p1_id].position;
     Vector2d end = particles[b.p2_id].position;
@@ -617,17 +621,17 @@ void draw_coords()
     glEnd();
 }
 
-Vector2d convert_to_gl_coords(const Vector2d& v)
+Vector2d metres_to_gl_coords(const Vector2d& v)
 {
     return Vector2d(v.x * 2.0 * scale / window_width, v.y * 2.0 * scale / window_height);
 }
 
-double convert_to_gl_coords_x(double d)
+double metres_to_gl_coords_x(double d)
 {
     return d * 2.0 * scale / window_width;
 }
 
-double convert_to_gl_coords_y(double d)
+double metres_to_gl_coords_y(double d)
 {
     return d * 2.0 * scale / window_height;
 }
@@ -641,16 +645,16 @@ void draw_rectangle(Vector2d c, double w, double h, bool px)
     {
         // Convert from pixels to gl coords
         double scale_inverse = 1.0 / scale;
-        centre = convert_to_gl_coords(scale_inverse * c);
-        half_width = 0.5 * convert_to_gl_coords_x(scale_inverse * w);
-        half_height = 0.5 * convert_to_gl_coords_y(scale_inverse * h);
+        centre = metres_to_gl_coords(scale_inverse * c);
+        half_width = 0.5 * metres_to_gl_coords_x(scale_inverse * w);
+        half_height = 0.5 * metres_to_gl_coords_y(scale_inverse * h);
     }
     else
     {
         // Convert from metres to gl coords
-        centre = convert_to_gl_coords(c);
-        half_width = 0.5 * convert_to_gl_coords_x(w);
-        half_height = 0.5 * convert_to_gl_coords_y(h);
+        centre = metres_to_gl_coords(c);
+        half_width = 0.5 * metres_to_gl_coords_x(w);
+        half_height = 0.5 * metres_to_gl_coords_y(h);
     }
     
     glBegin(GL_LINE_LOOP);
@@ -686,7 +690,46 @@ void draw_button(const Button& b)
 void draw_wall(const Wall& w)
 {
     glColor3f(1.0, 1.0, 1.0);
-    glLineWidth(1.0);
+    glLineWidth(2.0);
     
     draw_rectangle(w.centre_, w.width_, w.height_, false);
+    
+    double x_min = w.centre_.x - w.width_ / 2.0;
+    double x_max = w.centre_.x + w.width_ / 2.0;
+    double y_min = w.centre_.y - w.height_ / 2.0;
+    double y_max = w.centre_.y + w.height_ / 2.0;
+    
+    double width = w.width_;
+    double height = w.height_;
+    
+    // Spacing between the lines
+    double d = 0.25;
+    
+    glBegin(GL_LINES);
+    for (int i = 0; i * d <= width + height; i++)
+    {
+        double x1 = x_min + i * d - height;
+        double y1 = y_min;
+        double x2 = x_min + i * d;
+        double y2 = y_max;
+        
+        if (x1 < x_min)
+        {
+            x1 = x_min;
+            y1 = y_max - i * d;
+        }
+        if (x2 > x_max)
+        {
+            x2 = x_max;
+            y2 = y_min + width + height - i * d;
+        }
+        
+        glVertex2f(metres_to_gl_coords_x(x1), metres_to_gl_coords_y(y1));
+        glVertex2f(metres_to_gl_coords_x(x2), metres_to_gl_coords_y(y2));
+        
+    }
+    glEnd();
+    
+    
+    
 }

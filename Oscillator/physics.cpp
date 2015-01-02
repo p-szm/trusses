@@ -14,7 +14,6 @@ unsigned long long int t = 0.0;
 unsigned long long int prev_t = 0.0;
 double delta_t = 0.0;
 double g = 10.0;
-double spring_energy = 0.0;
 double energy_absorption = 0.5;
 
 bool euler = false;
@@ -37,8 +36,6 @@ void update_time()
 
 double energy(std::vector<Particle>& particles)
 {
-    return 0.0;
-    
     if (particles_number == 0)
         return 0.0;
     
@@ -48,9 +45,8 @@ double energy(std::vector<Particle>& particles)
         double kinetic_energy = 0.5 * particles[i].mass * particles[i].velocity.abs2();
         double potential_energy = (gravity) ? particles[i].mass * g * (particles[i].position.y + 1.0) : 0.0;
         
-        total_energy += kinetic_energy + potential_energy;
+        total_energy += kinetic_energy;// + potential_energy;
     }
-    total_energy += spring_energy;
     
     return total_energy;
 }
@@ -135,7 +131,7 @@ void update_position(std::vector<Particle>& particles)
     }
     
     // Increase this to increase the stiffness
-    int iterations = 50;
+    int iterations = 30;
     for (int j = 0; j < iterations; j++)
     {
         for (int i = 0; i < bars_number; i++)
@@ -146,7 +142,7 @@ void update_position(std::vector<Particle>& particles)
             
             double extension = b->length() - b->r0;
             
-            double k = 1.0; // max is 1.0 or it blows up
+            double k = 0.5; // max is 1.0 or it blows up
             double im1 = 1/p1->mass;
             double im2 = 1/p1->mass;
             float mult1 = (im1 / (im1 + im2)) * k;
