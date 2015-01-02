@@ -9,8 +9,6 @@
 #ifndef __Oscillator__physics__
 #define __Oscillator__physics__
 
-#include <iostream>
-#include <sys/time.h>
 #include "particle.h"
 
 extern unsigned long long int t;

@@ -7,7 +7,8 @@
 //
 
 #include "physics.h"
-#include "graphics.h"
+
+#include <sys/time.h>
 
 unsigned long long int t = 0.0;
 unsigned long long int prev_t = 0.0;
@@ -66,10 +67,10 @@ void check_boundaries(Particle& p)
     for (int i = 0; i < walls_number; i++)
     {
         Wall* w = &walls[i];
-        double wall_top = w->centre.y + w->height/2.0;
-        double wall_bottom = w->centre.y - w->height/2.0;
-        double wall_left = w->centre.x - w->width/2.0;
-        double wall_right = w->centre.x + w->width/2.0;
+        double wall_top = w->centre_.y + w->height_/2.0;
+        double wall_bottom = w->centre_.y - w->height_/2.0;
+        double wall_left = w->centre_.x - w->width_/2.0;
+        double wall_right = w->centre_.x + w->width_/2.0;
         
         // If the particle entered the wall
         if (pos.x >= wall_left && pos.x <= wall_right && pos.y >= wall_bottom && pos.y <= wall_top)
@@ -105,7 +106,7 @@ void check_boundaries(Particle& p)
             }
             
             // So it doesn't break the Verlet integrator
-            p.prev_position = p.position - delta_t * p.velocity;
+            p.prev_position_verlet = p.position - delta_t * p.velocity;
         }
     }
 }
@@ -120,48 +121,62 @@ void integrate(Particle& p, Vector2d acc, double dt)
     }
     else // verlet
     {
-        Vector2d next_position = 2 * p.position - p.prev_position + pow(delta_t, 2) * acc;
-        p.velocity = (0.5 / delta_t) * (next_position - p.prev_position); // one step behind the position
-        p.prev_position = p.position;
+        Vector2d next_position = 2 * p.position - p.prev_position_verlet + pow(delta_t, 2) * acc;
+        p.velocity = (0.5 / delta_t) * (next_position - p.prev_position);
+        p.prev_position_verlet = p.position;
         p.position = next_position;
     }
 }
 
 void update_position(std::vector<Particle>& particles)
 {
-    // Zero the acceleration
+    // Zero the acceleration and remember the previous position
     for (int i = 0; i < particles_number; i++)
     {
         particles[i].acceleration = Vector2d(0.0, 0.0);
+        particles[i].prev_position = particles[i].position;
     }
     
-    int iterations = 10;
+    // Increase this to increase the stiffness
+    int iterations = 50;
     for (int j = 0; j < iterations; j++)
     {
         for (int i = 0; i < bars_number; i++)
         {
             Bar* b = &bars[i];
+            Particle* p1 = &particles[b->p1_id];
+            Particle* p2 = &particles[b->p2_id];
+            
             double extension = b->length() - b->r0;
-            if (!particles[b->p1_id].fixed)
-                particles[b->p1_id].position += 0.5 * extension * b->unit21();
-            if (!particles[b->p2_id].fixed)
-                particles[b->p2_id].position += 0.5 * extension * b->unit12();
+            
+            double k = 1.0; // max is 1.0 or it blows up
+            double im1 = 1/p1->mass;
+            double im2 = 1/p1->mass;
+            float mult1 = (im1 / (im1 + im2)) * k;
+            float mult2 = k - mult1;
+            
+            if (!p1->fixed)
+                p1->position += mult1 * extension * b->unit21();
+            if (!p2->fixed)
+                p2->position += mult2 * extension * b->unit12();
         }
     }
     
     for (int i = 0; i < particles_number; i++)
     {
-        if (particles[i].fixed)
+        Particle* p = &particles[i];
+        
+        if (p->fixed)
             continue;
         
-        particles[i].acceleration += particles[i].external_acceleration;
+        p->acceleration += p->external_acceleration;
         
         if (gravity)
-            particles[i].acceleration = Vector2d(particles[i].acceleration.x, particles[i].acceleration.y - g);
+            p->acceleration += Vector2d(0.0, -g);
         
-        integrate(particles[i], particles[i].acceleration, delta_t);
+        integrate(*p, p->acceleration, delta_t);
         
         // Bounce the particles off the edges
-        check_boundaries(particles[i]);
+        check_boundaries(*p);
     }
 }

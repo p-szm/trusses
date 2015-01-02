@@ -9,41 +9,20 @@
 #ifndef __Oscillator__particle__
 #define __Oscillator__particle__
 
-#include <iostream>
 #include <random>
+
+#include "math.h"
 
 #define MAX_VELOCITY 0.1
 
 // TODO: remove this
 extern double delta_t;
 
-float random(float range);
-
-struct Vector2d
-{
-    double x;
-    double y;
-    Vector2d(float a, float b): x(a), y(b) {}
-    Vector2d() {};
-    Vector2d operator+ (const Vector2d &v) { return Vector2d(x+v.x, y+v.y); }
-    Vector2d operator- (const Vector2d &v) { return Vector2d(x-v.x, y-v.y); }
-    double operator* (const Vector2d &v) { return (x*v.x + y*v.y); }
-    friend Vector2d operator* (const double &a, const Vector2d &v) { return Vector2d(v.x*a, v.y*a); }
-    friend Vector2d operator- (const Vector2d &v) { return Vector2d(-v.x, -v.y); }
-    double abs2() { return (x*x + y*y); }
-    double abs() { return sqrt(this->abs2()); }
-    Vector2d norm() { double s(this->abs()); if (s==0) return *this; else return Vector2d(x/s, y/s); }
-    Vector2d& operator+= (const Vector2d &v) { x+=v.x; y+=v.y; return *this; }
-    Vector2d& operator-= (const Vector2d &v) { x-=v.x; y-=v.y; return *this; }
-    
-    friend std::ostream& operator << (std::ostream &out, const Vector2d &v) { out << v.x << ' ' << v.y; return out; }
-
-};
-
 struct Particle
 {
     Vector2d position;
     Vector2d prev_position;
+    Vector2d prev_position_verlet;
     Vector2d velocity;
     Vector2d acceleration;
     bool fixed;
@@ -81,12 +60,11 @@ private:
 
 struct Wall
 {
-    double width;
-    double height;
-    Vector2d centre;
-    Wall(Vector2d c, double w, double h) {width = w; height = h; centre = c;}
+    Wall(Vector2d c, double w, double h) {width_ = w; height_ = h; centre_ = c;}
     static Wall create(Vector2d c, double w, double h);
-    
+    Vector2d centre_;
+    double width_;
+    double height_;
     int id;
 };
 

@@ -16,12 +16,6 @@ std::vector<Particle> particles;
 std::vector<Bar> bars;
 std::vector<Wall> walls;
 
-float random(float range)
-{
-    float r = 1.0 * rand() / RAND_MAX;
-    return r * 2 * range - range;
-}
-
 Particle Particle::create(double a, double b, bool fixed)
 {
     // TODO
@@ -36,6 +30,7 @@ Particle Particle::create(double a, double b, bool fixed)
     p.velocity = velocity;
     
     p.prev_position = p.position - delta_t * p.velocity;
+    p.prev_position_verlet = p.position - delta_t * p.velocity;
     
     p.acceleration = Vector2d(0.0, 0.0);
     p.external_acceleration = Vector2d(0.0, 0.0);

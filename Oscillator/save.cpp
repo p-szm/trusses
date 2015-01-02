@@ -7,12 +7,14 @@
 //
 
 #include "save.h"
-#include "particle.h"
-#include "graphics.h"
-#include <time.h>
+
+#include <sys/time.h>
 #include <fstream>
 #include <sstream>
 #include <vector>
+
+#include "particle.h"
+#include "graphics.h"
 
 template<typename T>
 void read_numbers(std::string str, std::vector<T> & target_v)
@@ -146,7 +148,7 @@ void save(std::string filename)
     // Print walls
     for (int i = 0; i < walls_number; i++)
     {
-        file << 'w' << walls[i].id << ' ' << walls[i].centre << ' ' << walls[i].width << ' ' << walls[i].height << std::endl;
+        file << 'w' << walls[i].id << ' ' << walls[i].centre_ << ' ' << walls[i].width_ << ' ' << walls[i].height_ << std::endl;
     }
     file << std::endl;
     

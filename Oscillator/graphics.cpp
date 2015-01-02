@@ -7,10 +7,12 @@
 //
 
 #include "graphics.h"
+
 #include <sstream>
+
 #include "save.h"
 #include "physics.h"
-#include <cmath>
+#include "button.h"
 
 int window_width = 1400;
 int window_height = 900;
@@ -35,12 +37,21 @@ Vector2d snapped_point(0.0, 0.0);
 extern std::vector<Particle> particles;
 extern std::vector<Bar> bars;
 
-void glut_print (float x, float y, std::string s)
+void glut_print (float x, float y, std::string s, bool px)
 // Prints string at location (x,y) in a bitmap font
 {
     unsigned short i;
     
-    glRasterPos2f(x*2.0*scale/window_width, y*2.0*scale/window_height);
+    x = convert_to_gl_coords_x(x);
+    y = convert_to_gl_coords_y(y);
+    
+    if (px)
+    {
+        x /= scale;
+        y /= scale;
+    }
+    
+    glRasterPos2f(x, y);
     for (i = 0; i < s.length(); i++) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, s[i]);
 }
 
@@ -50,7 +61,7 @@ void display_fps(double dt)
     
     std::ostringstream s;
     s << "fps: " << int(1/dt);
-    glut_print((-window_width/2.0+30)/scale, (-window_height/2.0+20)/scale, s.str());
+    glut_print(-window_width/2.0+30, -window_height/2.0+20, s.str(), true);
 }
 
 void display_energy()
@@ -60,7 +71,7 @@ void display_energy()
     std::ostringstream s;
     s.precision(3);
     s << "Energy: " << energy(particles);
-    glut_print((window_width/2.0-60)/scale, (-window_height/2.0+20)/scale, s.str());
+    glut_print(window_width/2.0-60, -window_height/2.0+20, s.str(), true);
 }
 
 void draw_gravity_indicator()
@@ -132,6 +143,11 @@ void display()
         glVertex2d(pos_gl.x, pos_gl.y);
         glEnd();
     }
+
+    for (int i = 0; i < buttons_number; i++)
+    {
+        draw_button(buttons[i]);
+    }
     
     display_fps(delta_t);
     display_energy();
@@ -148,6 +164,12 @@ void reshape(int width, int height)
     window_width = width;
     window_height = height;
     glScalef(window_width/2.0, window_height/2.0, 1.0);
+    
+    // Reposition the buttons
+    for (int i = 0; i < buttons_number; i++)
+    {
+        buttons[i].update_position();
+    }
 }
 
 void mouse_click (int button, int state, int x, int y)
@@ -197,9 +219,27 @@ void mouse_click (int button, int state, int x, int y)
     
     else if (state == GLUT_DOWN)
     {
+        bool button_hit = false;
+        
+        // If a button was hit
+        for (int i = 0; i < buttons_number || button_hit == true; i++)
+        {
+            if (buttons[i].is_hit(x_px, y_px) && state == GLUT_DOWN)
+            {
+                buttons[i].execute_action();
+                std::cout << "Button " << buttons[i].id <<" was clicked" << std::endl;
+                button_hit = true;
+                return;
+            }
+        }
 
+        if (button_hit)
+        {
+            
+        }
+        
         // If a particle was clicked and one was already selected
-        if (hit_particle_id != -1 && selected_particle_id != -1)
+        else if (hit_particle_id != -1 && selected_particle_id != -1)
         {
             Bar new_b = Bar::create(hit_particle_id, selected_particle_id);
             bars.push_back(new_b);
@@ -289,7 +329,7 @@ void key_pressed(unsigned char key, int x, int y)
     }
     else if (key == 'p')
     {
-        load("/Users/patrick/Desktop/cantilever.txt");
+        load("/Users/patrick/Desktop/cube.txt");
     }
     else if (key == 'i')
     {
@@ -297,7 +337,7 @@ void key_pressed(unsigned char key, int x, int y)
     }
     else if (key == 'w')
     {
-        walls.push_back(Wall::create(Vector2d(0.0, -1.0), 10, 0.1));
+        walls.push_back(Wall::create(Vector2d(0.0, -0.1), 10, 0.1));
     }
     
     glutPostRedisplay();
@@ -309,20 +349,6 @@ void idle()
     update_position(particles);
     
     glutPostRedisplay();
-}
-
-double abs_d(double x)
-{
-    if (x >= 0.0)
-        return x;
-    else
-        return -x;
-}
-
-double round(double x)
-{
-    x += 0.5;
-    return floor(x);
 }
 
 void mouse_passive(int x, int y)
@@ -489,47 +515,105 @@ void draw_coords()
     
     glBegin(GL_LINES);
     
+    // Draw the axis
     glVertex2f(0.0, 1.0);
     glVertex2f(0.0, -1.0);
     glVertex2f(-1.0, 0.0);
     glVertex2f(1.0, 0.0);
     
+    // Draw the scale
     double scale_size = 5; // px
     
     for (int i = 1; i < window_height/(2.0*scale); i++)
     {
+        // For +ve y
+        double left_x = -2.0*scale_size/window_width;
+        double left_y = i*2.0*scale/window_height;
+        double right_x = -left_x;
+        double right_y = left_y;
+        
         // +ve y
-        glVertex2f(-2.0*scale_size/window_width, i*2.0*scale/window_height);
-        glVertex2f(2.0*scale_size/window_width, i*2.0*scale/window_height);
+        glVertex2f(left_x, left_y);
+        glVertex2f(right_x, right_y);
         
         // -ve y
-        glVertex2f(-2.0*scale_size/window_width, -i*2.0*scale/window_height);
-        glVertex2f(2.0*scale_size/window_width, -i*2.0*scale/window_height);
+        glVertex2f(left_x, -left_y);
+        glVertex2f(right_x, -right_y);
     }
     
     for (int i = 1; i < window_width/(2.0*scale); i++)
     {
+        // For +ve x
+        double bottom_x = i*2.0*scale/window_width;
+        double bottom_y = -2.0*scale_size/window_height;
+        double top_x = bottom_x;
+        double top_y = -bottom_y;
+        
         // +ve x
-        glVertex2f(i*2.0*scale/window_width, -2.0*scale_size/window_height);
-        glVertex2f(i*2.0*scale/window_width, 2.0*scale_size/window_height);
+        glVertex2f(bottom_x, bottom_y);
+        glVertex2f(top_x, top_y);
         
         // -ve x
-        glVertex2f(-i*2.0*scale/window_width, -2.0*scale_size/window_height);
-        glVertex2f(-i*2.0*scale/window_width, 2.0*scale_size/window_height);
+        glVertex2f(-bottom_x, bottom_y);
+        glVertex2f(-top_x, top_y);
     }
     
     glEnd();
 }
 
-void draw_wall(const Wall& w)
+Vector2d convert_to_gl_coords(const Vector2d& v)
 {
+    return Vector2d(v.x * 2.0 * scale / window_width, v.y * 2.0 * scale / window_height);
+}
+
+double convert_to_gl_coords_x(double d)
+{
+    return d * 2.0 * scale / window_width;
+}
+
+double convert_to_gl_coords_y(double d)
+{
+    return d * 2.0 * scale / window_height;
+}
+
+void draw_rectangle(Vector2d c, double w, double h, bool px)
+{
+    Vector2d centre;
+    double half_width, half_height;
+    
+    if (px)
+    {
+        // Convert from pixels to gl coords
+        double scale_inverse = 1.0 / scale;
+        centre = convert_to_gl_coords(scale_inverse * c);
+        half_width = 0.5 * convert_to_gl_coords_x(scale_inverse * w);
+        half_height = 0.5 * convert_to_gl_coords_y(scale_inverse * h);
+    }
+    else
+    {
+        // Convert from metres to gl coords
+        centre = convert_to_gl_coords(c);
+        half_width = 0.5 * convert_to_gl_coords_x(w);
+        half_height = 0.5 * convert_to_gl_coords_y(h);
+    }
+    
     glColor3f(1.0, 1.0, 1.0);
     glLineWidth(1.0);
     
     glBegin(GL_LINE_LOOP);
-    glVertex2f((w.centre.x-w.width/2.0)*2.0*scale/window_width, (w.centre.y+w.height/2.0)*2.0*scale/window_height);
-    glVertex2f((w.centre.x+w.width/2.0)*2.0*scale/window_width, (w.centre.y+w.height/2.0)*2.0*scale/window_height);
-    glVertex2f((w.centre.x+w.width/2.0)*2.0*scale/window_width, (w.centre.y-w.height/2.0)*2.0*scale/window_height);
-    glVertex2f((w.centre.x-w.width/2.0)*2.0*scale/window_width, (w.centre.y-w.height/2.0)*2.0*scale/window_height);
+    glVertex2f(centre.x - half_width, centre.y + half_height);
+    glVertex2f(centre.x + half_width, centre.y + half_height);
+    glVertex2f(centre.x + half_width, centre.y - half_height);
+    glVertex2f(centre.x - half_width, centre.y - half_height);
     glEnd();
+}
+
+void draw_button(const Button& rect)
+{
+    draw_rectangle(rect.centre_, rect.width_, rect.height_, true);
+}
+
+void draw_wall(const Wall& w)
+{
+    draw_rectangle(w.centre_, w.width_, w.height_, false);
 }

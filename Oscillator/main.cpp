@@ -12,7 +12,7 @@
 
 #include "graphics.h"
 #include "physics.h" // for time
-#include <vector>
+#include "button.h"
 
 int main(int argc, char * argv[])
 {
@@ -47,6 +47,8 @@ int main(int argc, char * argv[])
     
     microsecond_time(t);
     delta_t = (t - prev_t)/1000000.0;
+    
+    create_buttons();
     
     glutMainLoop();
     

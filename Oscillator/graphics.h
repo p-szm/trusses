@@ -9,18 +9,16 @@
 #ifndef __Oscillator__graphics__
 #define __Oscillator__graphics__
 
-#include <iostream>
 #include <GLUT/glut.h>
 #include <OpenGL/gl.h>
-#include <sstream>
-#include <vector>
 
 #include "particle.h"
+#include "button.h"
 
 extern int window_width;
 extern int window_height;
 
-void glut_print (float x, float y, std::string s);
+void glut_print (float x, float y, std::string s, bool px = false);
 void display_fps(double dt);
 void display_energy();
 void draw_gravity_indicator();
@@ -38,10 +36,19 @@ void draw_particle(const Particle& p);
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b);
 void draw_bar(const Bar& b);
 void draw_coords();
-void draw_wall(const Wall& w);
-
-double abs_d(double x);
 
 extern int selected_particle_id;
+
+void draw_rectangle(Vector2d c, double w, double h, bool px);
+
+void draw_wall(const Wall& w);
+void draw_button(const Button& rect);
+
+Vector2d convert_to_gl_coords(const Vector2d& v);
+double convert_to_gl_coords_x(double d);
+double convert_to_gl_coords_y(double d);
+
+extern bool ids;
+extern bool velocities;
 
 #endif /* defined(__Oscillator__graphics__) */
