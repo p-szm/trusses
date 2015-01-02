@@ -73,7 +73,7 @@ void check_boundaries(Particle& p)
         double wall_right = w->centre_.x + w->width_/2.0;
         
         // Particle penetrated the bottom wall
-        if (prev_pos.y <= wall_bottom && pos.y >= wall_bottom)
+        if (prev_pos.y <= wall_bottom && pos.y >= wall_bottom && prev_pos.x >= wall_left && prev_pos.x <= wall_right)
         {
             p.position.y = wall_bottom;
             p.velocity = Vector2d(eng_regained_par*vel.x, -eng_regained_perp*vel.y);
@@ -83,7 +83,7 @@ void check_boundaries(Particle& p)
         }
         
         // Particle penetrated the left wall
-        else if (prev_pos.x <= wall_left && pos.x >= wall_left)
+        else if (prev_pos.x <= wall_left && pos.x >= wall_left && prev_pos.y <= wall_top && prev_pos.y >= wall_bottom)
         {
             p.position.x = wall_left;
             p.velocity = Vector2d(-eng_regained_perp*vel.x, eng_regained_par*vel.y);
@@ -91,7 +91,7 @@ void check_boundaries(Particle& p)
         }
         
         // Particle penetrated the right wall
-        else if (prev_pos.x >= wall_right && pos.x <= wall_right)
+        else if (prev_pos.x >= wall_right && pos.x <= wall_right && prev_pos.y <= wall_top && prev_pos.y >= wall_bottom)
         {
             p.position.x = wall_right;
             p.velocity = Vector2d(-eng_regained_perp*vel.x, eng_regained_par*vel.y);
@@ -99,7 +99,7 @@ void check_boundaries(Particle& p)
         }
         
         // Particle penetrated the top wall
-        else if (prev_pos.y >= wall_top && pos.y <= wall_top)
+        else if (prev_pos.y >= wall_top && pos.y <= wall_top && prev_pos.x >= wall_left && prev_pos.x <= wall_right)
         {
             p.position.y = wall_top;
             p.velocity = Vector2d(eng_regained_par*vel.x, -eng_regained_perp*vel.y);

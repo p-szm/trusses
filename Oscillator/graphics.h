@@ -50,5 +50,12 @@ double convert_to_gl_coords_y(double d);
 
 extern bool ids;
 extern bool velocities;
+extern bool accelerations;
+
+extern bool lengths;
+extern bool extension_rates;
+
+extern bool coords;
+extern bool snap;
 
 #endif /* defined(__Oscillator__graphics__) */

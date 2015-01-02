@@ -23,14 +23,14 @@ bool lengths = false;
 bool extension_rates = false;
 bool coords = true;
 bool ids = false;
+bool snap = true;
+bool short_scale = false;
 
 int min_click_dist = 8; // pixels
-
 double scale = 150.0; // pixels/metre
 
 int selected_particle_id = -1;
 
-bool snap = true;
 bool snapped = false;
 Vector2d snapped_point(0.0, 0.0);
 
@@ -99,16 +99,16 @@ void display()
     if (coords)
         draw_coords();
     
-    // Draw the particles
-    for (int i = 0; i < particles_number; i++)
-    {
-        draw_particle(particles[i]);
-    }
-    
     // Draw the bars
     for (int i = 0; i < bars_number; i++)
     {
         draw_bar(bars[i]);
+    }
+    
+    // Draw the particles
+    for (int i = 0; i < particles_number; i++)
+    {
+        draw_particle(particles[i]);
     }
     
     // Draw the vectors
@@ -144,6 +144,7 @@ void display()
         glEnd();
     }
 
+    // Draw buttons
     for (int i = 0; i < buttons_number; i++)
     {
         draw_button(buttons[i]);
@@ -328,7 +329,7 @@ void key_pressed(unsigned char key, int x, int y)
     }
     else if (key == 'p')
     {
-        load("/Users/patrick/Desktop/cube.txt");
+        load("/Users/patrick/Desktop/cantilever.txt");
     }
     else if (key == 'i')
     {
@@ -379,6 +380,7 @@ void mouse_passive(int x, int y)
         }
     }
     
+    // Snap to the grid
     if (abs_d(closest_x*scale-x_px) < min_click_dist && abs_d(closest_y*scale-y_px) < min_click_dist)
     {
         snapped = true;
@@ -389,6 +391,7 @@ void mouse_passive(int x, int y)
         snapped = false;
     }
     
+    // Highlight particles
     for (int i = 0; i < particles_number; i++)
     {
         Vector2d p_pos = particles[i].position;
@@ -398,11 +401,6 @@ void mouse_passive(int x, int y)
         }
         else
             particles[i].highlight = false;
-    }
-    
-    if (snap)
-    {
-        
     }
 }
 
@@ -434,25 +432,36 @@ void special_key_down(int key, int x, int y)
 
 void draw_particle(const Particle& p)
 {
-    glColor3f(1.0, 1.0, 1.0);
-    
     Vector2d pos = p.position;
     Vector2d pos_gl(pos.x*2.0*scale/window_width, pos.y*2.0*scale/window_height);
     
-    if (p.highlight || selected_particle_id == p.id)
+    // If selected
+    if (selected_particle_id == p.id)
     {
+        glColor3f(1.0, 1.0, 0.0);
         glPointSize(10);
-        glBegin(GL_POINTS);
-        glVertex2f(pos_gl.x, pos_gl.y);
-        glEnd();
+    }
+    // If fixed
+    else if (p.fixed)
+    {
+        glColor3f(1.0, 0.0, 0.0);
+        glPointSize(5);
     }
     else
     {
+        glColor3f(1.0, 1.0, 1.0);
         glPointSize(5);
-        glBegin(GL_POINTS);
-        glVertex2f(pos_gl.x, pos_gl.y);
-        glEnd();
     }
+    
+    // Increase the point size if highlighted and not selected
+    if (p.highlight && selected_particle_id != p.id)
+    {
+        glPointSize(10);
+    }
+    
+    glBegin(GL_POINTS);
+    glVertex2f(pos_gl.x, pos_gl.y);
+    glEnd();
     
     if (ids)
     {
@@ -546,7 +555,6 @@ void draw_coords()
     
     glBegin(GL_LINES);
     
-    bool short_scale = false;
     double scale_size = 5; // px
     
     // For +ve y and +ve x
@@ -655,19 +663,24 @@ void draw_rectangle(Vector2d c, double w, double h, bool px)
 
 void draw_button(const Button& b)
 {
-    if (b.highlighted_ || b.active_)
+    if (b.active_)
     {
-        glColor3f(0.8, 0.0, 0.0);
+        glColor3f(1.0, 1.0, 0.0);
+        glLineWidth(2.0);
+    }
+    else if (b.highlighted_)
+    {
+        glColor3f(0.8, 0.8, 0.0);
         glLineWidth(2.0);
     }
     else
     {
         glColor3f(1.0, 1.0, 1.0);
-        glLineWidth(1.0);
+        glLineWidth(2.0);
     }
     
     draw_rectangle(b.centre_, b.width_, b.height_, true);
-    glut_print(b.centre_.x - b.width_/2.0 + 4, b.centre_.y - 4, b.text_, true);
+    glut_print(b.centre_.x - b.width_/2.0 + 5, b.centre_.y - 4, b.text_, true);
 }
 
 void draw_wall(const Wall& w)

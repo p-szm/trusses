@@ -76,8 +76,40 @@ void button1_action(void)
     velocities = !velocities;
 }
 
+void button2_action(void)
+{
+    accelerations = !accelerations;
+}
+
+void button3_action(void)
+{
+    lengths = !lengths;
+}
+
+void button4_action(void)
+{
+    extension_rates = !extension_rates;
+}
+
+void button5_action(void)
+{
+    coords = !coords;
+}
+
+void button6_action(void)
+{
+    snap = !snap;
+}
+
 void create_buttons()
 {
-    buttons.push_back(Button(50, 30, -20, -20, &button0_action, "ids"));
-    buttons.push_back(Button(50, 30, -20, -70, &button1_action, "vels"));
+    buttons.push_back(Button(60, 30, -20, -20, &button0_action, "Ids"));
+    buttons.push_back(Button(60, 30, -20, -70, &button1_action, "Vels"));
+    buttons.push_back(Button(60, 30, -20, -120, &button2_action, "Accels"));
+    buttons.push_back(Button(60, 30, -20, -170, &button3_action, "Lengths"));
+    buttons.push_back(Button(60, 30, -20, -220, &button4_action, "Ext rates"));
+    buttons.push_back(Button(60, 30, -20, -270, &button5_action, "Coords"));
+    buttons.push_back(Button(60, 30, -20, -320, &button6_action, "Snap"));
+    buttons[6].active_ = true;
+
 }

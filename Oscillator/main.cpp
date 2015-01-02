@@ -27,7 +27,7 @@ int main(int argc, char * argv[])
     glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
     
     // Create a window
-    glutCreateWindow("GLUT test");
+    glutCreateWindow("Truss simulation");
     
     // Register callback functions
     glutDisplayFunc(display);
