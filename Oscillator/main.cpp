@@ -13,6 +13,7 @@
 #include "graphics.h"
 #include "physics.h" // for time
 #include "button.h"
+#include "interface.h"
 
 int main(int argc, char * argv[])
 {

@@ -16,6 +16,7 @@
 
 #include "particle.h"
 #include "graphics.h"
+#include "interface.h"
 
 template<typename T>
 void read_numbers(std::string str, std::vector<T> & target_v)
@@ -122,11 +123,11 @@ void save(std::string filename)
     // Print particles
     for (int i = 0; i < particles_number; i++)
     {
-        if (particles[i].fixed)
+        if (particles[i].fixed_)
             file << 'f';
         else
             file << 'p';
-        file << particles[i].id << ' ' << particles[i].position;
+        file << particles[i].id_ << ' ' << particles[i].position_;
         file << std::endl;
     }
     file << std::endl;

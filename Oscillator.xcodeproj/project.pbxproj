@@ -16,6 +16,9 @@
 		CDD4AA5C1A55830C00E2DC67 /* save.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA5A1A55830C00E2DC67 /* save.cpp */; };
 		CDD4AA601A56A6EA00E2DC67 /* button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA5E1A56A6EA00E2DC67 /* button.cpp */; };
 		CDD4AA651A56AECF00E2DC67 /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA631A56AECF00E2DC67 /* math.cpp */; };
+		CDD4AA6B1A5875B700E2DC67 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA691A5875B700E2DC67 /* interface.cpp */; };
+		CDD4AA6E1A587B8A00E2DC67 /* wall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA6C1A587B8A00E2DC67 /* wall.cpp */; };
+		CDD4AA711A587CA800E2DC67 /* bar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA6F1A587CA800E2DC67 /* bar.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +50,12 @@
 		CDD4AA5F1A56A6EA00E2DC67 /* button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = button.h; sourceTree = "<group>"; };
 		CDD4AA631A56AECF00E2DC67 /* math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = math.cpp; sourceTree = "<group>"; };
 		CDD4AA641A56AECF00E2DC67 /* math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
+		CDD4AA691A5875B700E2DC67 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface.cpp; sourceTree = "<group>"; };
+		CDD4AA6A1A5875B700E2DC67 /* interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface.h; sourceTree = "<group>"; };
+		CDD4AA6C1A587B8A00E2DC67 /* wall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wall.cpp; sourceTree = "<group>"; };
+		CDD4AA6D1A587B8A00E2DC67 /* wall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wall.h; sourceTree = "<group>"; };
+		CDD4AA6F1A587CA800E2DC67 /* bar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bar.cpp; sourceTree = "<group>"; };
+		CDD4AA701A587CA800E2DC67 /* bar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bar.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,12 +101,15 @@
 		CDD4AA611A56AE4B00E2DC67 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				CD74D2221A531983000B6F31 /* physics.h */,
-				CD74D21C1A53126B000B6F31 /* particle.h */,
-				CD74D21F1A5314AE000B6F31 /* graphics.h */,
-				CDD4AA5B1A55830C00E2DC67 /* save.h */,
+				CDD4AA701A587CA800E2DC67 /* bar.h */,
 				CDD4AA5F1A56A6EA00E2DC67 /* button.h */,
+				CD74D21F1A5314AE000B6F31 /* graphics.h */,
+				CDD4AA6A1A5875B700E2DC67 /* interface.h */,
 				CDD4AA641A56AECF00E2DC67 /* math.h */,
+				CD74D21C1A53126B000B6F31 /* particle.h */,
+				CD74D2221A531983000B6F31 /* physics.h */,
+				CDD4AA5B1A55830C00E2DC67 /* save.h */,
+				CDD4AA6D1A587B8A00E2DC67 /* wall.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -105,13 +117,16 @@
 		CDD4AA621A56AE6400E2DC67 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				CD74D2101A5214CC000B6F31 /* main.cpp */,
-				CD74D2211A531983000B6F31 /* physics.cpp */,
-				CD74D21B1A53126B000B6F31 /* particle.cpp */,
-				CD74D21E1A5314AE000B6F31 /* graphics.cpp */,
-				CDD4AA5A1A55830C00E2DC67 /* save.cpp */,
+				CDD4AA6F1A587CA800E2DC67 /* bar.cpp */,
 				CDD4AA5E1A56A6EA00E2DC67 /* button.cpp */,
+				CD74D21E1A5314AE000B6F31 /* graphics.cpp */,
+				CDD4AA691A5875B700E2DC67 /* interface.cpp */,
+				CD74D2101A5214CC000B6F31 /* main.cpp */,
 				CDD4AA631A56AECF00E2DC67 /* math.cpp */,
+				CD74D21B1A53126B000B6F31 /* particle.cpp */,
+				CD74D2211A531983000B6F31 /* physics.cpp */,
+				CDD4AA5A1A55830C00E2DC67 /* save.cpp */,
+				CDD4AA6C1A587B8A00E2DC67 /* wall.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -174,11 +189,14 @@
 			files = (
 				CD74D2111A5214CC000B6F31 /* main.cpp in Sources */,
 				CDD4AA601A56A6EA00E2DC67 /* button.cpp in Sources */,
+				CDD4AA6E1A587B8A00E2DC67 /* wall.cpp in Sources */,
 				CD74D21D1A53126B000B6F31 /* particle.cpp in Sources */,
 				CD74D2201A5314AE000B6F31 /* graphics.cpp in Sources */,
+				CDD4AA711A587CA800E2DC67 /* bar.cpp in Sources */,
 				CDD4AA651A56AECF00E2DC67 /* math.cpp in Sources */,
 				CDD4AA5C1A55830C00E2DC67 /* save.cpp in Sources */,
 				CD74D2231A531983000B6F31 /* physics.cpp in Sources */,
+				CDD4AA6B1A5875B700E2DC67 /* interface.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
