@@ -60,12 +60,16 @@ private:
 
 struct Wall
 {
-    Wall(Vector2d c, double w, double h) {width_ = w; height_ = h; centre_ = c;}
-    static Wall create(Vector2d c, double w, double h);
-    Vector2d centre_;
-    double width_;
-    double height_;
+    Wall(Vector2d p1, Vector2d p2) {p1_ = p1; p2_ = p2;}
+    static Wall create(Vector2d p1, Vector2d p2);
+    Vector2d p1_;
+    Vector2d p2_;
     int id;
+    
+    double x_min() const;
+    double x_max() const;
+    double y_min() const;
+    double y_max() const;
 };
 
 extern std::vector<Particle> particles;

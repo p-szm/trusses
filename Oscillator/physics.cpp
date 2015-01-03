@@ -63,10 +63,10 @@ void check_boundaries(Particle& p)
     for (int i = 0; i < walls_number; i++)
     {
         Wall* w = &walls[i];
-        double wall_top = w->centre_.y + w->height_/2.0;
-        double wall_bottom = w->centre_.y - w->height_/2.0;
-        double wall_left = w->centre_.x - w->width_/2.0;
-        double wall_right = w->centre_.x + w->width_/2.0;
+        double wall_top = w->y_max();
+        double wall_bottom = w->y_min();
+        double wall_left = w->x_min();
+        double wall_right = w->x_max();
         
         // Particle penetrated the bottom wall
         if (prev_pos.y <= wall_bottom && pos.y >= wall_bottom && prev_pos.x >= wall_left && prev_pos.x <= wall_right)

@@ -37,4 +37,7 @@ float random(float range);
 double abs_d(double x);
 double round(double x);
 
+double min(double a, double b);
+double max(double a, double b);
+
 #endif /* defined(__Oscillator__math__) */

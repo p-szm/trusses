@@ -101,7 +101,7 @@ int load(std::string filename)
             std::vector<int> v;
             read_numbers(line, v);
             
-            walls.push_back(Wall::create(Vector2d(v[0], v[1]), v[2], v[3]));
+            walls.push_back(Wall::create(Vector2d(v[0], v[1]), Vector2d(v[2], v[3])));
         }
     }
     
@@ -141,7 +141,7 @@ void save(std::string filename)
     // Print walls
     for (int i = 0; i < walls_number; i++)
     {
-        file << 'w' << walls[i].id << ' ' << walls[i].centre_ << ' ' << walls[i].width_ << ' ' << walls[i].height_ << std::endl;
+        file << 'w' << walls[i].id << ' ' << walls[i].p1_ << ' ' << walls[i].p1_ << std::endl;
     }
     file << std::endl;
     

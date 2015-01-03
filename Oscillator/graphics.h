@@ -39,14 +39,28 @@ void draw_coords();
 
 extern int selected_particle_id;
 
-void draw_rectangle(Vector2d c, double w, double h, bool px);
+void draw_rectangle(Vector2d p1, Vector2d p2, bool px);
 
 void draw_wall(const Wall& w);
 void draw_button(const Button& b);
 
-Vector2d metres_to_gl_coords(const Vector2d& v);
-double metres_to_gl_coords_x(double d);
-double metres_to_gl_coords_y(double d);
+/////
+
+inline Vector2d metres_to_gl_coords(const Vector2d& v);
+inline double metres_to_gl_coords_x(double d);
+inline double metres_to_gl_coords_y(double d);
+
+inline Vector2d px_to_gl_coords(Vector2d v);
+inline double px_to_gl_coords_x(double d);
+inline double px_to_gl_coords_y(double d);
+
+inline Vector2d m_to_px(Vector2d v);
+inline double m_to_px(double d);
+
+inline Vector2d px_to_m(Vector2d v);
+inline double px_to_m(double d);
+
+/////
 
 extern bool ids;
 extern bool velocities;
@@ -59,5 +73,7 @@ extern bool coords;
 extern bool snap;
 
 extern double scale;
+
+extern bool drawing_wall;
 
 #endif /* defined(__Oscillator__graphics__) */

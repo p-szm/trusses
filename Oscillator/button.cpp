@@ -132,6 +132,11 @@ void button_scale_down_action(void)
     scale /= 1.1;
 }
 
+void button_draw_wall_action(void)
+{
+    drawing_wall = true;
+}
+
 void create_buttons()
 {
     buttons.push_back(Button(60, 30, -20, -20, &button_ids_action, "Ids"));
@@ -151,5 +156,6 @@ void create_buttons()
     buttons[10].change_state_ = false;
     buttons.push_back(Button(60, 30, -20, -620, &button_scale_down_action, "     -"));
     buttons[11].change_state_ = false;
+    buttons.push_back(Button(60, 30, -20, -670, &button_draw_wall_action, "Wall")); // 12
     
 }

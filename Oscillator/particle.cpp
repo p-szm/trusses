@@ -122,12 +122,35 @@ double Bar::extension_rate() const
 
 /////
 
-Wall Wall::create(Vector2d c, double w, double h)
+Wall Wall::create(Vector2d p1, Vector2d p2)
 {
-    Wall wl = Wall(c, w, h);
+    Wall wl = Wall(p1, p2);
     
     wl.id = walls_number;
     walls_number ++;
     
     return wl;
 }
+
+double Wall::x_min() const
+{
+    return min(p1_.x, p2_.x);
+}
+
+double Wall::x_max() const
+{
+    return max(p1_.x, p2_.x);
+}
+
+double Wall::y_min() const
+{
+    return min(p1_.y, p2_.y);
+}
+
+double Wall::y_max() const
+{
+    return max(p1_.y, p2_.y);
+}
+
+double min_y();
+double max_y();

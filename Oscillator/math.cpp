@@ -27,3 +27,19 @@ double round(double x)
     x += 0.5;
     return floor(x);
 }
+
+double min(double a, double b)
+{
+    if (a >= b)
+        return b;
+    else
+        return a;
+}
+
+double max(double a, double b)
+{
+    if (a >= b)
+        return a;
+    else
+        return b;
+}
