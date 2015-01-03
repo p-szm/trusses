@@ -8,6 +8,8 @@
 
 #include "button.h"
 #include "graphics.h"
+#include "save.h"
+#include "physics.h"
 
 int buttons_number = 0;
 std::vector<Button> buttons {};
@@ -22,6 +24,7 @@ Button::Button(double w, double h, double x_sh, double y_sh, void (*a)(void), st
     highlighted_ = false;
     text_ = t;
     active_ = false;
+    change_state_ = true;
     
     id_ = buttons_number;
     buttons_number ++;
@@ -45,7 +48,8 @@ bool Button::is_hit(double x, double y)
 void Button::execute_action()
 {
     action();
-    active_ = !active_;
+    if (change_state_)
+        active_ = !active_;
 }
 
 void Button::update_position()
@@ -66,50 +70,86 @@ void Button::update_position()
         centre_.y = window_height / 2.0 - half_height + y_shift_;
 }
 
-void button0_action(void)
+void button_ids_action(void)
 {
     ids = !ids;
 }
 
-void button1_action(void)
+void button_velocities_action(void)
 {
     velocities = !velocities;
 }
 
-void button2_action(void)
+void button_accelerations_action(void)
 {
     accelerations = !accelerations;
 }
 
-void button3_action(void)
+void button_lengths_action(void)
 {
     lengths = !lengths;
 }
 
-void button4_action(void)
+void button_ext_rates_action(void)
 {
     extension_rates = !extension_rates;
 }
 
-void button5_action(void)
+void button_coords_action(void)
 {
     coords = !coords;
 }
 
-void button6_action(void)
+void button_snap_action(void)
 {
     snap = !snap;
 }
 
+void button_reset_action(void)
+{
+    reset();
+}
+
+void button_save_action(void)
+{
+    std::string path = "/Users/patrick/Desktop/save-";
+    path += date_str() + '-' + time_str();
+    save(path);
+}
+
+void button_gravity_action(void)
+{
+    gravity = !gravity;
+}
+
+void button_scale_up_action(void)
+{
+    scale *= 1.1;
+}
+
+void button_scale_down_action(void)
+{
+    scale /= 1.1;
+}
+
 void create_buttons()
 {
-    buttons.push_back(Button(60, 30, -20, -20, &button0_action, "Ids"));
-    buttons.push_back(Button(60, 30, -20, -70, &button1_action, "Vels"));
-    buttons.push_back(Button(60, 30, -20, -120, &button2_action, "Accels"));
-    buttons.push_back(Button(60, 30, -20, -170, &button3_action, "Lengths"));
-    buttons.push_back(Button(60, 30, -20, -220, &button4_action, "Ext rates"));
-    buttons.push_back(Button(60, 30, -20, -270, &button5_action, "Coords"));
-    buttons.push_back(Button(60, 30, -20, -320, &button6_action, "Snap"));
+    buttons.push_back(Button(60, 30, -20, -20, &button_ids_action, "Ids"));
+    buttons.push_back(Button(60, 30, -20, -70, &button_velocities_action, "Vels"));
+    buttons.push_back(Button(60, 30, -20, -120, &button_accelerations_action, "Accels"));
+    buttons.push_back(Button(60, 30, -20, -170, &button_lengths_action, "Lengths"));
+    buttons.push_back(Button(60, 30, -20, -220, &button_ext_rates_action, "Ext rates"));
+    buttons.push_back(Button(60, 30, -20, -270, &button_coords_action, "Coords"));
+    buttons.push_back(Button(60, 30, -20, -320, &button_snap_action, "Snap"));
     buttons[6].active_ = true;
-
+    buttons.push_back(Button(60, 30, -20, -420, &button_reset_action, "Reset"));
+    buttons[7].change_state_ = false;
+    buttons.push_back(Button(60, 30, -20, -470, &button_save_action, "Save"));
+    buttons[8].change_state_ = false;
+    buttons.push_back(Button(60, 30, 23, -30, &button_gravity_action, "Gravity"));
+    buttons.push_back(Button(60, 30, -20, -570, &button_scale_up_action, "     +"));
+    buttons[10].change_state_ = false;
+    buttons.push_back(Button(60, 30, -20, -620, &button_scale_down_action, "     -"));
+    buttons[11].change_state_ = false;
+    
 }

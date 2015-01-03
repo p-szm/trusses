@@ -117,15 +117,7 @@ void save(std::string filename)
     std::ofstream file(filename);
     
     // Print time
-    time_t rawtime;
-    struct tm * timeinfo;
-    
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
-    
-    //std::cout << asctime (timeinfo) << std::endl;
-    file << timeinfo->tm_year + 1900 << '-' << timeinfo->tm_mon + 1 << '-' << timeinfo->tm_mday << ' ';
-    file << timeinfo->tm_hour << ':' << timeinfo->tm_min << ':' << timeinfo->tm_sec << std::endl << std::endl;
+    file << date_str() << ' ' << time_str() << std::endl << std::endl;;
     
     // Print particles
     for (int i = 0; i < particles_number; i++)
@@ -210,4 +202,34 @@ void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)
             bars.push_back(Bar::create(id0 + i + n * j, id0 + i + n * (j + 1)));
         }
     }
+}
+
+std::string date_str()
+{
+    time_t rawtime;
+    struct tm * timeinfo;
+    
+    time ( &rawtime );
+    timeinfo = localtime ( &rawtime );
+    
+    std::ostringstream s;
+    
+    s << timeinfo->tm_year + 1900 << '-' << timeinfo->tm_mon + 1 << '-' << timeinfo->tm_mday;
+    
+    return s.str();
+}
+
+std::string time_str()
+{
+    time_t rawtime;
+    struct tm * timeinfo;
+    
+    time ( &rawtime );
+    timeinfo = localtime ( &rawtime );
+    
+    std::ostringstream s;
+
+    s << timeinfo->tm_hour << '-' << timeinfo->tm_min << '-' << timeinfo->tm_sec;
+    
+    return s.str();
 }

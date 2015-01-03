@@ -58,4 +58,6 @@ extern bool extension_rates;
 extern bool coords;
 extern bool snap;
 
+extern double scale;
+
 #endif /* defined(__Oscillator__graphics__) */

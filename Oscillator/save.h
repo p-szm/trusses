@@ -19,4 +19,7 @@ void reset();
 
 void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix);
 
+std::string date_str();
+std::string time_str();
+
 #endif /* defined(__Oscillator__save__) */

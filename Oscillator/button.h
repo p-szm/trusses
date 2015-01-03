@@ -17,6 +17,8 @@
 class Button
 {
 public:
+    friend void create_buttons();
+    
     // All in pixels relative to the top left corner
     Button(double w, double h, double x_sh, double y_sh, void (*a)(void), std::string t);
     friend void draw();
@@ -35,6 +37,7 @@ private:
     Vector2d centre_;
     double width_;
     double height_;
+    bool change_state_;
 };
 
 void button0_action(void);

@@ -26,7 +26,7 @@ bool ids = false;
 bool snap = true;
 bool short_scale = false;
 
-int min_click_dist = 8; // pixels
+int min_click_dist = 15; // pixels
 double scale = 150.0; // pixels/metre
 
 int selected_particle_id = -1;
@@ -328,7 +328,9 @@ void key_pressed(unsigned char key, int x, int y)
     }
     else if (key == 's')
     {
-        save("/Users/patrick/Desktop/test_save.txt");
+        std::string path = "/Users/patrick/Desktop/save-";
+        path += date_str() + '-' + time_str();
+        save(path);
     }
     else if (key == 'p')
     {
