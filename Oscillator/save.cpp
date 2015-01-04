@@ -93,7 +93,7 @@ int load(std::string filename)
             std::vector<int> v;
             read_numbers(line, v);
             
-            bars.push_back(Bar::create(v[0], v[1]));
+            Bar::create(v[0], v[1]);
         }
         
         // A wall
@@ -102,7 +102,7 @@ int load(std::string filename)
             std::vector<int> v;
             read_numbers(line, v);
             
-            walls.push_back(Wall::create(Vector2d(v[0], v[1]), Vector2d(v[2], v[3])));
+            Wall::create(Vector2d(v[0], v[1]), Vector2d(v[2], v[3]));
         }
     }
     
@@ -135,14 +135,14 @@ void save(std::string filename)
     // Print bars
     for (int i = 0; i < bars_number; i++)
     {
-        file << 'b' << bars[i].id << ' ' << bars[i].p1_id << ' ' << bars[i].p2_id << std::endl;
+        file << 'b' << bars[i].id_.number << ' ' << bars[i].p1_id << ' ' << bars[i].p2_id << std::endl;
     }
     file << std::endl;
     
     // Print walls
     for (int i = 0; i < walls_number; i++)
     {
-        file << 'w' << walls[i].id << ' ' << walls[i].p1_ << ' ' << walls[i].p1_ << std::endl;
+        file << 'w' << walls[i].id_.number << ' ' << walls[i].p1_ << ' ' << walls[i].p2_ << std::endl;
     }
     file << std::endl;
     
@@ -152,13 +152,11 @@ void save(std::string filename)
 
 void reset()
 {
-    particles.clear();
-    bars.clear();
-    walls.clear();
+    reset_walls();
+    reset_bars();
     
+    particles.clear();
     particles_number = 0;
-    bars_number = 0;
-    walls_number = 0;
     
     selected_particle_id = -1;
 }
@@ -191,7 +189,7 @@ void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)
     {
         for (int i = 0; i < n-1; i++)
         {
-            bars.push_back(Bar::create(id0 + j * n + i, id0 + j * n + i + 1));
+            Bar::create(id0 + j * n + i, id0 + j * n + i + 1);
         }
     }
     
@@ -200,7 +198,7 @@ void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)
     {
         for (int j = 0; j < n-1; j++)
         {
-            bars.push_back(Bar::create(id0 + i + n * j, id0 + i + n * (j + 1)));
+            Bar::create(id0 + i + n * j, id0 + i + n * (j + 1));
         }
     }
 }

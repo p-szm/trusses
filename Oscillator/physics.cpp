@@ -47,7 +47,7 @@ double energy(std::vector<Particle>& particles)
     for (int i = 0; i < particles_number; i++)
     {
         double kinetic_energy = 0.5 * particles[i].mass_ * particles[i].velocity_.abs2();
-        double potential_energy = (gravity) ? particles[i].mass_ * g * (particles[i].position_.y + 1.0) : 0.0;
+        //double potential_energy = (gravity) ? particles[i].mass_ * g * (particles[i].position_.y + 1.0) : 0.0;
         
         total_energy += kinetic_energy;// + potential_energy;
     }
@@ -144,9 +144,9 @@ void update_position(std::vector<Particle>& particles)
             Particle* p1 = &particles[b->p1_id];
             Particle* p2 = &particles[b->p2_id];
             
-            double extension = b->length() - b->r0;
+            double extension = b->extension();
             
-            double k = 0.5; // max is 1.0 or it blows up
+            double k = 1.0; // max is 1.0 or it blows up
             double im1 = 1/p1->mass_;
             double im2 = 1/p1->mass_;
             float mult1 = (im1 / (im1 + im2)) * k;
@@ -164,16 +164,42 @@ void update_position(std::vector<Particle>& particles)
         Particle* p = &particles[i];
         
         if (p->fixed_)
-            continue;
-        
-        p->acceleration_ += p->external_acceleration_;
-        
-        if (gravity)
-            p->acceleration_ += Vector2d(0.0, -g);
-        
-        integrate(*p, p->acceleration_, delta_t);
-        
-        // Bounce the particles off the edges
-        check_boundaries(*p);
+        {
+            // p->position_ = p->position_ + Vector2d(0.001, 0.0);
+            // check_boundaries(*p);
+        }
+        else
+        {
+            p->acceleration_ += p->external_acceleration_;
+            
+            if (gravity)
+                p->acceleration_ += Vector2d(0.0, -g);
+            
+            integrate(*p, p->acceleration_, delta_t);
+            
+            // Bounce the particles off the edges
+            check_boundaries(*p);
+        }
     }
+    
+    // Destroy bars which are extended by too much
+    std::vector<ID> bars_to_destroy;
+    for (int i = 0; i < bars_number; i++)
+    {
+        double extension = bars[i].extension() / bars[i].r0;
+        //std::cout << i << std::endl;
+        //std::cout << "ext: " << extension << " " << bars[i].extension() << " " << bars[i].r0 << std::endl;
+        if (extension > 0.1 || extension < -0.1)
+        {
+            //bars_to_destroy.push_back(bars[i].id_);
+            Bar::destroy(bars[i].id_);
+            i--; // The order of bars was mixed up. The last one ended up here, so
+                 // we need to recheck the ith bar 
+        }
+    }
+    
+    /*for (int i = 0; i < bars_to_destroy.size(); i++)
+    {
+        Bar::destroy(bars_to_destroy[i]);
+    }*/
 }

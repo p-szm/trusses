@@ -26,7 +26,7 @@ int min_click_dist = 10; // pixels
 int selected_particle_id = -1;
 int highlighted_particle_id = -1;
 
-double scale = 150.0; // pixels/metre
+double scale = 50.0; // pixels/metre
 
 Vector2d world_centre(0.0, 0.0); // In pixels
 
@@ -78,13 +78,16 @@ void key_pressed(unsigned char key, int x, int y)
     }
     else if (key == 'p')
     {
-        load("/Users/patrick/Desktop/save-2015-1-3-21-14-12");
+        load("/Users/patrick/Desktop/cantilever.txt");
     }
     else if (key == 'o')
     {
-        create_cloth(20, 0.1, Vector2d(0.0, 0.0), false);
+        create_cloth(20, 0.1, Vector2d(0.0, 0.0), true);
     }
-    std::cout << 1 << std::endl;
+    else if (key == 'w')
+    {
+        Wall::destroy(ID(2,0));
+    }
     glutPostRedisplay();
 }
 
@@ -235,8 +238,7 @@ void mouse_click (int button, int state, int x, int y)
         // If a particle was clicked and one was already selected
         else if (hit_particle_id != -1 && selected_particle_id != -1)
         {
-            Bar new_b = Bar::create(hit_particle_id, selected_particle_id);
-            bars.push_back(new_b);
+            Bar::create(selected_particle_id, hit_particle_id);
             selected_particle_id = -1; // Unselect
         }
         
@@ -256,9 +258,7 @@ void mouse_click (int button, int state, int x, int y)
                 particles.push_back(Particle::create(x_metres, y_metres, false));
             
             // Create a new bar
-            Bar new_b = Bar::create(selected_particle_id, particles_number-1);
-            bars.push_back(new_b);
-            
+            Bar::create(selected_particle_id, particles_number-1);
             selected_particle_id = -1;
         }
         
@@ -269,7 +269,7 @@ void mouse_click (int button, int state, int x, int y)
                 wall_points.push_back(Vector2d(x_metres, y_metres));
             if (wall_points.size() == 2)
             {
-                walls.push_back(Wall::create(wall_points[0], wall_points[1]));
+                Wall::create(wall_points[0], wall_points[1]);
                 wall_points.clear();
                 drawing_wall = false;
                 buttons[12].active_ = false; // TODO: what if this number changes?
@@ -291,12 +291,28 @@ void mouse_click (int button, int state, int x, int y)
 
 void mouse_drag(int x, int y)
 {
-    double x_coord = (x - window_width / 2.0)/scale;
-    double y_coord = (-y  + window_height / 2.0)/scale;
+    double x_px = x - window_width / 2.0; // wrt centre of the screen, not the world
+    double y_px = -y  + window_height / 2.0;
+    double x_metres = px_to_m(x_px - world_centre.x);
+    double y_metres = px_to_m(y_px - world_centre.y);
     
     if (selected_particle_id != -1)
     {
-        Vector2d pos = particles[selected_particle_id].position_;
-        particles[selected_particle_id].external_acceleration_ = 100 * Vector2d(x_coord - pos.x, y_coord - pos.y);
+        Particle* p = &particles[selected_particle_id];
+        
+        // Fixed particles can be dragged around
+        if (p->fixed_)
+        {
+            p->position_ = Vector2d(x_metres, y_metres);
+        }
+        else
+        {
+            //p->position_ = Vector2d(x_metres, y_metres);
+            //p->prev_position_ = p->position_;
+            //p->prev_position_verlet_ = p->position_;
+            Vector2d p_gl_pos = metres_to_gl_coords(p->position_);
+            Vector2d mouse_gl_pos = metres_to_gl_coords(Vector2d(x_metres, y_metres));
+            p->external_acceleration_ = 100 * Vector2d(mouse_gl_pos.x - p_gl_pos.x, mouse_gl_pos.y - p_gl_pos.y);
+        }
     }
 }

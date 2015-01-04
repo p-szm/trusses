@@ -49,7 +49,7 @@ extern bool ids;
 extern bool velocities;
 extern bool accelerations;
 extern bool lengths;
-extern bool extension_rates;
+extern bool extensions;
 extern bool coords;
 extern bool snap;
 

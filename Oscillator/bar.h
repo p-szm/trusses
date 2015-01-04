@@ -13,24 +13,30 @@
 #include <vector>
 
 #include "math.h"
+#include "physics.h"
 
 struct Bar
 {
     int p1_id;
     int p2_id;
     double length() const;
-    double extension_rate() const;
+    double extension() const;
     Vector2d unit12() const;
     Vector2d unit21() const;
     
-    static Bar create(int id1, int id2);
+    ID id_;
     
-    int id;
     double r0;
-    double tension() const;
+    
+    static ID create(int id1, int id2);
+    static void destroy(ID bar_id);
+    static int get_current_version(int number);
+    
 private:
     Bar(int id1, int id2) {p1_id = id1; p2_id = id2;}
 };
+
+void reset_bars();
 
 extern std::vector<Bar> bars;
 extern int bars_number;

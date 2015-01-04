@@ -90,9 +90,9 @@ void button_lengths_action(void)
     lengths = !lengths;
 }
 
-void button_ext_rates_action(void)
+void button_rel_extensions_action(void)
 {
-    extension_rates = !extension_rates;
+    extensions = !extensions;
 }
 
 void button_coords_action(void)
@@ -143,7 +143,7 @@ void create_buttons()
     buttons.push_back(Button(60, 30, -20, -70, &button_velocities_action, "Vels"));
     buttons.push_back(Button(60, 30, -20, -120, &button_accelerations_action, "Accels"));
     buttons.push_back(Button(60, 30, -20, -170, &button_lengths_action, "Lengths"));
-    buttons.push_back(Button(60, 30, -20, -220, &button_ext_rates_action, "Ext rates"));
+    buttons.push_back(Button(60, 30, -20, -220, &button_rel_extensions_action, "Rel ext"));
     buttons.push_back(Button(60, 30, -20, -270, &button_coords_action, "Coords"));
     buttons.push_back(Button(60, 30, -20, -320, &button_snap_action, "Snap"));
     buttons[6].active_ = true;

@@ -23,7 +23,7 @@ int window_height = 900;
 bool accelerations = false;
 bool velocities = false;
 bool lengths = false;
-bool extension_rates = false;
+bool extensions = false;
 bool coords = true;
 bool ids = false;
 
@@ -244,7 +244,8 @@ void draw_vector(Vector2d v, Vector2d start, float r, float g, float b)
 
 void draw_bar(const Bar& b)
 {
-    double epsilon = (b.length() - b.r0)/b.r0;
+    // Relative extension
+    double epsilon = b.extension() / b.length();
     if (epsilon > 1.0)
         epsilon = 1.0;
     else if (epsilon < -1.0)
@@ -277,10 +278,10 @@ void draw_bar(const Bar& b)
         s << b.length();
         glut_print(m_mid.x, m_mid.y, s.str());
     }
-    if (extension_rates)
+    if (extensions)
     {
         s.str("");
-        s << b.extension_rate();
+        s << b.extension() / b.r0;
         glut_print(m_mid.x, m_mid.y - px_to_m(12.0), s.str());
     }
 }
@@ -478,6 +479,9 @@ void draw_wall(const Wall& w)
     }
     glEnd();
     
-    
-    
+    // Print ids
+    std::ostringstream s;
+    s << '(' << w.id_.number << ", " << w.id_.version << ')';
+    glColor3f(0.0, 1.0, 1.0);
+    glut_print(w.p2_.x, w.p2_.y, s.str());
 }
