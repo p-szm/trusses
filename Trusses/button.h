@@ -1,13 +1,13 @@
 //
 //  button.h
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 02/01/2015.
 //  Copyright (c) 2015 Patrick Szmucer. All rights reserved.
 //
 
-#ifndef __Oscillator__button__
-#define __Oscillator__button__
+#ifndef __Trusses__button__
+#define __Trusses__button__
 
 #include <iostream>
 #include <vector>
@@ -48,4 +48,4 @@ extern int buttons_number;
 
 void create_buttons();
 
-#endif /* defined(__Oscillator__button__) */
+#endif /* defined(__Trusses__button__) */

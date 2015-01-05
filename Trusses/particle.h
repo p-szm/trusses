@@ -1,13 +1,13 @@
 //
 //  particle.h
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 30/12/2014.
 //  Copyright (c) 2014 Patrick Szmucer. All rights reserved.
 //
 
-#ifndef __Oscillator__particle__
-#define __Oscillator__particle__
+#ifndef __Trusses__particle__
+#define __Trusses__particle__
 
 #include <random>
 
@@ -39,4 +39,4 @@ private:
 extern std::vector<Particle> particles;
 extern int particles_number;
 
-#endif /* defined(__Oscillator__particle__) */
+#endif /* defined(__Trusses__particle__) */

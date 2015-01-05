@@ -1,13 +1,13 @@
 //
 //  bar.h
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 03/01/2015.
 //  Copyright (c) 2015 Patrick Szmucer. All rights reserved.
 //
 
-#ifndef __Oscillator__bar__
-#define __Oscillator__bar__
+#ifndef __Trusses__bar__
+#define __Trusses__bar__
 
 #include <stdio.h>
 #include <vector>
@@ -41,4 +41,4 @@ void reset_bars();
 extern std::vector<Bar> bars;
 extern int bars_number;
 
-#endif /* defined(__Oscillator__bar__) */
+#endif /* defined(__Trusses__bar__) */

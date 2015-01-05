@@ -1,13 +1,13 @@
 //
 //  wall.h
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 03/01/2015.
 //  Copyright (c) 2015 Patrick Szmucer. All rights reserved.
 //
 
-#ifndef __Oscillator__wall__
-#define __Oscillator__wall__
+#ifndef __Trusses__wall__
+#define __Trusses__wall__
 
 #include <iostream>
 #include <vector>
@@ -37,4 +37,4 @@ void reset_walls();
 extern std::vector<Wall> walls;
 extern int walls_number;
 
-#endif /* defined(__Oscillator__wall__) */
+#endif /* defined(__Trusses__wall__) */

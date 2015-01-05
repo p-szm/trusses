@@ -1,13 +1,13 @@
 //
 //  graphics.h
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 30/12/2014.
 //  Copyright (c) 2014 Patrick Szmucer. All rights reserved.
 //
 
-#ifndef __Oscillator__graphics__
-#define __Oscillator__graphics__
+#ifndef __Trusses__graphics__
+#define __Trusses__graphics__
 
 #include "particle.h"
 #include "wall.h"
@@ -60,4 +60,4 @@ extern bool drawing_wall;
 extern int window_width;
 extern int window_height;
 
-#endif /* defined(__Oscillator__graphics__) */
+#endif /* defined(__Trusses__graphics__) */

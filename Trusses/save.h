@@ -1,13 +1,13 @@
 //
 //  save.h
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 01/01/2015.
 //  Copyright (c) 2015 Patrick Szmucer. All rights reserved.
 //
 
-#ifndef __Oscillator__save__
-#define __Oscillator__save__
+#ifndef __Trusses__save__
+#define __Trusses__save__
 
 #include <iostream>
 #include "math.h"
@@ -22,4 +22,4 @@ void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix);
 std::string date_str();
 std::string time_str();
 
-#endif /* defined(__Oscillator__save__) */
+#endif /* defined(__Trusses__save__) */

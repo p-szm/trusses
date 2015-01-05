@@ -1,13 +1,13 @@
 //
 //  physics.h
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 30/12/2014.
 //  Copyright (c) 2014 Patrick Szmucer. All rights reserved.
 //
 
-#ifndef __Oscillator__physics__
-#define __Oscillator__physics__
+#ifndef __Trusses__physics__
+#define __Trusses__physics__
 
 #include "particle.h"
 
@@ -31,4 +31,4 @@ double energy(std::vector<Particle>& particles);
 void check_boundaries(Particle& p);
 void integrate(Particle& p, Vector2d acc, double dt);
 
-#endif /* defined(__Oscillator__physics__) */
+#endif /* defined(__Trusses__physics__) */

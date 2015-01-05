@@ -1,13 +1,13 @@
 //
 //  math.h
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 02/01/2015.
 //  Copyright (c) 2015 Patrick Szmucer. All rights reserved.
 //
 
-#ifndef __Oscillator__math__
-#define __Oscillator__math__
+#ifndef __Trusses__math__
+#define __Trusses__math__
 
 #include <iostream>
 #include <cmath>
@@ -40,4 +40,4 @@ double round(double x);
 double min(double a, double b);
 double max(double a, double b);
 
-#endif /* defined(__Oscillator__math__) */
+#endif /* defined(__Trusses__math__) */

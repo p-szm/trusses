@@ -7,18 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CD74D2111A5214CC000B6F31 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD74D2101A5214CC000B6F31 /* main.cpp */; };
 		CD74D2181A52F51A000B6F31 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2171A52F51A000B6F31 /* OpenGL.framework */; };
 		CD74D21A1A52F520000B6F31 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2191A52F520000B6F31 /* GLUT.framework */; };
-		CD74D21D1A53126B000B6F31 /* particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD74D21B1A53126B000B6F31 /* particle.cpp */; };
-		CD74D2201A5314AE000B6F31 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD74D21E1A5314AE000B6F31 /* graphics.cpp */; };
-		CD74D2231A531983000B6F31 /* physics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD74D2211A531983000B6F31 /* physics.cpp */; };
-		CDD4AA5C1A55830C00E2DC67 /* save.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA5A1A55830C00E2DC67 /* save.cpp */; };
-		CDD4AA601A56A6EA00E2DC67 /* button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA5E1A56A6EA00E2DC67 /* button.cpp */; };
-		CDD4AA651A56AECF00E2DC67 /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA631A56AECF00E2DC67 /* math.cpp */; };
-		CDD4AA6B1A5875B700E2DC67 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA691A5875B700E2DC67 /* interface.cpp */; };
-		CDD4AA6E1A587B8A00E2DC67 /* wall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA6C1A587B8A00E2DC67 /* wall.cpp */; };
-		CDD4AA711A587CA800E2DC67 /* bar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA6F1A587CA800E2DC67 /* bar.cpp */; };
+		CDD4AA981A5AB6EF00E2DC67 /* bar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA8E1A5AB6EF00E2DC67 /* bar.cpp */; };
+		CDD4AA991A5AB6EF00E2DC67 /* button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA8F1A5AB6EF00E2DC67 /* button.cpp */; };
+		CDD4AA9A1A5AB6EF00E2DC67 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA901A5AB6EF00E2DC67 /* graphics.cpp */; };
+		CDD4AA9B1A5AB6EF00E2DC67 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA911A5AB6EF00E2DC67 /* interface.cpp */; };
+		CDD4AA9C1A5AB6EF00E2DC67 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA921A5AB6EF00E2DC67 /* main.cpp */; };
+		CDD4AA9D1A5AB6EF00E2DC67 /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA931A5AB6EF00E2DC67 /* math.cpp */; };
+		CDD4AA9E1A5AB6EF00E2DC67 /* particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA941A5AB6EF00E2DC67 /* particle.cpp */; };
+		CDD4AA9F1A5AB6EF00E2DC67 /* physics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA951A5AB6EF00E2DC67 /* physics.cpp */; };
+		CDD4AAA01A5AB6EF00E2DC67 /* save.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA961A5AB6EF00E2DC67 /* save.cpp */; };
+		CDD4AAA11A5AB6EF00E2DC67 /* wall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA971A5AB6EF00E2DC67 /* wall.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,28 +34,28 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		CD74D20D1A5214CC000B6F31 /* Oscillator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Oscillator; sourceTree = BUILT_PRODUCTS_DIR; };
-		CD74D2101A5214CC000B6F31 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		CD74D20D1A5214CC000B6F31 /* Trusses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Trusses; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD74D2171A52F51A000B6F31 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		CD74D2191A52F520000B6F31 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
-		CD74D21B1A53126B000B6F31 /* particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = particle.cpp; sourceTree = "<group>"; };
-		CD74D21C1A53126B000B6F31 /* particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = particle.h; sourceTree = "<group>"; };
-		CD74D21E1A5314AE000B6F31 /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graphics.cpp; sourceTree = "<group>"; };
-		CD74D21F1A5314AE000B6F31 /* graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = graphics.h; sourceTree = "<group>"; };
-		CD74D2211A531983000B6F31 /* physics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = physics.cpp; sourceTree = "<group>"; };
-		CD74D2221A531983000B6F31 /* physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = physics.h; sourceTree = "<group>"; };
-		CDD4AA5A1A55830C00E2DC67 /* save.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = save.cpp; sourceTree = "<group>"; };
-		CDD4AA5B1A55830C00E2DC67 /* save.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = save.h; sourceTree = "<group>"; };
-		CDD4AA5E1A56A6EA00E2DC67 /* button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = button.cpp; sourceTree = "<group>"; };
-		CDD4AA5F1A56A6EA00E2DC67 /* button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = button.h; sourceTree = "<group>"; };
-		CDD4AA631A56AECF00E2DC67 /* math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = math.cpp; sourceTree = "<group>"; };
-		CDD4AA641A56AECF00E2DC67 /* math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
-		CDD4AA691A5875B700E2DC67 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface.cpp; sourceTree = "<group>"; };
-		CDD4AA6A1A5875B700E2DC67 /* interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface.h; sourceTree = "<group>"; };
-		CDD4AA6C1A587B8A00E2DC67 /* wall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wall.cpp; sourceTree = "<group>"; };
-		CDD4AA6D1A587B8A00E2DC67 /* wall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wall.h; sourceTree = "<group>"; };
-		CDD4AA6F1A587CA800E2DC67 /* bar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bar.cpp; sourceTree = "<group>"; };
-		CDD4AA701A587CA800E2DC67 /* bar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bar.h; sourceTree = "<group>"; };
+		CDD4AA851A5AB6DC00E2DC67 /* bar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bar.h; path = Trusses/bar.h; sourceTree = SOURCE_ROOT; };
+		CDD4AA861A5AB6DC00E2DC67 /* button.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = button.h; path = Trusses/button.h; sourceTree = SOURCE_ROOT; };
+		CDD4AA871A5AB6DC00E2DC67 /* graphics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = graphics.h; path = Trusses/graphics.h; sourceTree = SOURCE_ROOT; };
+		CDD4AA881A5AB6DC00E2DC67 /* interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = interface.h; path = Trusses/interface.h; sourceTree = SOURCE_ROOT; };
+		CDD4AA891A5AB6DC00E2DC67 /* math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = math.h; path = Trusses/math.h; sourceTree = SOURCE_ROOT; };
+		CDD4AA8A1A5AB6DC00E2DC67 /* particle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = particle.h; path = Trusses/particle.h; sourceTree = SOURCE_ROOT; };
+		CDD4AA8B1A5AB6DC00E2DC67 /* physics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = physics.h; path = Trusses/physics.h; sourceTree = SOURCE_ROOT; };
+		CDD4AA8C1A5AB6DC00E2DC67 /* save.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = save.h; path = Trusses/save.h; sourceTree = SOURCE_ROOT; };
+		CDD4AA8D1A5AB6DC00E2DC67 /* wall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = wall.h; path = Trusses/wall.h; sourceTree = SOURCE_ROOT; };
+		CDD4AA8E1A5AB6EF00E2DC67 /* bar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bar.cpp; path = Trusses/bar.cpp; sourceTree = SOURCE_ROOT; };
+		CDD4AA8F1A5AB6EF00E2DC67 /* button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = button.cpp; path = Trusses/button.cpp; sourceTree = SOURCE_ROOT; };
+		CDD4AA901A5AB6EF00E2DC67 /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = graphics.cpp; path = Trusses/graphics.cpp; sourceTree = SOURCE_ROOT; };
+		CDD4AA911A5AB6EF00E2DC67 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interface.cpp; path = Trusses/interface.cpp; sourceTree = SOURCE_ROOT; };
+		CDD4AA921A5AB6EF00E2DC67 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = Trusses/main.cpp; sourceTree = SOURCE_ROOT; };
+		CDD4AA931A5AB6EF00E2DC67 /* math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = math.cpp; path = Trusses/math.cpp; sourceTree = SOURCE_ROOT; };
+		CDD4AA941A5AB6EF00E2DC67 /* particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = particle.cpp; path = Trusses/particle.cpp; sourceTree = SOURCE_ROOT; };
+		CDD4AA951A5AB6EF00E2DC67 /* physics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = physics.cpp; path = Trusses/physics.cpp; sourceTree = SOURCE_ROOT; };
+		CDD4AA961A5AB6EF00E2DC67 /* save.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = save.cpp; path = Trusses/save.cpp; sourceTree = SOURCE_ROOT; };
+		CDD4AA971A5AB6EF00E2DC67 /* wall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wall.cpp; path = Trusses/wall.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +76,7 @@
 			children = (
 				CD74D2191A52F520000B6F31 /* GLUT.framework */,
 				CD74D2171A52F51A000B6F31 /* OpenGL.framework */,
-				CD74D20F1A5214CC000B6F31 /* Oscillator */,
+				CD74D20F1A5214CC000B6F31 /* Trusses */,
 				CD74D20E1A5214CC000B6F31 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -84,32 +84,33 @@
 		CD74D20E1A5214CC000B6F31 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CD74D20D1A5214CC000B6F31 /* Oscillator */,
+				CD74D20D1A5214CC000B6F31 /* Trusses */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CD74D20F1A5214CC000B6F31 /* Oscillator */ = {
+		CD74D20F1A5214CC000B6F31 /* Trusses */ = {
 			isa = PBXGroup;
 			children = (
 				CDD4AA611A56AE4B00E2DC67 /* Headers */,
 				CDD4AA621A56AE6400E2DC67 /* Source */,
 			);
+			name = Trusses;
 			path = Oscillator;
 			sourceTree = "<group>";
 		};
 		CDD4AA611A56AE4B00E2DC67 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				CDD4AA701A587CA800E2DC67 /* bar.h */,
-				CDD4AA5F1A56A6EA00E2DC67 /* button.h */,
-				CD74D21F1A5314AE000B6F31 /* graphics.h */,
-				CDD4AA6A1A5875B700E2DC67 /* interface.h */,
-				CDD4AA641A56AECF00E2DC67 /* math.h */,
-				CD74D21C1A53126B000B6F31 /* particle.h */,
-				CD74D2221A531983000B6F31 /* physics.h */,
-				CDD4AA5B1A55830C00E2DC67 /* save.h */,
-				CDD4AA6D1A587B8A00E2DC67 /* wall.h */,
+				CDD4AA851A5AB6DC00E2DC67 /* bar.h */,
+				CDD4AA861A5AB6DC00E2DC67 /* button.h */,
+				CDD4AA871A5AB6DC00E2DC67 /* graphics.h */,
+				CDD4AA881A5AB6DC00E2DC67 /* interface.h */,
+				CDD4AA891A5AB6DC00E2DC67 /* math.h */,
+				CDD4AA8A1A5AB6DC00E2DC67 /* particle.h */,
+				CDD4AA8B1A5AB6DC00E2DC67 /* physics.h */,
+				CDD4AA8C1A5AB6DC00E2DC67 /* save.h */,
+				CDD4AA8D1A5AB6DC00E2DC67 /* wall.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -117,16 +118,16 @@
 		CDD4AA621A56AE6400E2DC67 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				CDD4AA6F1A587CA800E2DC67 /* bar.cpp */,
-				CDD4AA5E1A56A6EA00E2DC67 /* button.cpp */,
-				CD74D21E1A5314AE000B6F31 /* graphics.cpp */,
-				CDD4AA691A5875B700E2DC67 /* interface.cpp */,
-				CD74D2101A5214CC000B6F31 /* main.cpp */,
-				CDD4AA631A56AECF00E2DC67 /* math.cpp */,
-				CD74D21B1A53126B000B6F31 /* particle.cpp */,
-				CD74D2211A531983000B6F31 /* physics.cpp */,
-				CDD4AA5A1A55830C00E2DC67 /* save.cpp */,
-				CDD4AA6C1A587B8A00E2DC67 /* wall.cpp */,
+				CDD4AA8E1A5AB6EF00E2DC67 /* bar.cpp */,
+				CDD4AA8F1A5AB6EF00E2DC67 /* button.cpp */,
+				CDD4AA901A5AB6EF00E2DC67 /* graphics.cpp */,
+				CDD4AA911A5AB6EF00E2DC67 /* interface.cpp */,
+				CDD4AA921A5AB6EF00E2DC67 /* main.cpp */,
+				CDD4AA931A5AB6EF00E2DC67 /* math.cpp */,
+				CDD4AA941A5AB6EF00E2DC67 /* particle.cpp */,
+				CDD4AA951A5AB6EF00E2DC67 /* physics.cpp */,
+				CDD4AA961A5AB6EF00E2DC67 /* save.cpp */,
+				CDD4AA971A5AB6EF00E2DC67 /* wall.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -134,9 +135,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CD74D20C1A5214CC000B6F31 /* Oscillator */ = {
+		CD74D20C1A5214CC000B6F31 /* Trusses */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CD74D2141A5214CC000B6F31 /* Build configuration list for PBXNativeTarget "Oscillator" */;
+			buildConfigurationList = CD74D2141A5214CC000B6F31 /* Build configuration list for PBXNativeTarget "Trusses" */;
 			buildPhases = (
 				CD74D2091A5214CC000B6F31 /* Sources */,
 				CD74D20A1A5214CC000B6F31 /* Frameworks */,
@@ -146,9 +147,9 @@
 			);
 			dependencies = (
 			);
-			name = Oscillator;
+			name = Trusses;
 			productName = Oscillator;
-			productReference = CD74D20D1A5214CC000B6F31 /* Oscillator */;
+			productReference = CD74D20D1A5214CC000B6F31 /* Trusses */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -165,7 +166,7 @@
 					};
 				};
 			};
-			buildConfigurationList = CD74D2081A5214CC000B6F31 /* Build configuration list for PBXProject "Oscillator" */;
+			buildConfigurationList = CD74D2081A5214CC000B6F31 /* Build configuration list for PBXProject "Trusses" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -177,7 +178,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CD74D20C1A5214CC000B6F31 /* Oscillator */,
+				CD74D20C1A5214CC000B6F31 /* Trusses */,
 			);
 		};
 /* End PBXProject section */
@@ -187,16 +188,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD74D2111A5214CC000B6F31 /* main.cpp in Sources */,
-				CDD4AA601A56A6EA00E2DC67 /* button.cpp in Sources */,
-				CDD4AA6E1A587B8A00E2DC67 /* wall.cpp in Sources */,
-				CD74D21D1A53126B000B6F31 /* particle.cpp in Sources */,
-				CD74D2201A5314AE000B6F31 /* graphics.cpp in Sources */,
-				CDD4AA711A587CA800E2DC67 /* bar.cpp in Sources */,
-				CDD4AA651A56AECF00E2DC67 /* math.cpp in Sources */,
-				CDD4AA5C1A55830C00E2DC67 /* save.cpp in Sources */,
-				CD74D2231A531983000B6F31 /* physics.cpp in Sources */,
-				CDD4AA6B1A5875B700E2DC67 /* interface.cpp in Sources */,
+				CDD4AA981A5AB6EF00E2DC67 /* bar.cpp in Sources */,
+				CDD4AA9E1A5AB6EF00E2DC67 /* particle.cpp in Sources */,
+				CDD4AAA01A5AB6EF00E2DC67 /* save.cpp in Sources */,
+				CDD4AAA11A5AB6EF00E2DC67 /* wall.cpp in Sources */,
+				CDD4AA991A5AB6EF00E2DC67 /* button.cpp in Sources */,
+				CDD4AA9A1A5AB6EF00E2DC67 /* graphics.cpp in Sources */,
+				CDD4AA9C1A5AB6EF00E2DC67 /* main.cpp in Sources */,
+				CDD4AA9B1A5AB6EF00E2DC67 /* interface.cpp in Sources */,
+				CDD4AA9D1A5AB6EF00E2DC67 /* math.cpp in Sources */,
+				CDD4AA9F1A5AB6EF00E2DC67 /* physics.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,7 +282,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Trusses;
 			};
 			name = Debug;
 		};
@@ -289,14 +290,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Trusses;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CD74D2081A5214CC000B6F31 /* Build configuration list for PBXProject "Oscillator" */ = {
+		CD74D2081A5214CC000B6F31 /* Build configuration list for PBXProject "Trusses" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CD74D2121A5214CC000B6F31 /* Debug */,
@@ -305,7 +306,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CD74D2141A5214CC000B6F31 /* Build configuration list for PBXNativeTarget "Oscillator" */ = {
+		CD74D2141A5214CC000B6F31 /* Build configuration list for PBXNativeTarget "Trusses" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CD74D2151A5214CC000B6F31 /* Debug */,
