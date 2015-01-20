@@ -75,7 +75,7 @@ int load(std::string filename)
             std::vector<double> v;
             read_numbers(line, v);
 
-            particles.push_back(Particle::create(v[0], v[1], false));
+            Particle::create(v[0], v[1], false);
         }
         
         // A fixed particle
@@ -84,7 +84,7 @@ int load(std::string filename)
             std::vector<double> v;
             read_numbers(line, v);
             
-            particles.push_back(Particle::create(v[0], v[1], true));
+            Particle::create(v[0], v[1], true);
         }
         
         // A bar
@@ -127,7 +127,7 @@ void save(std::string filename)
             file << 'f';
         else
             file << 'p';
-        file << particles[i].id_ << ' ' << particles[i].position_;
+        file << particles[i].id_.number << ' ' << particles[i].position_;
         file << std::endl;
     }
     file << std::endl;
@@ -178,9 +178,9 @@ void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)
         for (int i = 0; i < n; i++)
         {
             if (fixed)
-                particles.push_back(Particle::create(x0 + i * d, y0 + j * d, true));
+                Particle::create(x0 + i * d, y0 + j * d, true);
             else
-                particles.push_back(Particle::create(x0 + i * d, y0 + j * d, false));
+                Particle::create(x0 + i * d, y0 + j * d, false);
         }
     }
     

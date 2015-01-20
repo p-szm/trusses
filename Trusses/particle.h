@@ -9,12 +9,22 @@
 #ifndef __Trusses__particle__
 #define __Trusses__particle__
 
-#include <random>
+#include <vector>
 
 #include "math.h"
+#include "id.h"
 
-// TODO: remove this
+enum OSCIL_T {X, Y, CW, ACW};
 
+struct Oscillation
+{
+    Vector2d origin;
+    double amplitude;
+    double frequency;
+    double phase;
+    Oscillation(Vector2d orig, double amp, double freq): origin(orig), amplitude(amp), frequency(freq) {}
+    Oscillation() {}
+};
 
 struct Particle
 {
@@ -29,9 +39,15 @@ struct Particle
     bool fixed_;
     bool dragged_;
     
-    int id_;
+    Oscillation oscillation_;
+    OSCIL_T oscil_dir;
     
-    static Particle create(double a, double b, bool fixed);
+    // Moves the particle using its motion function
+    void move();
+    
+    ID id_;
+    
+    static ID create(double a, double b, bool fixed);
 private:
     Particle(double a, double b) {position_.x = a; position_.y = b;}
 };

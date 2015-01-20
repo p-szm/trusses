@@ -16,9 +16,10 @@
 #include "physics.h"
 #include "button.h"
 #include "interface.h"
+#include "interpreter.h"
 
-int window_width = 1400;
-int window_height = 900;
+int window_width = 1200;
+int window_height = 700;
 
 bool accelerations = false;
 bool velocities = false;
@@ -149,6 +150,27 @@ void display()
     display_energy();
     draw_gravity_indicator();
     
+    // Draw the command line
+    if (command_mode)
+    {
+        glColor3f(0.3, 0.3, 0.3);
+        glBegin(GL_QUADS);
+        glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0));
+        glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0));
+        glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0+30));
+        glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0+30));
+        glEnd();
+        
+        glColor3f(0.7, 0.7, 0.0);
+        glBegin(GL_LINES);
+        glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0+30));
+        glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0+30));
+        glEnd();
+        
+        glColor3f(1.0, 1.0, 1.0);
+        glut_print(-window_width/2.0+20, -window_height/2.0+10, command, true);
+    }
+    
     glutSwapBuffers();
     glFlush();
 }
@@ -184,7 +206,7 @@ void draw_particle(const Particle& p)
     Vector2d pos_gl = metres_to_gl_coords(pos);
     
     // If selected
-    if (selected_particle_id == p.id_)
+    if (selected_particle_id == p.id_.number)
     {
         glColor3f(1.0, 1.0, 0.0);
         glPointSize(10);
@@ -193,7 +215,7 @@ void draw_particle(const Particle& p)
     else if (p.fixed_)
     {
         glColor3f(1.0, 0.0, 0.0);
-        glPointSize(5);
+        glPointSize(8);
     }
     else
     {
@@ -202,7 +224,7 @@ void draw_particle(const Particle& p)
     }
     
     // Increase the point size if highlighted and not selected
-    if (highlighted_particle_id == p.id_ && selected_particle_id != p.id_)
+    if (highlighted_particle_id == p.id_.number && selected_particle_id != p.id_.number)
     {
         glPointSize(10);
     }
@@ -214,7 +236,7 @@ void draw_particle(const Particle& p)
     if (ids)
     {
         std::stringstream s;
-        s << p.id_;
+        s << p.id_.number;
         
         // Add 5 pixels in eah direction
         glColor3f(0.8, 0.8, 0.0);

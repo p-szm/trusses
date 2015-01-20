@@ -14,6 +14,8 @@
 #include "interface.h"
 #include "physics.h"
 #include "save.h"
+#include "interpreter.h"
+
 
 bool snap = true;
 bool snapped = false;
@@ -26,7 +28,7 @@ int min_click_dist = 10; // pixels
 int selected_particle_id = -1;
 int highlighted_particle_id = -1;
 
-double scale = 50.0; // pixels/metre
+double scale = 40.0; // pixels/metre
 
 Vector2d world_centre(0.0, 0.0); // In pixels
 
@@ -56,37 +58,54 @@ double px_to_m(double d)
 
 void key_pressed(unsigned char key, int x, int y)
 {
-    if (key == 'r')
+    if (command_mode)
     {
-        reset();
-        std::cout << "Clear" << std::endl;
+        if (key == 27)
+        {
+            command_mode = false;
+            command = "";
+        }
+        else if (key == 13)
+        {
+            command_mode = false;
+            interpret_command(command);
+            command = "";
+        }
+        else if (key == 127 || key == 8)
+        {
+            if (command.size() > 0)
+                command = command.substr(0, command.size()-1);
+        }
+        else
+        {
+            command += key;
+        }
     }
-    else if (key == 'g')
+    else
     {
-        gravity = !gravity;
-        std::cout << "Gravity: " << gravity << std::endl;
-    }
-    else if (key == 27)
-    {
-        std::exit(0);
-    }
-    else if (key == 's')
-    {
-        std::string path = "/Users/patrick/Desktop/save-";
-        path += date_str() + '-' + time_str();
-        save(path);
-    }
-    else if (key == 'p')
-    {
-        load("/Users/patrick/Desktop/cantilever.txt");
-    }
-    else if (key == 'o')
-    {
-        create_cloth(20, 0.1, Vector2d(0.0, 0.0), true);
-    }
-    else if (key == 'w')
-    {
-        Wall::destroy(ID(2,0));
+        if (key == 'g')
+        {
+            gravity = !gravity;
+            std::cout << "Gravity: " << gravity << std::endl;
+        }
+        else if (key == 'o')
+        {
+            create_cloth(20, 0.1, Vector2d(0.0, 0.0), true);
+        }
+        else if (key == 'w')
+        {
+            Wall::destroy(ID(2,0));
+        }
+        
+        else if (key == 27)
+        {
+            std::exit(0);
+        }
+        
+        else if (key == 13)
+        {
+            command_mode = true;
+        }
     }
     glutPostRedisplay();
 }
@@ -160,7 +179,7 @@ void mouse_passive(int x, int y)
         Vector2d p_pos = particles[i].position_;
         if (abs_d(x_metres - p_pos.x) < px_to_m(min_click_dist) && abs_d(y_metres - p_pos.y) < px_to_m(min_click_dist))
         {
-            highlighted_particle_id = particles[i].id_;
+            highlighted_particle_id = particles[i].id_.number;
             highlighted_particle = true;
         }
     }
@@ -198,7 +217,7 @@ void mouse_click (int button, int state, int x, int y)
         Vector2d p_pos = particles[i].position_;
         if (abs_d(x_metres - p_pos.x) < px_to_m(min_click_dist) && abs_d(y_metres - p_pos.y) < px_to_m(min_click_dist) && button == GLUT_LEFT_BUTTON)
         {
-            hit_particle_id = particles[i].id_;
+            hit_particle_id = particles[i].id_.number;
             break;
         }
     }
@@ -253,9 +272,9 @@ void mouse_click (int button, int state, int x, int y)
         {
             // Create a new particle
             if (button == GLUT_RIGHT_BUTTON)
-                particles.push_back(Particle::create(x_metres, y_metres, true));
+                Particle::create(x_metres, y_metres, true);
             else
-                particles.push_back(Particle::create(x_metres, y_metres, false));
+                Particle::create(x_metres, y_metres, false);
             
             // Create a new bar
             Bar::create(selected_particle_id, particles_number-1);
@@ -280,9 +299,15 @@ void mouse_click (int button, int state, int x, int y)
         else
         {
             if (button == GLUT_RIGHT_BUTTON)
-                particles.push_back(Particle::create(x_metres, y_metres, true));
+            {
+                Particle::create(x_metres, y_metres, true);
+                if (particles.back().oscil_dir == CW || particles.back().oscil_dir == ACW)
+                {
+                    particles.back().oscillation_.origin.x = particles.back().position_.x - particles.back().oscillation_.amplitude;
+                }
+            }
             else
-                particles.push_back(Particle::create(x_metres, y_metres, false));
+                Particle::create(x_metres, y_metres, false);
         }
         
         glutPostRedisplay();
@@ -300,19 +325,11 @@ void mouse_drag(int x, int y)
     {
         Particle* p = &particles[selected_particle_id];
         
-        // Fixed particles can be dragged around
-        if (p->fixed_)
-        {
-            p->position_ = Vector2d(x_metres, y_metres);
-        }
-        else
-        {
-            //p->position_ = Vector2d(x_metres, y_metres);
-            //p->prev_position_ = p->position_;
-            //p->prev_position_verlet_ = p->position_;
-            Vector2d p_gl_pos = metres_to_gl_coords(p->position_);
-            Vector2d mouse_gl_pos = metres_to_gl_coords(Vector2d(x_metres, y_metres));
-            p->external_acceleration_ = 100 * Vector2d(mouse_gl_pos.x - p_gl_pos.x, mouse_gl_pos.y - p_gl_pos.y);
-        }
+        //p->position_ = Vector2d(x_metres, y_metres);
+        //p->prev_position_ = p->position_;
+        //p->prev_position_verlet_ = p->position_;
+        Vector2d p_gl_pos = metres_to_gl_coords(p->position_);
+        Vector2d mouse_gl_pos = metres_to_gl_coords(Vector2d(x_metres, y_metres));
+        p->external_acceleration_ = 100 * Vector2d(mouse_gl_pos.x - p_gl_pos.x, mouse_gl_pos.y - p_gl_pos.y);
     }
 }

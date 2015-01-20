@@ -20,7 +20,10 @@ double delta_t = 0.0;
 double g = 10.0;
 double energy_absorption = 0.5;
 
-bool euler = false;
+#define MAX_STRAIN 0.2
+
+bool oscillate = false;
+
 bool gravity = false;
 
 void microsecond_time (unsigned long long &t)
@@ -110,19 +113,11 @@ void check_boundaries(Particle& p)
 
 void integrate(Particle& p, Vector2d acc, double dt)
 {
-    if (euler)
-    {
-        p.velocity_ = p.velocity_ + dt * acc;
-        p.position_.x += delta_t * p.velocity_.x;
-        p.position_.y += delta_t * p.velocity_.y;
-    }
-    else // verlet
-    {
-        Vector2d next_position = 2 * p.position_ - p.prev_position_verlet_ + pow(delta_t, 2) * acc;
-        p.velocity_ = (0.5 / delta_t) * (next_position - p.prev_position_);
-        p.prev_position_verlet_ = p.position_;
-        p.position_ = next_position;
-    }
+    // verlet
+    Vector2d next_position = 2 * p.position_ - p.prev_position_verlet_ + pow(delta_t, 2) * acc;
+    p.velocity_ = (0.5 / delta_t) * (next_position - p.prev_position_);
+    p.prev_position_verlet_ = p.position_;
+    p.position_ = next_position;
 }
 
 void update_position(std::vector<Particle>& particles)
@@ -165,8 +160,8 @@ void update_position(std::vector<Particle>& particles)
         
         if (p->fixed_)
         {
-            // p->position_ = p->position_ + Vector2d(0.001, 0.0);
-            // check_boundaries(*p);
+            if (oscillate)
+                p->move();
         }
         else
         {
@@ -187,19 +182,11 @@ void update_position(std::vector<Particle>& particles)
     for (int i = 0; i < bars_number; i++)
     {
         double extension = bars[i].extension() / bars[i].r0;
-        //std::cout << i << std::endl;
-        //std::cout << "ext: " << extension << " " << bars[i].extension() << " " << bars[i].r0 << std::endl;
-        if (extension > 0.1 || extension < -0.1)
+        if (extension > MAX_STRAIN || extension < -MAX_STRAIN)
         {
-            //bars_to_destroy.push_back(bars[i].id_);
             Bar::destroy(bars[i].id_);
             i--; // The order of bars was mixed up. The last one ended up here, so
                  // we need to recheck the ith bar 
         }
     }
-    
-    /*for (int i = 0; i < bars_to_destroy.size(); i++)
-    {
-        Bar::destroy(bars_to_destroy[i]);
-    }*/
 }
