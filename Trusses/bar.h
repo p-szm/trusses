@@ -13,7 +13,6 @@
 #include <vector>
 
 #include "math.h"
-#include "id.h"
 
 struct Bar
 {
@@ -24,19 +23,21 @@ struct Bar
     Vector2d unit12() const;
     Vector2d unit21() const;
     
-    ID id_;
+    int id_;
     
     double r0;
     
-    static ID create(int id1, int id2);
-    static void destroy(ID bar_id);
-    static int get_current_version(int number);
+    static int create(int id1, int id2);
+    static void destroy(int bar_id);
     
 private:
     Bar(int id1, int id2) {p1_id = id1; p2_id = id2;}
 };
 
 void reset_bars();
+void print_bars();
+
+int bar_location(int id);
 
 extern std::vector<Bar> bars;
 extern int bars_number;

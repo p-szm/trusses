@@ -17,6 +17,9 @@
 #include "particle.h"
 #include "graphics.h"
 #include "interface.h"
+#include "interpreter.h"
+
+// TODO: this shouldn't be doubled (the definition exists in interpreter.cpp)
 
 template<typename T>
 void read_numbers(std::string str, std::vector<T> & target_v)
@@ -49,9 +52,6 @@ int load(std::string filename)
 {
     // TODO
     // Check if the file is valid
-    
-    // Remove all the existing particles and bars
-    reset();
     
     // Open the file
     std::ifstream file(filename);
@@ -127,7 +127,7 @@ void save(std::string filename)
             file << 'f';
         else
             file << 'p';
-        file << particles[i].id_.number << ' ' << particles[i].position_;
+        file << particles[i].id_ << ' ' << particles[i].position_;
         file << std::endl;
     }
     file << std::endl;
@@ -135,14 +135,14 @@ void save(std::string filename)
     // Print bars
     for (int i = 0; i < bars_number; i++)
     {
-        file << 'b' << bars[i].id_.number << ' ' << bars[i].p1_id << ' ' << bars[i].p2_id << std::endl;
+        file << 'b' << bars[i].id_ << ' ' << bars[i].p1_id << ' ' << bars[i].p2_id << std::endl;
     }
     file << std::endl;
     
     // Print walls
     for (int i = 0; i < walls_number; i++)
     {
-        file << 'w' << walls[i].id_.number << ' ' << walls[i].p1_ << ' ' << walls[i].p2_ << std::endl;
+        file << 'w' << walls[i].id_ << ' ' << walls[i].p1_ << ' ' << walls[i].p2_ << std::endl;
     }
     file << std::endl;
     
@@ -154,9 +154,7 @@ void reset()
 {
     reset_walls();
     reset_bars();
-    
-    particles.clear();
-    particles_number = 0;
+    reset_particles();
     
     selected_particle_id = -1;
 }

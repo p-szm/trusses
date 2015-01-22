@@ -11,98 +11,311 @@
 #include "graphics.h"
 #include "save.h"
 #include "physics.h"
+#include "wall.h"
+
+#include <sstream>
 
 bool command_mode = false;
 std::string command;
 
+template<typename T>
+void extract_words(std::string str, std::vector<T> & target_v)
+{
+    // Convert the string to the stringstream
+    std::istringstream s(str);
+    
+    // Read every "word" of a stringstream
+    while (s)
+    {
+        // If s is of type T
+        T n;
+        if (s >> n)
+            target_v.push_back(n);
+    }
+}
+
+bool begins_with(std::string str, std::string substring)
+{
+    size_t sub_length = substring.size();
+    if (str.substr(0, sub_length) == substring)
+        return true;
+    else
+        return false;
+}
+
+bool is_number(std::string input)
+{
+    std::stringstream s(input);
+    double n;
+    if (s >> n)
+        return true;
+    else
+        return false;
+}
+
+// Takes a string and returns a number
+// It is up to a user to check if the string represents a valid number
+template <typename T>
+T get_number(std::string input)
+{
+    std::stringstream s(input);
+    T n;
+    if (s >> n)
+        return n;
+    else
+        return 0;
+}
+
+// Cuts substring from the beginning of str and returns a new string
+std::string cut_out(std::string str, std::string substring)
+{
+    if (begins_with(str, substring))
+        return str.substr(substring.size());
+    else
+        return str;
+}
+
 void interpret_command(std::string cmd)
 {
-    std::cout << "Command: " << cmd << std::endl;
+    // Put all the words of this command into the "words" vector of strings
+    std::vector<std::string> words;
+    extract_words(cmd, words);
     
-    // ids on
-    if (cmd == "set ids on")
+    size_t words_number = words.size();
+    
+    // If no command given, return
+    if (words_number == 0)
+        return;
+    
+    std::string first_word = words[0];
+    
+    if (first_word == "ids")
     {
-        ids = true;
+        if (words_number == 1)
+            std::cout << "ids=" << ids << std::endl;
+        else if (words_number == 2 && words[1] == "on")
+            ids = true;
+        else if (words_number == 2 && words[1] == "off")
+            ids = false;
+        else
+            std::cout << "Usage: ids <on/off>" << std::endl;
     }
     
-    // ids off
-    else if (cmd == "set ids off")
+    else if (first_word == "gravity")
     {
-        ids = false;
+        if (words_number == 1)
+            std::cout << "gravity=" << ids << std::endl;
+        else if (words_number == 2 && words[1] == "on")
+            gravity = true;
+        else if (words_number == 2 && words[1] == "off")
+            gravity = false;
+        else
+            std::cout << "Usage: gravity <on/off>" << std::endl;
     }
     
-    // Load
-    else if (cmd.substr(0, 4) == "load")
+    else if (first_word == "oscillation")
     {
-        std::string filepath = cmd.substr(5);
-        
-        // Check if the path is absolute or relative
-        // If it is relative, add the save directory to the beginning
-        if (filepath.find("/") == -1)
+        if (words_number == 1)
+            std::cout << "oscillation=" << ids << std::endl;
+        else if (words_number == 2 && words[1] == "on")
+            oscillate = true;
+        else if (words_number == 2 && words[1] == "off")
+            oscillate = false;
+        else
+            std::cout << "Usage: oscillation <on/off>" << std::endl;
+    }
+    
+    else if (first_word == "snap")
+    {
+        if (words_number == 1)
+            std::cout << "snap=" << snap << std::endl;
+        else if (words_number == 2 && words[1] == "on")
+            snap = true;
+        else if (words_number == 2 && words[1] == "off")
+            snap = false;
+        else
+            std::cout << "Usage: snap <on/off>" << std::endl;
+    }
+    
+    else if (first_word == "coords")
+    {
+        if (words_number == 1)
+            std::cout << "coords=" << coords << std::endl;
+        else if (words_number == 2 && words[1] == "on")
+            coords = true;
+        else if (words_number == 2 && words[1] == "off")
+            coords = false;
+        else
+            std::cout << "Usage: coords <on/off>" << std::endl;
+    }
+    
+    else if (first_word == "load")
+    {
+        if (words_number == 2)
         {
-            filepath = "/Users/patrick/workspace/saves/" + filepath;
+            std::string filepath = words[1];
+            
+            // Check if the path is absolute or relative.
+            // If it is relative, assume that it means the save directory.
+            if (filepath.find("/") == -1)
+                filepath = SAVE_PATH + filepath;
+            
+            // Try to load the file
+            if (load(filepath))
+                std::cout << "Could not load " << filepath << std::endl;
         }
-        
-        // Try to load
-        if (load(filepath))
+        else
+            std::cout << "Usage: load <file>" << std::endl;
+    }
+    
+    else if (first_word == "save")
+    {
+        if (words_number == 1)
         {
-            std::cout << "Could not load " << filepath << std::endl;
+            std::string path = SAVE_PATH;
+            path += "save-" + date_str() + '-' + time_str();
+            save(path);
         }
-        
-    }
-    
-    // Save
-    else if (cmd == "save")
-    {
-        std::string path = "/Users/patrick/Desktop/save-";
-        path += date_str() + '-' + time_str();
-        save(path);
-    }
-    
-    // Oscillations on
-    else if (cmd == "set oscillations on")
-    {
-        oscillate = true;
-    }
-    
-    // Oscillations off
-    else if (cmd == "set oscillations off")
-    {
-        oscillate = false;
-    }
-    
-    // Gravity on
-    else if (cmd == "set gravity on")
-    {
-        gravity = true;
-    }
-    
-    // Gravity off
-    else if (cmd == "set gravity off")
-    {
-        gravity = false;
+        else if (words_number == 2)
+        {
+            std::string path = SAVE_PATH;
+            path += words[1]; // TODO: SECURITY: Check if the filaname is valid
+            save(path);
+        }
+        else
+        {
+            std::cout << "Usage: save (filename)" << std::endl;
+        }
     }
     
     // Reset
-    else if (cmd == "reset")
+    else if (first_word == "reset")
     {
-        reset();
+        if (words_number == 1)
+            reset();
+        else
+            std::cout << "Usage: reset" << std::endl;
     }
     
-    // Zoom in
-    else if (cmd == "zoom in")
+    else if (first_word == "zoom")
     {
-        scale *= 1.1;
+        if (words_number == 2 && words[1] == "in")
+            scale *= 1.2;
+        else if (words_number == 2 && words[1] == "out")
+            scale /= 1.2;
+        else
+            std::cout << "Usage: zoom <in/out>" << std::endl;
     }
     
-    // Zoom out
-    else if (cmd == "zoom out")
+    // TODO: Maybe scale should be just an int?
+    else if (first_word == "scale")
     {
-        scale /= 1.1;
+        if (words_number == 1)
+            std::cout << "scale=" << scale << std::endl;
+        else if (words_number == 2 && is_number(words[1]))
+        {
+            double new_scale = get_number<double>(words[1]);
+            if (new_scale <= 0.0)
+                std::cout << "Scale has to be positive!" << std::endl;
+            else
+                scale = new_scale;
+        }
+        else
+            std::cout << "Usage: scale <double>" << std::endl;
     }
     
+    else if (first_word == "wall")
+    {
+        if (words_number == 1)
+            print_walls();
+        else if (words_number == 5 && is_number(words[1]) && is_number(words[2])
+                 && is_number(words[3]) && is_number(words[4]))
+            Wall::create(Vector2d(get_number<double>(words[1]), get_number<double>(words[2])),
+                         Vector2d(get_number<double>(words[3]), get_number<double>(words[4])));
+        else
+            std::cout << "Usage: wall <double> <double> <double> <double>" << std::endl;
+    }
+    
+    else if (first_word == "particle")
+    {
+        if (words_number == 1)
+            print_particles();
+        else if (words_number == 3 && is_number(words[1]) && is_number(words[2]))
+            Particle::create(get_number<double>(words[1]), get_number<double>(words[2]), false);
+        else
+            std::cout << "Usage: particle <double> <double>" << std::endl;
+    }
+    
+    // TODO: accept only positive integers
+    else if (first_word == "bar")
+    {
+        if (words_number == 1)
+            print_bars();
+        else if (words_number == 3 && is_number(words[1]) && is_number(words[2])) // TODO: Prevent it from taking doubles
+        {
+            // Accept only positive integers
+            // Interpret negative numbers as 0
+            int n1 = get_number<int>(words[1]);
+            int n2 = get_number<int>(words[2]);
+            if (n1 < 0)
+                n1 = 0;
+            if (n2 < 0)
+                n2 = 0;
+            Bar::create(n1, n2);
+        }
+        else
+            std::cout << "Usage: bar <int> <int>" << std::endl;
+    }
+    
+    else if (first_word == "fix")
+    {
+        if (words_number == 2)
+        {
+            if (is_number(words[1]))
+            {
+                // Interpret negative numbers to 0
+                int n = get_number<int>(words[1]);
+                if (n < 0)
+                    n = 0;
+                if (particle_location(n) != -1)
+                    particles[particle_location(n)].fixed_ = true;
+            }
+        }
+    }
+    
+    else if (first_word == "remove")
+    {
+        if (words_number == 3)
+        {
+            if (words[1] == "bar")
+            {
+                if (is_number(words[2]))
+                {
+                    // Interpret negative numbers as 0
+                    int n = get_number<int>(words[2]);
+                    if (n < 0)
+                        n = 0;
+                    std::cout << n << std::endl;
+                    Bar::destroy(n);
+                }
+            }
+            
+            if (words[1] == "particle")
+            {
+                if (is_number(words[2]))
+                {
+                    // Interpret negative numbers tas 0
+                    int n = get_number<int>(words[2]);
+                    if (n < 0)
+                        n = 0;
+                    std::cout << n << std::endl;
+                    Particle::destroy(n);
+                }
+            }
+        }
+    }
+    
+    // The command was not recognised
     else
-    {
         std::cout << "Command not found" << std::endl;
-    }
 }

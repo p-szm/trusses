@@ -94,7 +94,7 @@ void key_pressed(unsigned char key, int x, int y)
         }
         else if (key == 'w')
         {
-            Wall::destroy(ID(2,0));
+            Wall::destroy(2);
         }
         
         else if (key == 27)
@@ -179,7 +179,7 @@ void mouse_passive(int x, int y)
         Vector2d p_pos = particles[i].position_;
         if (abs_d(x_metres - p_pos.x) < px_to_m(min_click_dist) && abs_d(y_metres - p_pos.y) < px_to_m(min_click_dist))
         {
-            highlighted_particle_id = particles[i].id_.number;
+            highlighted_particle_id = particles[i].id_;
             highlighted_particle = true;
         }
     }
@@ -217,7 +217,7 @@ void mouse_click (int button, int state, int x, int y)
         Vector2d p_pos = particles[i].position_;
         if (abs_d(x_metres - p_pos.x) < px_to_m(min_click_dist) && abs_d(y_metres - p_pos.y) < px_to_m(min_click_dist) && button == GLUT_LEFT_BUTTON)
         {
-            hit_particle_id = particles[i].id_.number;
+            hit_particle_id = particles[i].id_;
             break;
         }
     }
@@ -227,7 +227,7 @@ void mouse_click (int button, int state, int x, int y)
     {
         if (selected_particle_id != -1)
         {
-            particles[selected_particle_id].external_acceleration_ = Vector2d(0.0, 0.0);
+            particles[particle_location(selected_particle_id)].external_acceleration_ = Vector2d(0.0, 0.0);
         }
         
         if (hit_particle_id == -1)
@@ -323,7 +323,7 @@ void mouse_drag(int x, int y)
     
     if (selected_particle_id != -1)
     {
-        Particle* p = &particles[selected_particle_id];
+        Particle* p = &particles[particle_location(selected_particle_id)];
         
         //p->position_ = Vector2d(x_metres, y_metres);
         //p->prev_position_ = p->position_;

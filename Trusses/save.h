@@ -12,6 +12,8 @@
 #include <iostream>
 #include "math.h"
 
+#define SAVE_PATH "/Users/patrick/workspace/saves/"
+
 int load(std::string filename);
 void save(std::string filename);
 

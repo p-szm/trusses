@@ -206,7 +206,7 @@ void draw_particle(const Particle& p)
     Vector2d pos_gl = metres_to_gl_coords(pos);
     
     // If selected
-    if (selected_particle_id == p.id_.number)
+    if (selected_particle_id == p.id_)
     {
         glColor3f(1.0, 1.0, 0.0);
         glPointSize(10);
@@ -224,7 +224,7 @@ void draw_particle(const Particle& p)
     }
     
     // Increase the point size if highlighted and not selected
-    if (highlighted_particle_id == p.id_.number && selected_particle_id != p.id_.number)
+    if (highlighted_particle_id == p.id_ && selected_particle_id != p.id_)
     {
         glPointSize(10);
     }
@@ -236,7 +236,7 @@ void draw_particle(const Particle& p)
     if (ids)
     {
         std::stringstream s;
-        s << p.id_.number;
+        s << p.id_;
         
         // Add 5 pixels in eah direction
         glColor3f(0.8, 0.8, 0.0);
@@ -282,10 +282,10 @@ void draw_bar(const Bar& b)
     
     glLineWidth(2.0);
     
-    Vector2d gl_start = metres_to_gl_coords(particles[b.p1_id].position_);
-    Vector2d gl_end = metres_to_gl_coords(particles[b.p2_id].position_);
+    Vector2d gl_start = metres_to_gl_coords(particles[particle_location(b.p1_id)].position_);
+    Vector2d gl_end = metres_to_gl_coords(particles[particle_location(b.p2_id)].position_);
     
-    Vector2d m_mid = 0.5 * (particles[b.p1_id].position_ + particles[b.p2_id].position_);
+    Vector2d m_mid = 0.5 * (particles[particle_location(b.p1_id)].position_ + particles[particle_location(b.p2_id)].position_);
     
     glBegin(GL_LINES);
     glVertex2f(gl_start.x, gl_start.y);
@@ -295,8 +295,15 @@ void draw_bar(const Bar& b)
     std::stringstream s;
     s.precision(3);
     
+    if (ids)
+    {
+        
+        s << b.id_;
+        glut_print(m_mid.x, m_mid.y, s.str());
+    }
     if (lengths)
     {
+        
         s << b.length();
         glut_print(m_mid.x, m_mid.y, s.str());
     }
@@ -503,7 +510,7 @@ void draw_wall(const Wall& w)
     
     // Print ids
     std::ostringstream s;
-    s << '(' << w.id_.number << ", " << w.id_.version << ')';
+    s << '(' << w.id_ << ')';
     glColor3f(0.0, 1.0, 1.0);
     glut_print(w.p2_.x, w.p2_.y, s.str());
 }

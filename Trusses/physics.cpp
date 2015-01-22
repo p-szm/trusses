@@ -136,8 +136,9 @@ void update_position(std::vector<Particle>& particles)
         for (int i = 0; i < bars_number; i++)
         {
             Bar* b = &bars[i];
-            Particle* p1 = &particles[b->p1_id];
-            Particle* p2 = &particles[b->p2_id];
+            int particle_location(int id);
+            Particle* p1 = &particles[particle_location(b->p1_id)];
+            Particle* p2 = &particles[particle_location(b->p2_id)];
             
             double extension = b->extension();
             
@@ -178,7 +179,7 @@ void update_position(std::vector<Particle>& particles)
     }
     
     // Destroy bars which are extended by too much
-    std::vector<ID> bars_to_destroy;
+    std::vector<int> bars_to_destroy;
     for (int i = 0; i < bars_number; i++)
     {
         double extension = bars[i].extension() / bars[i].r0;

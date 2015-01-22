@@ -12,7 +12,6 @@
 #include <vector>
 
 #include "math.h"
-#include "id.h"
 
 enum OSCIL_T {X, Y, CW, ACW};
 
@@ -39,18 +38,28 @@ struct Particle
     bool fixed_;
     bool dragged_;
     
+    int id_;
+    
+    std::vector<int> bars_connected;
+    
+    // For oscillations of fixed particles
     Oscillation oscillation_;
     OSCIL_T oscil_dir;
-    
     // Moves the particle using its motion function
     void move();
     
-    ID id_;
+    static int create(double a, double b, bool fixed);
+    static void destroy(int removed_id);
     
-    static ID create(double a, double b, bool fixed);
 private:
     Particle(double a, double b) {position_.x = a; position_.y = b;}
 };
+
+int particle_location(int id);
+
+void print_particles();
+
+void reset_particles();
 
 extern std::vector<Particle> particles;
 extern int particles_number;

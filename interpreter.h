@@ -10,6 +10,7 @@
 #define __Trusses__interpreter__
 
 #include <iostream>
+#include <vector>
 
 void interpret_command(std::string cmd);
 
