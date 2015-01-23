@@ -16,20 +16,17 @@
 
 struct Bar
 {
+    int id_;
     int p1_id;
     int p2_id;
+    double r0;
     double length() const;
     double extension() const;
     Vector2d unit12() const;
     Vector2d unit21() const;
     
-    int id_;
-    
-    double r0;
-    
     static int create(int id1, int id2);
     static int destroy(int obj_id);
-    
 private:
     Bar(int id1, int id2) {p1_id = id1; p2_id = id2;}
 };

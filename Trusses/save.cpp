@@ -27,8 +27,6 @@ void read_numbers(std::string str, std::vector<T> & target_v)
     // Convert the string to the stringstream
     std::istringstream s(str.substr(str.find(' ')+1, std::string::npos));
     
-    std::vector<T> numbers;
-    
     // Read every "word" of a stringstream
     while (s)
     {
@@ -37,14 +35,8 @@ void read_numbers(std::string str, std::vector<T> & target_v)
         // If s is a number
         if (s >> n)
         {
-            numbers.push_back(n);
+            target_v.push_back(n);
         }
-    }
-    
-    // Put it in the target vector
-    for (unsigned i = 0; i < 3; i++)
-    {
-        target_v.push_back(numbers[i]);
     }
 }
 
@@ -55,6 +47,11 @@ int load(std::string filename)
     
     // Important:
     // Sort out the problem with ids when loading
+    
+    // Important:
+    // App freezes when loading walls
+    // --- Fixed
+    // But check the function read_numbers
     
     // Open the file
     std::ifstream file(filename);

@@ -27,6 +27,7 @@ struct Oscillation
 
 struct Particle
 {
+    int id_;
     Vector2d position_;
     Vector2d prev_position_;
     Vector2d prev_position_verlet_;
@@ -34,12 +35,8 @@ struct Particle
     Vector2d acceleration_;
     Vector2d external_acceleration_; // Added by dragging the particle
     double mass_;
-    
     bool fixed_;
     bool dragged_;
-    
-    int id_;
-    
     std::vector<int> bars_connected;
     
     // For oscillations of fixed particles
@@ -50,7 +47,6 @@ struct Particle
     
     static int create(double a, double b, bool fixed);
     static int destroy(int removed_id);
-    
 private:
     Particle(double a, double b) {position_.x = a; position_.y = b;}
 };

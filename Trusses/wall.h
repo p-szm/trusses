@@ -16,7 +16,6 @@
 
 struct Wall
 {
-    Wall(Vector2d p1, Vector2d p2) {p1_ = p1; p2_ = p2;}
     Vector2d p1_;
     Vector2d p2_;
     int id_;
@@ -28,12 +27,13 @@ struct Wall
     
     static int create(Vector2d p1, Vector2d p2);
     static int destroy(int wall_id);
+private:
+    Wall(Vector2d p1, Vector2d p2) {p1_ = p1; p2_ = p2;}
 };
 
 void reset_walls();
+void print_walls();
 
 extern SlotMap<Wall> walls;
-
-void print_walls();
 
 #endif /* defined(__Trusses__wall__) */

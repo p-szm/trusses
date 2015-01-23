@@ -20,7 +20,7 @@
 #include "bar.h"
 
 int window_width = 1200;
-int window_height = 700;
+int window_height = 800;
 
 bool accelerations = false;
 bool velocities = false;
@@ -148,7 +148,7 @@ void display()
     }
     
     display_fps(delta_t);
-    display_energy();
+    //display_energy();
     draw_gravity_indicator();
     
     // Draw the command line

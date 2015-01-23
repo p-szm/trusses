@@ -246,7 +246,7 @@ void mouse_click (int button, int state, int x, int y)
             if (buttons[i].highlighted_)
             {
                 buttons[i].execute_action();
-                std::cout << "Button " << buttons[i].id_ <<" was clicked" << std::endl;
+                //std::cout << "Button " << buttons[i].id_ <<" was clicked" << std::endl;
                 button_pressed = true;
             }
         }

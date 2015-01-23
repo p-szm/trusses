@@ -38,7 +38,7 @@ public:
     void clear();
     void print(); // Prints all the objects together with the internal state of the slot map
     bool exists(unsigned int obj_id); // True if the objects exists in the container, false otherwise
-    unsigned int size() {return container.size();}
+    unsigned int size() {return (unsigned int)container.size();}
 private:
     std::vector<T> container; // Holds objects in unspecified order (not sorted by ids)
     std::vector<int> slots; // ith entry in this vector holds information about an object of id "i" in the container.
