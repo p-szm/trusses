@@ -67,13 +67,13 @@ void check_boundaries(Particle& p)
     Vector2d pos = p.position_;
     Vector2d prev_pos = p.prev_position_;
     
-    for (int i = 0; i < walls_number; i++)
+    SlotMap<Wall>::iterator walls_it;
+    for (walls_it = walls.begin(); walls_it != walls.end(); walls_it++)
     {
-        Wall* w = &walls[i];
-        double wall_top = w->y_max();
-        double wall_bottom = w->y_min();
-        double wall_left = w->x_min();
-        double wall_right = w->x_max();
+        double wall_top = walls_it->y_max();
+        double wall_bottom = walls_it->y_min();
+        double wall_left = walls_it->x_min();
+        double wall_right = walls_it->x_max();
         
         // Particle penetrated the bottom wall
         if (prev_pos.y <= wall_bottom && pos.y >= wall_bottom && prev_pos.x >= wall_left && prev_pos.x <= wall_right)

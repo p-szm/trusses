@@ -10,7 +10,7 @@
 #define __Trusses__wall__
 
 #include <iostream>
-#include <vector>
+#include "slot_map.h"
 
 #include "math.h"
 
@@ -27,15 +27,13 @@ struct Wall
     double y_max() const;
     
     static int create(Vector2d p1, Vector2d p2);
-    static void destroy(int wall_id);
+    static int destroy(int wall_id);
 };
 
 void reset_walls();
 
-extern std::vector<Wall> walls;
+extern SlotMap<Wall> walls;
 extern int walls_number;
-
-int wall_location(int id);
 
 void print_walls();
 

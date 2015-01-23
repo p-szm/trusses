@@ -40,6 +40,7 @@
 		CD74D2191A52F520000B6F31 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		CD8AE56B1A6F0D9100E3BEA0 /* interpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interpreter.cpp; sourceTree = SOURCE_ROOT; };
 		CD8AE56C1A6F0D9100E3BEA0 /* interpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interpreter.h; sourceTree = SOURCE_ROOT; };
+		CD8AE56F1A72600600E3BEA0 /* slot_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slot_map.h; sourceTree = SOURCE_ROOT; };
 		CDD4AA851A5AB6DC00E2DC67 /* bar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bar.h; path = Trusses/bar.h; sourceTree = SOURCE_ROOT; };
 		CDD4AA861A5AB6DC00E2DC67 /* button.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = button.h; path = Trusses/button.h; sourceTree = SOURCE_ROOT; };
 		CDD4AA871A5AB6DC00E2DC67 /* graphics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = graphics.h; path = Trusses/graphics.h; sourceTree = SOURCE_ROOT; };
@@ -114,6 +115,7 @@
 				CDD4AA8A1A5AB6DC00E2DC67 /* particle.h */,
 				CDD4AA8B1A5AB6DC00E2DC67 /* physics.h */,
 				CDD4AA8C1A5AB6DC00E2DC67 /* save.h */,
+				CD8AE56F1A72600600E3BEA0 /* slot_map.h */,
 				CDD4AA8D1A5AB6DC00E2DC67 /* wall.h */,
 			);
 			name = Headers;

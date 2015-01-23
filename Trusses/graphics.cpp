@@ -96,9 +96,10 @@ void display()
         draw_coords();
     
     // Draw the walls
-    for (int i = 0; i < walls_number; i++)
+    SlotMap<Wall>::iterator walls_it;
+    for (walls_it = walls.begin(); walls_it != walls.end(); walls_it++)
     {
-        draw_wall(walls[i]);
+        draw_wall(*walls_it);
     }
     
     // Draw the bars

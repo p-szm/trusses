@@ -53,6 +53,9 @@ int load(std::string filename)
     // TODO
     // Check if the file is valid
     
+    // Important:
+    // Sort out the problem with ids when loading
+    
     // Open the file
     std::ifstream file(filename);
     
@@ -140,9 +143,10 @@ void save(std::string filename)
     file << std::endl;
     
     // Print walls
-    for (int i = 0; i < walls_number; i++)
+    SlotMap<Wall>::iterator walls_it;
+    for (walls_it = walls.begin(); walls_it != walls.end(); walls_it++)
     {
-        file << 'w' << walls[i].id_ << ' ' << walls[i].p1_ << ' ' << walls[i].p2_ << std::endl;
+        file << 'w' << walls_it->id_ << ' ' << walls_it->p1_ << ' ' << walls_it->p2_ << std::endl;
     }
     file << std::endl;
     
