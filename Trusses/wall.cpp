@@ -8,14 +8,12 @@
 
 #include "wall.h"
 
-int walls_number = 0;
 SlotMap<Wall> walls;
 
 int Wall::create(Vector2d p1, Vector2d p2)
 {
     Wall new_wall(p1, p2);
     int new_id = walls.add(new_wall);
-    walls_number ++;
     
     return new_id;
 }
@@ -23,15 +21,12 @@ int Wall::create(Vector2d p1, Vector2d p2)
 int Wall::destroy(int obj_id)
 {
     int result = walls.remove(obj_id);
-    if (!result)
-        walls_number--;
     return result;
 }
 
 void reset_walls()
 {
     walls.clear();
-    walls_number = 0;
 }
 
 double Wall::x_min() const

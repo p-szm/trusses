@@ -124,21 +124,23 @@ void save(std::string filename)
     file << date_str() << ' ' << time_str() << std::endl << std::endl;;
     
     // Print particles
-    for (int i = 0; i < particles_number; i++)
+    SlotMap<Particle>::iterator particles_it;
+    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
     {
-        if (particles[i].fixed_)
+        if (particles_it->fixed_)
             file << 'f';
         else
             file << 'p';
-        file << particles[i].id_ << ' ' << particles[i].position_;
+        file << particles_it->id_ << ' ' << particles_it->position_;
         file << std::endl;
     }
     file << std::endl;
     
     // Print bars
-    for (int i = 0; i < bars_number; i++)
+    SlotMap<Bar>::iterator bars_it;
+    for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
     {
-        file << 'b' << bars[i].id_ << ' ' << bars[i].p1_id << ' ' << bars[i].p2_id << std::endl;
+        file << 'b' << bars_it->id_ << ' ' << bars_it->p1_id << ' ' << bars_it->p2_id << std::endl;
     }
     file << std::endl;
     
@@ -167,7 +169,7 @@ void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)
 {
     double x0 = bottom_left_corner.x;
     double y0 = bottom_left_corner.y;
-    int id0 = particles_number;
+    int id0 = particles.size();
     
     bool fixed = false;
     

@@ -10,8 +10,8 @@
 #define __Trusses__particle__
 
 #include <vector>
-
 #include "math.h"
+#include "slot_map.h"
 
 enum OSCIL_T {X, Y, CW, ACW};
 
@@ -49,19 +49,15 @@ struct Particle
     void move();
     
     static int create(double a, double b, bool fixed);
-    static void destroy(int removed_id);
+    static int destroy(int removed_id);
     
 private:
     Particle(double a, double b) {position_.x = a; position_.y = b;}
 };
 
-int particle_location(int id);
-
 void print_particles();
-
 void reset_particles();
 
-extern std::vector<Particle> particles;
-extern int particles_number;
+extern SlotMap<Particle> particles;
 
 #endif /* defined(__Trusses__particle__) */

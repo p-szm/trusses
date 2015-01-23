@@ -20,8 +20,8 @@ extern bool oscillate;
 
 void microsecond_time (unsigned long long &t);
 void update_time();
-void update_position(std::vector<Particle>& particles_vect);
-double energy(std::vector<Particle>& particles);
+void update_position();
+double energy();
 void check_boundaries(Particle& p);
 void integrate(Particle& p, Vector2d acc, double dt);
 

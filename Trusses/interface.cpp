@@ -174,12 +174,13 @@ void mouse_passive(int x, int y)
     
     // Highlight particles
     bool highlighted_particle = false;
-    for (int i = 0; i < particles_number && !highlighted_particle; i++)
+    SlotMap<Particle>::iterator particles_it;
+    for (particles_it = particles.begin(); particles_it != particles.end() && !highlighted_particle; particles_it++)
     {
-        Vector2d p_pos = particles[i].position_;
+        Vector2d p_pos = particles_it->position_;
         if (abs_d(x_metres - p_pos.x) < px_to_m(min_click_dist) && abs_d(y_metres - p_pos.y) < px_to_m(min_click_dist))
         {
-            highlighted_particle_id = particles[i].id_;
+            highlighted_particle_id = particles_it->id_;
             highlighted_particle = true;
         }
     }
@@ -212,12 +213,13 @@ void mouse_click (int button, int state, int x, int y)
     
     // See if any particle was hit
     int hit_particle_id = -1;
-    for (int i = 0; i < particles_number; i++)
+    SlotMap<Particle>::iterator particles_it;
+    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
     {
-        Vector2d p_pos = particles[i].position_;
+        Vector2d p_pos = particles_it->position_;
         if (abs_d(x_metres - p_pos.x) < px_to_m(min_click_dist) && abs_d(y_metres - p_pos.y) < px_to_m(min_click_dist) && button == GLUT_LEFT_BUTTON)
         {
-            hit_particle_id = particles[i].id_;
+            hit_particle_id = particles_it->id_;
             break;
         }
     }
@@ -227,7 +229,7 @@ void mouse_click (int button, int state, int x, int y)
     {
         if (selected_particle_id != -1)
         {
-            particles[particle_location(selected_particle_id)].external_acceleration_ = Vector2d(0.0, 0.0);
+            particles[selected_particle_id].external_acceleration_ = Vector2d(0.0, 0.0);
         }
         
         if (hit_particle_id == -1)
@@ -271,13 +273,14 @@ void mouse_click (int button, int state, int x, int y)
         else if (hit_particle_id == -1 && selected_particle_id != -1)
         {
             // Create a new particle
+            int new_p_id;
             if (button == GLUT_RIGHT_BUTTON)
-                Particle::create(x_metres, y_metres, true);
+                new_p_id = Particle::create(x_metres, y_metres, true);
             else
-                Particle::create(x_metres, y_metres, false);
+                new_p_id = Particle::create(x_metres, y_metres, false);
             
             // Create a new bar
-            Bar::create(selected_particle_id, particles_number-1);
+            Bar::create(selected_particle_id, new_p_id);
             selected_particle_id = -1;
         }
         
@@ -300,10 +303,10 @@ void mouse_click (int button, int state, int x, int y)
         {
             if (button == GLUT_RIGHT_BUTTON)
             {
-                Particle::create(x_metres, y_metres, true);
-                if (particles.back().oscil_dir == CW || particles.back().oscil_dir == ACW)
+                int new_p_id = Particle::create(x_metres, y_metres, true);
+                if (particles[new_p_id].oscil_dir == CW || particles[new_p_id].oscil_dir == ACW)
                 {
-                    particles.back().oscillation_.origin.x = particles.back().position_.x - particles.back().oscillation_.amplitude;
+                    particles[new_p_id].oscillation_.origin.x = particles[new_p_id].position_.x - particles[new_p_id].oscillation_.amplitude;
                 }
             }
             else
@@ -323,7 +326,7 @@ void mouse_drag(int x, int y)
     
     if (selected_particle_id != -1)
     {
-        Particle* p = &particles[particle_location(selected_particle_id)];
+        Particle* p = &particles[selected_particle_id];
         
         //p->position_ = Vector2d(x_metres, y_metres);
         //p->prev_position_ = p->position_;

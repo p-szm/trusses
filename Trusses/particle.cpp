@@ -10,11 +10,7 @@
 #include "physics.h"
 #include "bar.h"
 
-std::vector<Particle> particles;
-std::vector<int> particles_slots;
-std::vector<int> free_particles_id;
-
-int particles_number = 0;
+SlotMap<Particle> particles;
 
 // Returns the next position
 Vector2d right(Vector2d pos)
@@ -51,106 +47,55 @@ void Particle::move()
 
 int Particle::create(double a, double b, bool fixed)
 {
-    particles_number++;
-    Particle p(a, b);
-    int new_id;
+    Particle new_particle(a, b);
     
-    p.velocity_ = Vector2d(0.0, 0.0);
-    p.prev_position_ = p.position_ - delta_t * p.velocity_;
-    p.prev_position_verlet_ = p.position_ - delta_t * p.velocity_;
-    p.acceleration_ = Vector2d(0.0, 0.0);
-    p.external_acceleration_ = Vector2d(0.0, 0.0);
-    p.mass_ = 1.0;
+    new_particle.velocity_ = Vector2d(0.0, 0.0);
+    new_particle.prev_position_ = new_particle.position_ - delta_t * new_particle.velocity_;
+    new_particle.prev_position_verlet_ = new_particle.position_ - delta_t * new_particle.velocity_;
+    new_particle.acceleration_ = Vector2d(0.0, 0.0);
+    new_particle.external_acceleration_ = Vector2d(0.0, 0.0);
+    new_particle.mass_ = 1.0;
     
-    p.fixed_ = (fixed) ? true : false;
-    p.dragged_ = false;
+    new_particle.fixed_ = (fixed) ? true : false;
+    new_particle.dragged_ = false;
     
     // Assume that the particle is fixed
-    p.oscil_dir = X;
-    p.oscillation_.phase = 0.0;
-    p.oscillation_ = Oscillation(p.position_, 0.1, 4);
+    new_particle.oscil_dir = X;
+    new_particle.oscillation_.phase = 0.0;
+    new_particle.oscillation_ = Oscillation(new_particle.position_, 0.1, 4);
     
-    // If there are some spare ids
-    if (!free_particles_id.empty())
-    {
-        // Grab the last one and pop it
-        int free_id = free_particles_id.back();
-        free_particles_id.pop_back();
-        p.id_ = free_id;
-        
-        particles.push_back(p);
-        new_id = free_id;
-    }
-    
-    // No free ids. Create a new one
-    else
-    {
-        int next_id = (int)particles.size();
-        p.id_ = next_id;
-        particles_slots.push_back(next_id);
-        
-        particles.push_back(p);
-        new_id = next_id;
-    }
+    int new_id = particles.add(new_particle);
     
     return new_id;
 }
 
-void Particle::destroy(int removed_id)
+int Particle::destroy(int obj_id)
 {
-    // Check if this particle exists
-    bool numbers_agree = (removed_id < particles_slots.size() && particles_slots[removed_id] != -1) ? true : false;
-    if (!numbers_agree)
+    if (!particles.exists(obj_id))
     {
-        std::cout << "Particle " << removed_id << " doesn't exist" << std::endl;
-        return;
+        std::cout << "This particle doesn't exist" << std::endl;
+        return 1;
     }
     
-    int position_of_removed_particle = particles_slots[removed_id];
-    int swapped_particle_id = particles.back().id_;
-    
     // Remove all the bars that this particle was connected to
-    Particle* this_p = &particles[particle_location(removed_id)];
+    Particle* this_p = &particles[obj_id];
     while (this_p->bars_connected.size() > 0)
         Bar::destroy(this_p->bars_connected.back());
     
-    // Swap the particle being destroyed with the last one
-    Particle last_copy = particles.back();
-    particles.back() = particles[position_of_removed_particle];
-    particles[position_of_removed_particle] = last_copy;
+    int result = particles.remove(obj_id);
     
-    // Pop the last particle
-    particles.pop_back();
-    
-    // Update the slots
-    particles_slots[swapped_particle_id] = position_of_removed_particle;
-    particles_slots[removed_id] = -1; // This particle doesn't exist
-    
-    // Update the free list
-    free_particles_id.push_back(removed_id);
-    
-    particles_number--;
-}
-
-int particle_location(int id)
-{
-    // size_t is unsigned, so be careful
-    // If the id has never existed or it is not used now
-    if (id + 1 > (int)particles_slots.size() || particles_slots[id] == -1)
-        return -1;
-    else
-        return particles_slots[id];
+    return result;
 }
 
 void print_particles()
 {
-    for (int i = 0; i < particles.size(); i++)
+    SlotMap<Particle>::iterator particles_it;
+    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
     {
-        //std::cout << "Particle (" << particles[i].id_.number << " " << particles[i].id_.version << ')' << std::endl;
-        std::cout << "Particle " << particles[i].id_ << ": ";
-        for (int j = 0; j < particles[i].bars_connected.size(); j++)
+        std::cout << "Particle " << particles_it->id_ << ": ";
+        for (int j = 0; j < particles_it->bars_connected.size(); j++)
         {
-            std::cout << particles[i].bars_connected[j] << " ";
+            std::cout << particles_it->bars_connected[j] << " ";
         }
         std::cout << std::endl;
     }
@@ -159,7 +104,4 @@ void print_particles()
 void reset_particles()
 {
     particles.clear();
-    particles_slots.clear();
-    free_particles_id.clear();
-    particles_number = 0;
 }

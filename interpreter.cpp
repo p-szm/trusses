@@ -277,8 +277,8 @@ void interpret_command(std::string cmd)
                 int n = get_number<int>(words[1]);
                 if (n < 0)
                     n = 0;
-                if (particle_location(n) != -1)
-                    particles[particle_location(n)].fixed_ = true;
+                if (particles.exists(n) != -1)
+                    particles[n].fixed_ = true;
             }
         }
     }

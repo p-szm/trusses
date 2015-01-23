@@ -22,6 +22,7 @@ public:
         void operator= (T* ptr) {pointer = ptr;}
         T& operator* () {return *pointer;}
         iterator operator++ (int dumy) {pointer ++; return *this;}
+        iterator operator-- (int dumy) {pointer --; return *this;}
         bool operator!= (T* ptr) {if (pointer != ptr) return true; else return false;}
         T* operator->() { return pointer; }
     private:
@@ -37,6 +38,7 @@ public:
     void clear();
     void print(); // Prints all the objects together with the internal state of the slot map
     bool exists(unsigned int obj_id); // True if the objects exists in the container, false otherwise
+    unsigned int size() {return container.size();}
 private:
     std::vector<T> container; // Holds objects in unspecified order (not sorted by ids)
     std::vector<int> slots; // ith entry in this vector holds information about an object of id "i" in the container.
@@ -142,6 +144,8 @@ unsigned int SlotMap<T>::locate(int obj_id)
 template <typename T>
 bool SlotMap<T>::exists(unsigned int obj_id)
 {
+    if (slots.size() <= obj_id)
+        return false;
     if (slots[obj_id] == -1)
         return false;
     return true;

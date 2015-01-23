@@ -10,7 +10,7 @@
 #define __Trusses__bar__
 
 #include <stdio.h>
-#include <vector>
+#include "slot_map.h"
 
 #include "math.h"
 
@@ -28,7 +28,7 @@ struct Bar
     double r0;
     
     static int create(int id1, int id2);
-    static void destroy(int bar_id);
+    static int destroy(int obj_id);
     
 private:
     Bar(int id1, int id2) {p1_id = id1; p2_id = id2;}
@@ -37,9 +37,6 @@ private:
 void reset_bars();
 void print_bars();
 
-int bar_location(int id);
-
-extern std::vector<Bar> bars;
-extern int bars_number;
+extern SlotMap<Bar> bars;
 
 #endif /* defined(__Trusses__bar__) */

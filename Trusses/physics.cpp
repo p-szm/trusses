@@ -41,16 +41,13 @@ void update_time()
     delta_t = (t - prev_t)/1000000.0;
 }
 
-double energy(std::vector<Particle>& particles)
+double energy()
 {
-    if (particles_number == 0)
-        return 0.0;
-    
     double total_energy;
-    for (int i = 0; i < particles_number; i++)
+    SlotMap<Particle>::iterator particles_it;
+    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
     {
-        double kinetic_energy = 0.5 * particles[i].mass_ * particles[i].velocity_.abs2();
-        //double potential_energy = (gravity) ? particles[i].mass_ * g * (particles[i].position_.y + 1.0) : 0.0;
+        double kinetic_energy = 0.5 * particles_it->mass_ * particles_it->velocity_.abs2();
         
         total_energy += kinetic_energy;// + potential_energy;
     }
@@ -120,27 +117,28 @@ void integrate(Particle& p, Vector2d acc, double dt)
     p.position_ = next_position;
 }
 
-void update_position(std::vector<Particle>& particles)
+void update_position()
 {
     // Zero the acceleration and remember the previous position
-    for (int i = 0; i < particles_number; i++)
+    SlotMap<Particle>::iterator particles_it;
+    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
     {
-        particles[i].acceleration_ = Vector2d(0.0, 0.0);
-        particles[i].prev_position_ = particles[i].position_;
+        particles_it->acceleration_ = Vector2d(0.0, 0.0);
+        particles_it->prev_position_ = particles_it->position_;
     }
     
     // Increase this to increase the stiffness
     int iterations = 30;
     for (int j = 0; j < iterations; j++)
     {
-        for (int i = 0; i < bars_number; i++)
+        SlotMap<Bar>::iterator bars_it;
+        for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
         {
-            Bar* b = &bars[i];
             int particle_location(int id);
-            Particle* p1 = &particles[particle_location(b->p1_id)];
-            Particle* p2 = &particles[particle_location(b->p2_id)];
+            Particle* p1 = &particles[bars_it->p1_id];
+            Particle* p2 = &particles[bars_it->p2_id];
             
-            double extension = b->extension();
+            double extension = bars_it->extension();
             
             double k = 1.0; // max is 1.0 or it blows up
             double im1 = 1/p1->mass_;
@@ -149,44 +147,42 @@ void update_position(std::vector<Particle>& particles)
             float mult2 = k - mult1;
             
             if (!p1->fixed_)
-                p1->position_ += mult1 * extension * b->unit21();
+                p1->position_ += mult1 * extension * bars_it->unit21();
             if (!p2->fixed_)
-                p2->position_ += mult2 * extension * b->unit12();
+                p2->position_ += mult2 * extension * bars_it->unit12();
         }
     }
     
-    for (int i = 0; i < particles_number; i++)
+    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
     {
-        Particle* p = &particles[i];
-        
-        if (p->fixed_)
+        if (particles_it->fixed_)
         {
             if (oscillate)
-                p->move();
+                particles_it->move();
         }
         else
         {
-            p->acceleration_ += p->external_acceleration_;
+            particles_it->acceleration_ += particles_it->external_acceleration_;
             
             if (gravity)
-                p->acceleration_ += Vector2d(0.0, -g);
+                particles_it->acceleration_ += Vector2d(0.0, -g);
             
-            integrate(*p, p->acceleration_, delta_t);
+            integrate(*particles_it, particles_it->acceleration_, delta_t);
             
             // Bounce the particles off the edges
-            check_boundaries(*p);
+            check_boundaries(*particles_it);
         }
     }
     
     // Destroy bars which are extended by too much
-    std::vector<int> bars_to_destroy;
-    for (int i = 0; i < bars_number; i++)
+    SlotMap<Bar>::iterator bars_it;
+    for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
     {
-        double extension = bars[i].extension() / bars[i].r0;
+        double extension = bars_it->extension() / bars_it->r0;
         if (extension > MAX_STRAIN || extension < -MAX_STRAIN)
         {
-            Bar::destroy(bars[i].id_);
-            i--; // The order of bars was mixed up. The last one ended up here, so
+            Bar::destroy(bars_it->id_);
+            bars_it--; // The order of bars was mixed up. The last one ended up here, so
                  // we need to recheck the ith bar 
         }
     }

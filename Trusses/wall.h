@@ -33,7 +33,6 @@ struct Wall
 void reset_walls();
 
 extern SlotMap<Wall> walls;
-extern int walls_number;
 
 void print_walls();
 

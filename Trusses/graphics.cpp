@@ -17,6 +17,7 @@
 #include "button.h"
 #include "interface.h"
 #include "interpreter.h"
+#include "bar.h"
 
 int window_width = 1200;
 int window_height = 700;
@@ -27,9 +28,6 @@ bool lengths = false;
 bool extensions = false;
 bool coords = true;
 bool ids = false;
-
-extern std::vector<Particle> particles; // TODO: remove these?
-extern std::vector<Bar> bars;
 
 void glut_print (float x, float y, std::string s, bool px)
 // Prints string at location (x,y) in a bitmap font
@@ -66,7 +64,7 @@ void display_energy()
     
     std::ostringstream s;
     s.precision(5);
-    s << "Energy: " << energy(particles);
+    s << "Energy: " << energy();
     glut_print(window_width/2.0-120, -window_height/2.0+20, s.str(), true);
 }
 
@@ -103,29 +101,31 @@ void display()
     }
     
     // Draw the bars
-    for (int i = 0; i < bars_number; i++)
+    SlotMap<Bar>::iterator bars_it;
+    for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
     {
-        draw_bar(bars[i]);
+        draw_bar(*bars_it);
     }
     
     // Draw the particles
-    for (int i = 0; i < particles_number; i++)
+    SlotMap<Particle>::iterator particles_it;
+    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
     {
-        draw_particle(particles[i]);
+        draw_particle(*particles_it);
     }
     
     // Draw the vectors
-    for (int i = 0; i < particles_number; i++)
+    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
     {
-        if (!particles[i].fixed_)
+        if (!particles_it->fixed_)
         {
             // Draw the velocity vector
             if (velocities)
-                draw_vector(particles[i].velocity_, particles[i].position_, 0.0, 0.5, 0.0);
+                draw_vector(particles_it->velocity_, particles_it->position_, 0.0, 0.5, 0.0);
             
             // Draw the acceleration vector
             if (accelerations)
-                draw_vector(particles[i].acceleration_, particles[i].position_, 0.5, 0.0, 0.0);
+                draw_vector(particles_it->acceleration_, particles_it->position_, 0.5, 0.0, 0.0);
         }
     }
     
@@ -194,7 +194,7 @@ void reshape(int width, int height)
 void idle()
 {
     update_time();
-    update_position(particles);
+    update_position();
     
     glutPostRedisplay();
 }
@@ -283,10 +283,10 @@ void draw_bar(const Bar& b)
     
     glLineWidth(2.0);
     
-    Vector2d gl_start = metres_to_gl_coords(particles[particle_location(b.p1_id)].position_);
-    Vector2d gl_end = metres_to_gl_coords(particles[particle_location(b.p2_id)].position_);
+    Vector2d gl_start = metres_to_gl_coords(particles[b.p1_id].position_);
+    Vector2d gl_end = metres_to_gl_coords(particles[b.p2_id].position_);
     
-    Vector2d m_mid = 0.5 * (particles[particle_location(b.p1_id)].position_ + particles[particle_location(b.p2_id)].position_);
+    Vector2d m_mid = 0.5 * (particles[b.p1_id].position_ + particles[b.p2_id].position_);
     
     glBegin(GL_LINES);
     glVertex2f(gl_start.x, gl_start.y);
