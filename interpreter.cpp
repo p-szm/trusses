@@ -327,6 +327,41 @@ void interpret_command(std::string cmd)
         }
     }
     
+    else if (first_word == "trace")
+    {
+        if (words_number == 2)
+        {
+            if (is_number(words[1]))
+            {
+                // Interpret negative numbers to 0
+                int n = get_number<int>(words[1]);
+                if (n < 0)
+                    n = 0;
+                if (particles.exists(n))
+                    particles[n].trace_on = true;
+            }
+        }
+    }
+    
+    else if (first_word == "untrace")
+    {
+        if (words_number == 2)
+        {
+            if (is_number(words[1]))
+            {
+                // Interpret negative numbers to 0
+                int n = get_number<int>(words[1]);
+                if (n < 0)
+                    n = 0;
+                if (particles.exists(n) && particles[n].trace_on)
+                {
+                    particles[n].trace_on = false;
+                    particles[n].trace.clear();
+                }
+            }
+        }
+    }
+    
     else if (first_word == "remove")
     {
         if (words_number == 3)

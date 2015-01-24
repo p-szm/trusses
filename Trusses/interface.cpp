@@ -214,19 +214,17 @@ void mouse_click (int button, int state, int x, int y)
     // GLUT_LEFT_BUTTON, GLUT_MIDDLE_BUTTON, or GLUT_RIGHT_BUTTON
     // GLUT_UP or GLUT_DOWN
     
-    double x_px, y_px, x_metres, y_metres;
+    double x_metres, y_metres;
     
     if (snap && snapped)
     {
         x_metres = snapped_point.x;
         y_metres = snapped_point.y;
-        x_px = m_to_px(x_metres);
-        y_px = m_to_px(y_metres);
     }
     else
     {
-        x_px = x - window_width / 2.0; // wrt centre of the screen, not the world
-        y_px = -y  + window_height / 2.0;
+        double x_px = x - window_width / 2.0; // wrt centre of the screen, not the world
+        double y_px = -y  + window_height / 2.0;
         x_metres = px_to_m(x_px - world_centre.x);
         y_metres = px_to_m(y_px - world_centre.y);
     }

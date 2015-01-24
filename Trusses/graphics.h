@@ -16,14 +16,13 @@
 
 void glut_print (float x, float y, std::string s, bool px = false);
 void display_fps(double dt);
-void display_energy();
 void draw_gravity_indicator();
 
 void display();
 void reshape(int width, int height);
 void idle();
 
-void draw_particle(const Particle& p);
+void draw_particle(Particle& p);
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b);
 void draw_bar(const Bar& b);
 void draw_coords();

@@ -19,7 +19,6 @@ extern bool gravity;
 void microsecond_time (unsigned long long &t);
 void update_time();
 void update_position();
-double energy();
 void check_boundaries(Particle& p);
 void integrate(Particle& p, Vector2d acc, double dt);
 

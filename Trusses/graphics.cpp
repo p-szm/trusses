@@ -58,16 +58,6 @@ void display_fps(double dt)
     glut_print(-window_width/2.0+30, -window_height/2.0+20, s.str(), true);
 }
 
-void display_energy()
-{
-    glColor3f(1.0, 1.0, 1.0);
-    
-    std::ostringstream s;
-    s.precision(5);
-    s << "Energy: " << energy();
-    glut_print(window_width/2.0-120, -window_height/2.0+20, s.str(), true);
-}
-
 void draw_gravity_indicator()
 {
     glColor3f(1.0, 1.0, 1.0);
@@ -148,7 +138,6 @@ void display()
     }
     
     display_fps(delta_t);
-    //display_energy();
     draw_gravity_indicator();
     
     // Draw the command line
@@ -201,8 +190,19 @@ void idle()
 
 //////////
 
-void draw_particle(const Particle& p)
+void draw_particle(Particle& p)
 {
+    glColor3f(0.8, 0.8, 0.0);
+    glPointSize(1);
+    glBegin(GL_POINTS);
+    for (int i = 0; i < p.trace.size(); i++)
+    {
+        Vector2d t = metres_to_gl_coords(p.trace.get(i));
+        glVertex2f(t.x, t.y);
+    }
+    glEnd();
+    
+    // Particle
     Vector2d pos = p.position_;
     Vector2d pos_gl = metres_to_gl_coords(pos);
     
@@ -226,9 +226,7 @@ void draw_particle(const Particle& p)
     
     // Increase the point size if highlighted and not selected
     if (highlighted_particle_id == p.id_ && selected_particle_id != p.id_)
-    {
         glPointSize(10);
-    }
     
     glBegin(GL_POINTS);
     glVertex2f(pos_gl.x, pos_gl.y);

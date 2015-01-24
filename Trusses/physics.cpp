@@ -20,7 +20,8 @@ double delta_t = 0.0;
 double g = 10.0;
 double energy_absorption = 0.5;
 
-#define MAX_STRAIN 0.8
+#define MAX_STRAIN 0.5
+#define SMALL_NUM 1e-5
 
 bool gravity = false;
 
@@ -37,20 +38,6 @@ void update_time()
     prev_t = t;
     microsecond_time(t);
     delta_t = (t - prev_t)/1000000.0;
-}
-
-double energy()
-{
-    double total_energy;
-    SlotMap<Particle>::iterator particles_it;
-    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
-    {
-        double kinetic_energy = 0.5 * particles_it->mass_ * particles_it->velocity_.abs2();
-        
-        total_energy += kinetic_energy;// + potential_energy;
-    }
-    
-    return total_energy;
 }
 
 void check_boundaries(Particle& p)
@@ -121,8 +108,14 @@ void update_position()
     SlotMap<Particle>::iterator particles_it;
     for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
     {
-        particles_it->acceleration_ = Vector2d(0.0, 0.0);
-        particles_it->prev_position_ = particles_it->position_;
+        if (!particles_it->fixed_)
+        {
+            particles_it->acceleration_ = Vector2d(0.0, 0.0);
+            particles_it->prev_position_ = particles_it->position_;
+            
+            if (particles_it->trace_on)
+                particles_it->trace.add(particles_it->position_);
+        }
     }
     
     // Increase this to increase the stiffness

@@ -209,4 +209,70 @@ void SlotMap<T>::clear()
     free_ids.clear();
 }
 
+template <typename T>
+class FixedSizeContainer
+{
+public:
+    unsigned int max_size;
+    void add(T obj);
+    void print() const;
+    T& last_element() const;
+    unsigned int size() const;
+    T& get(unsigned int i);
+    void clear();
+    FixedSizeContainer(unsigned int n): max_size(n) {current_pos = 0;}
+private:
+    std::vector<T> container;
+    unsigned int current_pos;
+};
+
+template <typename T>
+void FixedSizeContainer<T>::add(T obj)
+{
+    if (container.size() < max_size)
+        container.push_back(obj);
+    else if (container.size() == max_size)
+    {
+        container[current_pos] = obj;
+    }
+    current_pos++;
+    if (current_pos == max_size)
+        current_pos = 0;
+}
+
+template <typename T>
+void FixedSizeContainer<T>::print() const
+{
+    for (int i = 0; i < container.size(); i++)
+        std::cout << container[i] << " ";
+    std::cout << std::endl;
+}
+
+template <typename T>
+T& FixedSizeContainer<T>::last_element() const
+{
+    if (current_pos == 0)
+        return container.back();
+    return container[current_pos - 1];
+}
+
+template <typename T>
+unsigned int FixedSizeContainer<T>::size() const
+{
+    return (unsigned int)container.size();
+}
+
+template <typename T>
+T& FixedSizeContainer<T>::get(unsigned int i)
+{
+    return container.at(i);
+}
+
+template <typename T>
+void FixedSizeContainer<T>::clear()
+{
+    container.clear();
+    current_pos = 0;
+}
+
 #endif /* defined(__Trusses__slot_map__) */
