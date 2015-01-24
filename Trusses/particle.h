@@ -44,6 +44,7 @@ struct Particle
     OSCIL_T oscil_dir;
     // Moves the particle using its motion function
     void move();
+    bool oscillate;
     
     static int create(double a, double b, bool fixed);
     static int destroy(int removed_id);

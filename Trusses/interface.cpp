@@ -63,22 +63,28 @@ void key_pressed(unsigned char key, int x, int y)
         if (key == 27)
         {
             command_mode = false;
-            command = "";
+            commands.back() = "";
         }
         else if (key == 13)
         {
             command_mode = false;
-            interpret_command(command);
-            command = "";
+            std::string cmd_to_execute = commands[commands.size() - current_cmd - 1];
+            if (cmd_to_execute != "")
+            {
+                interpret_command(cmd_to_execute);
+                commands.back() = cmd_to_execute;
+            }
+            current_cmd = 0;
         }
         else if (key == 127 || key == 8)
         {
-            if (command.size() > 0)
-                command = command.substr(0, command.size()-1);
+            if (commands.back().size() > 0 && current_cmd == 0)
+                commands.back() = commands.back().substr(0, commands.back().size()-1);
         }
         else
         {
-            command += key;
+            if (current_cmd == 0)
+                commands.back() += key;
         }
     }
     else
@@ -90,7 +96,7 @@ void key_pressed(unsigned char key, int x, int y)
         }
         else if (key == 'o')
         {
-            create_cloth(20, 0.1, Vector2d(0.0, 0.0), true);
+            create_cloth(20, 0.1, Vector2d(0.0, 0.0), false);
         }
         else if (key == 'w')
         {
@@ -105,6 +111,8 @@ void key_pressed(unsigned char key, int x, int y)
         else if (key == 13)
         {
             command_mode = true;
+            if (commands.size() == 0 || commands.back() != "")
+                commands.push_back("");
         }
     }
     glutPostRedisplay();
@@ -115,11 +123,23 @@ void special_key_down(int key, int x, int y)
     // Arrows move the world around
     if (key == GLUT_KEY_UP)
     {
-        world_centre.y -= 10; // px
+        if (command_mode)
+        {
+            if (current_cmd < commands.size() - 1)
+                current_cmd++;
+        }
+        else
+            world_centre.y -= 10; // px
     }
     else if (key == GLUT_KEY_DOWN)
     {
-        world_centre.y += 10;
+        if (command_mode)
+        {
+            if (current_cmd > 0)
+                current_cmd--;
+        }
+        else
+            world_centre.y += 10;
     }
     else if (key == GLUT_KEY_LEFT)
     {

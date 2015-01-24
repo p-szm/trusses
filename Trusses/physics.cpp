@@ -20,9 +20,7 @@ double delta_t = 0.0;
 double g = 10.0;
 double energy_absorption = 0.5;
 
-#define MAX_STRAIN 0.2
-
-bool oscillate = false;
+#define MAX_STRAIN 0.8
 
 bool gravity = false;
 
@@ -139,12 +137,11 @@ void update_position()
             Particle* p2 = &particles[bars_it->p2_id];
             
             double extension = bars_it->extension();
-            
-            double k = 1.0; // max is 1.0 or it blows up
+
             double im1 = 1/p1->mass_;
             double im2 = 1/p1->mass_;
-            float mult1 = (im1 / (im1 + im2)) * k;
-            float mult2 = k - mult1;
+            float mult1 = (im1 / (im1 + im2)) * bars_it->stiffness;
+            float mult2 = bars_it->stiffness - mult1;
             
             if (!p1->fixed_)
                 p1->position_ += mult1 * extension * bars_it->unit21();
@@ -157,7 +154,7 @@ void update_position()
     {
         if (particles_it->fixed_)
         {
-            if (oscillate)
+            if (particles_it->oscillate)
                 particles_it->move();
         }
         else

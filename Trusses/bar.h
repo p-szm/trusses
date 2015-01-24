@@ -24,6 +24,7 @@ struct Bar
     double extension() const;
     Vector2d unit12() const;
     Vector2d unit21() const;
+    double stiffness;
     
     static int create(int id1, int id2);
     static int destroy(int obj_id);

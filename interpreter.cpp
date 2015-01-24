@@ -14,9 +14,11 @@
 #include "wall.h"
 
 #include <sstream>
+#include <vector>
 
 bool command_mode = false;
-std::string command;
+std::vector<std::string> commands;
+unsigned int current_cmd = 0; // From the back
 
 template<typename T>
 void extract_words(std::string str, std::vector<T> & target_v)
@@ -115,14 +117,31 @@ void interpret_command(std::string cmd)
     
     else if (first_word == "oscillation")
     {
-        if (words_number == 1)
-            std::cout << "oscillation=" << ids << std::endl;
-        else if (words_number == 2 && words[1] == "on")
-            oscillate = true;
-        else if (words_number == 2 && words[1] == "off")
-            oscillate = false;
-        else
-            std::cout << "Usage: oscillation <on/off>" << std::endl;
+        if (words_number == 3)
+        {
+            if (words[1] == "on")
+            {
+                if (is_number(words[2]))
+                {
+                    // Interpret negative numbers as 0
+                    int n = get_number<int>(words[2]);
+                    if (n < 0)
+                        n = 0;
+                    particles[n].oscillate = true;
+                }
+            }
+            else if (words[1] == "off")
+            {
+                if (is_number(words[2]))
+                {
+                    // Interpret negative numbers as 0
+                    int n = get_number<int>(words[2]);
+                    if (n < 0)
+                        n = 0;
+                    particles[n].oscillate = false;
+                }
+            }
+        }
     }
     
     else if (first_word == "snap")
@@ -262,6 +281,31 @@ void interpret_command(std::string cmd)
             if (n2 < 0)
                 n2 = 0;
             Bar::create(n1, n2);
+        }
+        else if (words_number == 4 && words[2] == "stiffness" && is_number(words[3]))
+        {
+            double new_stiffness = get_number<double>(words[3]);
+            if (new_stiffness < 0.0)
+                new_stiffness = 0.0;
+            else if (new_stiffness > 1.0)
+                new_stiffness = 1.0;
+            
+            if (is_number(words[1]))
+            {
+                int bar_id = get_number<int>(words[1]);
+                if (bar_id < 0)
+                    bar_id = 0;
+                if (bars.exists(bar_id))
+                    bars[bar_id].stiffness = new_stiffness;
+            }
+            else if (words[1] == "*")
+            {
+                SlotMap<Bar>::iterator bars_it;
+                for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
+                {
+                    bars_it->stiffness = new_stiffness;
+                }
+            }
         }
         else
             std::cout << "Usage: bar <int> <int>" << std::endl;

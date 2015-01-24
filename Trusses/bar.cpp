@@ -31,6 +31,7 @@ int Bar::create(int id1, int id2)
     
     Bar new_bar(id1, id2);
     new_bar.r0 = new_bar.length();
+    new_bar.stiffness = 1.0;
     int new_id = bars.add(new_bar);
     
     // Particles have to know which bars are connected to them

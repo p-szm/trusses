@@ -158,18 +158,18 @@ void display()
         glBegin(GL_QUADS);
         glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0));
         glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0));
-        glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0+30));
-        glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0+30));
+        glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0 + 30));
+        glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0 + 30));
         glEnd();
         
         glColor3f(0.7, 0.7, 0.0);
         glBegin(GL_LINES);
-        glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0+30));
-        glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0+30));
+        glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0 + 30));
+        glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0 + 30));
         glEnd();
         
         glColor3f(1.0, 1.0, 1.0);
-        glut_print(-window_width/2.0+20, -window_height/2.0+10, command, true);
+        glut_print(-window_width/2.0+20, -window_height/2.0+10, commands[commands.size() - current_cmd - 1], true);
     }
     
     glutSwapBuffers();
