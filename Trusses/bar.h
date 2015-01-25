@@ -20,11 +20,15 @@ struct Bar
     int p1_id;
     int p2_id;
     double r0;
+    double r_room;
+    double temperature;
     double length() const;
     double extension() const;
     Vector2d unit12() const;
     Vector2d unit21() const;
     double stiffness;
+    
+    void set_temperature(double t);
     
     static int create(int id1, int id2);
     static int destroy(int obj_id);

@@ -92,7 +92,6 @@ void key_pressed(unsigned char key, int x, int y)
         if (key == 'g')
         {
             gravity = !gravity;
-            std::cout << "Gravity: " << gravity << std::endl;
         }
         else if (key == 'o')
         {

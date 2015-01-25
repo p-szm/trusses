@@ -11,6 +11,8 @@
 
 SlotMap<Bar> bars;
 
+#define ROOM_TEMP 273.15
+
 int Bar::create(int id1, int id2)
 {
     // TODO
@@ -31,7 +33,9 @@ int Bar::create(int id1, int id2)
     
     Bar new_bar(id1, id2);
     new_bar.r0 = new_bar.length();
+    new_bar.r_room = new_bar.r0;
     new_bar.stiffness = 1.0;
+    new_bar.temperature = ROOM_TEMP;
     int new_id = bars.add(new_bar);
     
     // Particles have to know which bars are connected to them
@@ -39,6 +43,13 @@ int Bar::create(int id1, int id2)
     particles[id2].bars_connected.push_back(new_id);
 
     return new_id;
+}
+
+void Bar::set_temperature(double t)
+{
+    temperature = t;
+    double alpha = 2e-5;
+    r0 = r_room * (1 + alpha * (t - 273.15));
 }
 
 int Bar::destroy(int obj_id)

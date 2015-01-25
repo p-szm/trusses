@@ -16,6 +16,7 @@
 
 void glut_print (float x, float y, std::string s, bool px = false);
 void display_fps(double dt);
+void display_temperature(double temp);
 void draw_gravity_indicator();
 
 void display();
@@ -38,7 +39,7 @@ inline Vector2d metres_to_gl_coords(const Vector2d& v);
 inline double metres_to_gl_coords_x(double d);
 inline double metres_to_gl_coords_y(double d);
 
-inline Vector2d px_to_gl_coords(Vector2d v);
+inline Vector2d px_to_gl_coords(const Vector2d& v);
 inline double px_to_gl_coords_x(double d);
 inline double px_to_gl_coords_y(double d);
 

@@ -19,11 +19,23 @@ unsigned long long int prev_t = 0.0;
 double delta_t = 0.0;
 double g = 10.0;
 double energy_absorption = 0.5;
+double temperature = 273.15;
 
 #define MAX_STRAIN 0.5
 #define SMALL_NUM 1e-5
 
 bool gravity = false;
+
+void increase_temp(double rate)
+{
+    double dT = delta_t * rate;
+    set_environment_temperature(temperature + dT);
+}
+
+void set_environment_temperature(double t)
+{
+    temperature = t;
+}
 
 void microsecond_time (unsigned long long &t)
 // Returns system time in microseconds, used for introducing delays at low simulation speeds
@@ -164,16 +176,30 @@ void update_position()
         }
     }
     
-    // Destroy bars which are extended by too much
+    std::vector<int> bars_to_destroy;
     SlotMap<Bar>::iterator bars_it;
     for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
     {
+        // Temperature expansion
+        if (abs_d(bars_it->temperature - temperature) > SMALL_NUM)
+        {
+            bars_it->set_temperature( bars_it->temperature + delta_t/5.0 * (temperature - bars_it->temperature) );
+        }
+        
+        // Destroy bars which are extended by too much
         double extension = bars_it->extension() / bars_it->r0;
         if (extension > MAX_STRAIN || extension < -MAX_STRAIN)
         {
-            Bar::destroy(bars_it->id_);
-            bars_it--; // The order of bars was mixed up. The last one ended up here, so
-                 // we need to recheck the ith bar 
+            bars_to_destroy.push_back(bars_it->id_);
         }
+        else if (bars_it->temperature >= MELTING_POINT && random(1.0) > 0.8) // 20% chance of melting in each frame
+        {
+            bars_to_destroy.push_back(bars_it->id_);
+        }
+    }
+
+    for (int i = 0; i < bars_to_destroy.size(); i++)
+    {
+        Bar::destroy(bars_to_destroy[i]);
     }
 }

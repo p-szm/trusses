@@ -374,7 +374,6 @@ void interpret_command(std::string cmd)
                     int n = get_number<int>(words[2]);
                     if (n < 0)
                         n = 0;
-                    std::cout << n << std::endl;
                     Bar::destroy(n);
                 }
             }
@@ -387,9 +386,23 @@ void interpret_command(std::string cmd)
                     int n = get_number<int>(words[2]);
                     if (n < 0)
                         n = 0;
-                    std::cout << n << std::endl;
                     Particle::destroy(n);
                 }
+            }
+        }
+    }
+    
+    else if (first_word == "temperature")
+    {
+        if (words_number == 2)
+        {
+            if (is_number(words[1]))
+            {
+                // Interpret negative numbers to 0
+                int n = get_number<double>(words[1]);
+                if (n < 0.0)
+                    n = 0.0;
+                set_environment_temperature(n);
             }
         }
     }

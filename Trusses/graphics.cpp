@@ -58,6 +58,19 @@ void display_fps(double dt)
     glut_print(-window_width/2.0+30, -window_height/2.0+20, s.str(), true);
 }
 
+void display_temperature(double temp)
+{
+    if (temp > MELTING_POINT)
+        glColor3f(0.8, 0.0, 0.0);
+    else
+        glColor3f(1.0, 1.0, 1.0);
+    
+    std::ostringstream s;
+    s.precision(5);
+    s << "T = " << int(temp) << " K";
+    glut_print(window_width/2.0-80, -window_height/2.0+20, s.str(), true);
+}
+
 void draw_gravity_indicator()
 {
     glColor3f(1.0, 1.0, 1.0);
@@ -138,6 +151,7 @@ void display()
     }
     
     display_fps(delta_t);
+    display_temperature(temperature);
     draw_gravity_indicator();
     
     // Draw the command line
@@ -184,6 +198,7 @@ void idle()
 {
     update_time();
     update_position();
+    //increase_temp(500);
     
     glutPostRedisplay();
 }
@@ -394,7 +409,7 @@ double metres_to_gl_coords_y(double d)
     return (d + world_centre.y / scale) * 2.0 * scale / window_height;
 }
 
-Vector2d px_to_gl_coords(Vector2d v)
+Vector2d px_to_gl_coords(const Vector2d& v)
 {
     return Vector2d(px_to_gl_coords_x(v.x), px_to_gl_coords_y(v.y));
 }
