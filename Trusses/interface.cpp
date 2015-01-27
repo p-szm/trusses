@@ -92,7 +92,7 @@ void key_pressed(unsigned char key, int x, int y)
         if (key == 'g')
             gravity = !gravity;
         else if (key == 'o')
-            create_cloth(20, 0.1, Vector2d(0.0, 0.0), false);
+            create_cloth(20, 0.5, Vector2d(0.0, 0.0), false);
         else if (key == 27)
             std::exit(0);
         else if (key == 13)

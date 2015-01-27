@@ -23,6 +23,7 @@ struct Vector2d
     Vector2d operator+ (const Vector2d &v) { return Vector2d(x+v.x, y+v.y); }
     Vector2d operator- (const Vector2d &v) { return Vector2d(x-v.x, y-v.y); }
     double operator* (const Vector2d &v) { return (x*v.x + y*v.y); }
+    Vector2d operator/ (const double &a) { return Vector2d(x/a, y/a); }
     friend Vector2d operator* (const double &a, const Vector2d &v) { return Vector2d(v.x*a, v.y*a); }
     friend Vector2d operator- (const Vector2d &v) { return Vector2d(-v.x, -v.y); }
     double abs2() const { return (x*x + y*y); }

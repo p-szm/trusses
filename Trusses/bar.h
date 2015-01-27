@@ -38,6 +38,9 @@ struct Bar
     
     int update();
     
+    // Split the bar into n_parts bars of equal lengths
+    void split(unsigned int n_parts);
+    
     static int create(int id1, int id2);
     static int destroy(int obj_id);
 private:

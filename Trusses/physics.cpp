@@ -20,6 +20,7 @@ double delta_t = 0.0;
 double environment_temp = ROOM_TEMPERATURE;
 
 #define RELAX_ITER 30
+#define HORIZON 1000
 
 bool gravity = false;
 
@@ -68,4 +69,14 @@ void update_simulation()
     // Destroy each bar that was previously added to the list
     for (int i = 0; i < bars_to_destroy.size(); i++)
         Bar::destroy(bars_to_destroy[i]);
+    
+    // Destroy particles which are very far away
+    std::vector<int> particles_to_destroy;
+    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
+    {
+        if (abs_d(particles_it->position_.x) > HORIZON || abs_d(particles_it->position_.y) > HORIZON)
+            particles_to_destroy.push_back(particles_it->id_);
+    }
+    for (int i = 0; i < particles_to_destroy.size(); i++)
+        Particle::destroy(particles_to_destroy[i]);
 }

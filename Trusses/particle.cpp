@@ -63,7 +63,7 @@ int Particle::create(double a, double b, bool fixed)
     // Assume that the particle is fixed
     new_particle.oscil_dir = X;
     new_particle.oscillation_.phase = 0.0;
-    new_particle.oscillation_ = Oscillation(new_particle.position_, 0.1, 4);
+    new_particle.oscillation_ = Oscillation(new_particle.position_, 0.5, 2);
     new_particle.oscillate = false;
     
     // Trace

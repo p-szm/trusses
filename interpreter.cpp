@@ -406,6 +406,24 @@ void interpret_command(std::string cmd)
         }
     }
     
+    // TODO: accept only positive integers
+    else if (first_word == "split")
+    {
+        if (words_number == 3 && is_number(words[1]) && is_number(words[2])) // TODO: Prevent it from taking doubles
+        {
+            // Accept only positive integers
+            // Interpret negative numbers as 0
+            int n1 = get_number<int>(words[1]);
+            int n2 = get_number<int>(words[2]);
+            if (n1 < 0)
+                n1 = 0;
+            if (n2 < 0)
+                n2 = 0;
+            if (bars.exists(n1))
+                bars[n1].split(n2);
+        }
+    }
+    
     // The command was not recognised
     else
         std::cout << "Command not found" << std::endl;
