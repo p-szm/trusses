@@ -19,7 +19,6 @@
 
 bool snap = true;
 bool snapped = false;
-Vector2d snapped_point(0.0, 0.0);
 
 bool drawing_wall = false;
 std::vector<Vector2d> wall_points;
@@ -32,29 +31,30 @@ double scale = 40.0; // pixels/metre
 
 Vector2d world_centre(0.0, 0.0); // In pixels
 
-///////
+Vector2d mouse_pos; // In world coords
 
-Vector2d m_to_px(Vector2d v)
+bool command_mode = false;
+
+bool full_screen = false;
+
+struct Snap
 {
-    return scale * v;
-}
+    
+};
 
-double m_to_px(double d)
+class Interface
 {
-    return d * scale;
-}
+public:
+    bool drawing_wall;
+};
 
-Vector2d px_to_m(Vector2d v)
-{
-    return (1/scale) * v;
-}
 
+
+// Represents d pixels in metres
 double px_to_m(double d)
 {
     return d / scale;
 }
-
-///////
 
 void key_pressed(unsigned char key, int x, int y)
 {
@@ -90,30 +90,38 @@ void key_pressed(unsigned char key, int x, int y)
     else
     {
         if (key == 'g')
-        {
             gravity = !gravity;
-        }
         else if (key == 'o')
-        {
             create_cloth(20, 0.1, Vector2d(0.0, 0.0), false);
-        }
-        else if (key == 'w')
-        {
-            Wall::destroy(2);
-        }
-        
         else if (key == 27)
-        {
             std::exit(0);
-        }
-        
         else if (key == 13)
         {
             command_mode = true;
             if (commands.size() == 0 || commands.back() != "")
                 commands.push_back("");
         }
+        if (key == 'c')
+        {
+            if (bars_color_mode == STRAIN_C)
+                bars_color_mode = TEMP_C;
+            else if (bars_color_mode == TEMP_C)
+                bars_color_mode = STRAIN_C;
+        }
+        if (key == 'f')
+        {
+            full_screen = !full_screen;
+            if (full_screen)
+                glutFullScreen();
+            else
+            {
+                glutReshapeWindow(1100, 750);
+                glutPositionWindow(100, 80);
+            }
+        }
     }
+    
+    // Redraw the window
     glutPostRedisplay();
 }
 
@@ -141,26 +149,32 @@ void special_key_down(int key, int x, int y)
             world_centre.y += 10;
     }
     else if (key == GLUT_KEY_LEFT)
-    {
         world_centre.x += 10;
-    }
     else if (key == GLUT_KEY_RIGHT)
-    {
         world_centre.x -= 10;
-    }
 }
 
+// True if two vectors (in metres) are closer than min_click_dist (in px)
+bool in_range_m(double d1, double d2)
+{
+    if (abs_d(d1 - d2) * scale < min_click_dist)
+        return true;
+    return false;
+}
+
+// When the mouse is just hovered
 void mouse_passive(int x, int y)
 {
-    double x_px = x - window_width / 2.0; // wrt centre of the screen, not the world
+    double x_px = x - window_width / 2.0; // Wrt the centre of the screen, not the world
     double y_px = -y  + window_height / 2.0;
-    double x_metres = px_to_m(x_px - world_centre.x);
+    double x_metres = px_to_m(x_px - world_centre.x); // In the worlds coordinates
     double y_metres = px_to_m(y_px - world_centre.y);
     
     double closest_x = round(x_metres);
     double closest_y = round(y_metres);
     
-    //std::cout << x_metres << ' ' << y_metres << std::endl;
+    // Remember mouse position
+    mouse_pos = Vector2d(x_metres, y_metres);
     
     // Highlight the buttons
     bool button_hit = false;
@@ -172,23 +186,19 @@ void mouse_passive(int x, int y)
             button_hit = true;
         }
         else
-        {
             buttons[i].highlighted_ = false;
-        }
     }
     
     // Snap to the grid
     if (snap)
     {
-        if (abs_d(closest_x - x_metres) < px_to_m(min_click_dist) && abs_d(closest_y - y_metres) < px_to_m(min_click_dist))
+        if (in_range_m(closest_x, x_metres) && in_range_m(closest_y, y_metres))
         {
             snapped = true;
-            snapped_point = Vector2d(closest_x, closest_y);
+            mouse_pos = Vector2d(closest_x, closest_y);
         }
         else
-        {
             snapped = false;
-        }
     }
     
     // Highlight particles
@@ -196,14 +206,14 @@ void mouse_passive(int x, int y)
     SlotMap<Particle>::iterator particles_it;
     for (particles_it = particles.begin(); particles_it != particles.end() && !highlighted_particle; particles_it++)
     {
-        Vector2d p_pos = particles_it->position_;
-        if (abs_d(x_metres - p_pos.x) < px_to_m(min_click_dist) && abs_d(y_metres - p_pos.y) < px_to_m(min_click_dist))
+        if (in_range_m(x_metres, particles_it->position_.x) && in_range_m(y_metres, particles_it->position_.y))
         {
             highlighted_particle_id = particles_it->id_;
             highlighted_particle = true;
         }
     }
     
+    // -1 if none of the particles were highlighted
     if (!highlighted_particle)
         highlighted_particle_id = -1;
 }
@@ -215,79 +225,67 @@ void mouse_click (int button, int state, int x, int y)
     
     double x_metres, y_metres;
     
+    // Move the mouse to the snapped point if snapping is enabled and
     if (snap && snapped)
     {
-        x_metres = snapped_point.x;
-        y_metres = snapped_point.y;
+        x_metres = mouse_pos.x;
+        y_metres = mouse_pos.y;
     }
     else
     {
-        double x_px = x - window_width / 2.0; // wrt centre of the screen, not the world
+        double x_px = x - window_width / 2.0; // Wrt to centre of the screen, not the world
         double y_px = -y  + window_height / 2.0;
-        x_metres = px_to_m(x_px - world_centre.x);
+        x_metres = px_to_m(x_px - world_centre.x); // In world coordinates
         y_metres = px_to_m(y_px - world_centre.y);
     }
     
-    // See if any particle was hit
-    int hit_particle_id = -1;
+    // See if any particle was clicked, and if it was grab the first one that's detected
+    int clicked_particle_id = -1;
     SlotMap<Particle>::iterator particles_it;
-    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
+    for (particles_it = particles.begin(); particles_it != particles.end() && clicked_particle_id == -1; particles_it++)
     {
         Vector2d p_pos = particles_it->position_;
         if (abs_d(x_metres - p_pos.x) < px_to_m(min_click_dist) && abs_d(y_metres - p_pos.y) < px_to_m(min_click_dist) && button == GLUT_LEFT_BUTTON)
-        {
-            hit_particle_id = particles_it->id_;
-            break;
-        }
+            clicked_particle_id = particles_it->id_;
     }
     
     // Unselect particles
     if (state == GLUT_UP)
     {
         if (selected_particle_id != -1)
-        {
             particles[selected_particle_id].external_acceleration_ = Vector2d(0.0, 0.0);
-        }
         
-        if (hit_particle_id == -1)
+        if (clicked_particle_id == -1)
             selected_particle_id = -1;
     }
     
     else if (state == GLUT_DOWN)
     {
-        bool button_pressed = false;
-        
         // Check if any button was pressed
-        for (int i = 0; i < buttons_number && button_pressed == false; i++)
-        {
+        int pressed_button_id = -1;
+        for (int i = 0; i < buttons_number && pressed_button_id == -1; i++)
             if (buttons[i].highlighted_)
-            {
-                buttons[i].execute_action();
-                //std::cout << "Button " << buttons[i].id_ <<" was clicked" << std::endl;
-                button_pressed = true;
-            }
-        }
+                pressed_button_id = buttons[i].id_;
         
-        if (button_pressed)
-        {
-            
-        }
+        // If a button was pressed
+        if (pressed_button_id != -1)
+            buttons[pressed_button_id].execute_action();
         
         // If a particle was clicked and one was already selected
-        else if (hit_particle_id != -1 && selected_particle_id != -1)
+        else if (clicked_particle_id != -1 && selected_particle_id != -1)
         {
-            Bar::create(selected_particle_id, hit_particle_id);
+            Bar::create(selected_particle_id, clicked_particle_id);
             selected_particle_id = -1; // Unselect
         }
         
         // If a particle was clicked and no particle was selected
-        else if (hit_particle_id != -1 && selected_particle_id == -1)
+        else if (clicked_particle_id != -1 && selected_particle_id == -1)
         {
-            selected_particle_id = hit_particle_id;
+            selected_particle_id = clicked_particle_id;
         }
         
         // If a particle was selected but no particle clicked
-        else if (hit_particle_id == -1 && selected_particle_id != -1)
+        else if (clicked_particle_id == -1 && selected_particle_id != -1)
         {
             // Create a new particle
             int new_p_id;
@@ -344,10 +342,6 @@ void mouse_drag(int x, int y)
     if (selected_particle_id != -1)
     {
         Particle* p = &particles[selected_particle_id];
-        
-        //p->position_ = Vector2d(x_metres, y_metres);
-        //p->prev_position_ = p->position_;
-        //p->prev_position_verlet_ = p->position_;
         Vector2d p_gl_pos = metres_to_gl_coords(p->position_);
         Vector2d mouse_gl_pos = metres_to_gl_coords(Vector2d(x_metres, y_metres));
         p->external_acceleration_ = 100 * Vector2d(mouse_gl_pos.x - p_gl_pos.x, mouse_gl_pos.y - p_gl_pos.y);

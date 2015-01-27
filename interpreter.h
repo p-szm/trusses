@@ -14,7 +14,6 @@
 
 void interpret_command(std::string cmd);
 
-extern bool command_mode;
 extern std::vector<std::string> commands;
 extern unsigned int current_cmd;
 

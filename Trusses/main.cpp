@@ -45,6 +45,7 @@ int main(int argc, char * argv[])
     
     glPointSize(5.0);
     glLineWidth(1.0);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
     
     microsecond_time(t);
     delta_t = (t - prev_t)/1000000.0;

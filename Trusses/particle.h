@@ -49,6 +49,9 @@ struct Particle
     bool trace_on;
     FixedSizeContainer<Vector2d> trace;
     
+    void update();
+    void impose_boundaries();
+    
     static int create(double a, double b, bool fixed);
     static int destroy(int removed_id);
 private:

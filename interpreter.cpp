@@ -16,7 +16,6 @@
 #include <sstream>
 #include <vector>
 
-bool command_mode = false;
 std::vector<std::string> commands;
 unsigned int current_cmd = 0; // From the back
 
@@ -402,7 +401,7 @@ void interpret_command(std::string cmd)
                 int n = get_number<double>(words[1]);
                 if (n < 0.0)
                     n = 0.0;
-                set_environment_temperature(n);
+                environment_temp = n;
             }
         }
     }

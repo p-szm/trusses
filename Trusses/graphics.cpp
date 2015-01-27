@@ -29,6 +29,8 @@ bool extensions = false;
 bool coords = true;
 bool ids = false;
 
+bars_color_mode_t bars_color_mode = STRAIN_C;
+
 void glut_print (float x, float y, std::string s, bool px)
 // Prints string at location (x,y) in a bitmap font
 {
@@ -83,6 +85,19 @@ void draw_gravity_indicator()
     glut_print(-window_width/2.0+20, window_height/2.0-20, s, true);
 }
 
+// Position in world coords, size in px
+void draw_cross(Vector2d pos, int size_px)
+{
+    Vector2d pos_gl = metres_to_gl_coords(pos);
+    
+    glBegin(GL_LINES);
+    glVertex2f(pos_gl.x - px_to_gl_coords_x(size_px), pos_gl.y);
+    glVertex2f(pos_gl.x + px_to_gl_coords_x(size_px), pos_gl.y);
+    glVertex2f(pos_gl.x, pos_gl.y + px_to_gl_coords_y(size_px));
+    glVertex2f(pos_gl.x , pos_gl.y - px_to_gl_coords_y(size_px));
+    glEnd();
+}
+
 void display()
 {
     // Clear the window
@@ -132,10 +147,26 @@ void display()
         }
     }
     
-    // Draw the snapped point
-    if (snap && snapped)
+    // Draw the wall cursor
+    if (drawing_wall)
     {
-        Vector2d pos_gl(metres_to_gl_coords_x(snapped_point.x), metres_to_gl_coords_y(snapped_point.y));
+        glLineWidth(1);
+        glColor3f(1.0, 1.0, 1.0);
+        draw_cross(mouse_pos, 10);
+    }
+    
+    // Draw the wall points
+    for (int i = 0; i < wall_points.size(); i++)
+    {
+        glLineWidth(1);
+        glColor3f(1.0, 1.0, 1.0);
+        draw_cross(wall_points[i], 10);
+    }
+    
+    // Draw the snapped point
+    if (snap && snapped && !drawing_wall)
+    {
+        Vector2d pos_gl(metres_to_gl_coords_x(mouse_pos.x), metres_to_gl_coords_y(mouse_pos.y));
         
         glColor3f(1.0, 1.0, 1.0);
         glPointSize(10);
@@ -151,7 +182,7 @@ void display()
     }
     
     display_fps(delta_t);
-    display_temperature(temperature);
+    display_temperature(environment_temp);
     draw_gravity_indicator();
     
     // Draw the command line
@@ -176,7 +207,6 @@ void display()
     }
     
     glutSwapBuffers();
-    glFlush();
 }
 
 void reshape(int width, int height)
@@ -186,6 +216,10 @@ void reshape(int width, int height)
     window_width = width;
     window_height = height;
     glScalef(window_width/2.0, window_height/2.0, 1.0);
+    
+    //glMatrixMode(GL_PROJECTION);      // Select the Projection matrix for operation
+    //glLoadIdentity();                 // Reset Projection matrix
+    //gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
     
     // Reposition the buttons
     for (int i = 0; i < buttons_number; i++)
@@ -197,10 +231,18 @@ void reshape(int width, int height)
 void idle()
 {
     update_time();
-    update_position();
-    //increase_temp(500);
-    
+    update_simulation();
     glutPostRedisplay();
+    
+    /*
+    static long int a = 0;
+    a++;
+    if (a % 100 == 0)
+    {
+        std::cout << delta_t << std::endl;
+    }
+    */
+    
 }
 
 //////////
@@ -280,19 +322,34 @@ void draw_vector(Vector2d v, Vector2d start, float r, float g, float b)
 
 void draw_bar(const Bar& b)
 {
-    // Relative extension
-    double epsilon = b.extension() / b.length();
-    if (epsilon > 1.0)
-        epsilon = 1.0;
-    else if (epsilon < -1.0)
-        epsilon = -1.0;
-    
-    int multiplier = 20;
-    
-    if (epsilon > 0.0)
-        glColor3f(1.0, 1.0-epsilon*multiplier, 1.0-epsilon*multiplier);
-    else
-        glColor3f(1.0+epsilon*multiplier, 1.0, 1.0);
+    // Color bars according to their strain
+    // TODO: Scale it appropriately (use MAX_STRAIN)
+    if (bars_color_mode == STRAIN_C)
+    {
+        // Relative extension
+        double epsilon = b.extension() / b.length();
+        if (epsilon > 1.0)
+            epsilon = 1.0;
+        else if (epsilon < -1.0)
+            epsilon = -1.0;
+        
+        int multiplier = 20;
+        
+        if (epsilon > 0.0)
+            glColor3f(1.0, 1.0-epsilon*multiplier, 1.0-epsilon*multiplier);
+        else
+            glColor3f(1.0+epsilon*multiplier, 1.0, 1.0);
+    }
+    // Color bars according to their temperature
+    // TODO: Color it appropriately: black-red-yellow-white
+    else if (bars_color_mode == TEMP_C)
+    {
+        double temp_fraction = (b.temperature - ROOM_TEMPERATURE) / (MELTING_POINT - ROOM_TEMPERATURE);
+        if (temp_fraction > 0.0)
+            glColor3f(1.0, 1.0 - temp_fraction, 1.0 - temp_fraction); // red
+        else
+            glColor3f(1.0 + temp_fraction, 1.0, 1.0); // cyan
+    }
     
     glLineWidth(2.0);
     

@@ -8,10 +8,9 @@
 
 #include "bar.h"
 #include "particle.h"
+#include "physics.h"
 
 SlotMap<Bar> bars;
-
-#define ROOM_TEMP 273.15
 
 int Bar::create(int id1, int id2)
 {
@@ -35,7 +34,7 @@ int Bar::create(int id1, int id2)
     new_bar.r0 = new_bar.length();
     new_bar.r_room = new_bar.r0;
     new_bar.stiffness = 1.0;
-    new_bar.temperature = ROOM_TEMP;
+    new_bar.temperature = ROOM_TEMPERATURE;
     int new_id = bars.add(new_bar);
     
     // Particles have to know which bars are connected to them
@@ -50,6 +49,8 @@ void Bar::set_temperature(double t)
     temperature = t;
     double alpha = 2e-5;
     r0 = r_room * (1 + alpha * (t - 273.15));
+    if (temperature > ROOM_TEMPERATURE) // Stiffness can only be decreased for now. This is because we have to be careful not to go above 1.0
+        stiffness = -(1.0 - STIFFNESS_AT_TM) * temperature / (MELTING_POINT - ROOM_TEMPERATURE) + 1.0;
 }
 
 int Bar::destroy(int obj_id)
@@ -109,6 +110,39 @@ double Bar::extension() const
     double r_not = r0;
     double ans = len - r_not;
     return ans;
+}
+
+void Bar::impose_constraint()
+{
+    int particle_location(int id);
+    Particle* p1 = &particles[p1_id];
+    Particle* p2 = &particles[p2_id];
+    
+    double ext = extension();
+    
+    double im1 = 1/p1->mass_;
+    double im2 = 1/p1->mass_;
+    float mult1 = (im1 / (im1 + im2)) * stiffness;
+    float mult2 = stiffness - mult1;
+    
+    if (!p1->fixed_)
+        p1->position_ += mult1 * ext * unit21();
+    if (!p2->fixed_)
+        p2->position_ += mult2 * ext * unit12();
+}
+
+// Returns 1 if bar will be destroyed, 0 otherwise
+int Bar::update()
+{
+    // Temperature expansion
+    if (abs_d(temperature - environment_temp) > SMALL_NUM)
+        set_temperature( temperature + delta_t/5.0 * (environment_temp - temperature) );
+    
+    // Destroy bars which are extended by too much
+    double ext = extension() / r0;
+    if (abs_d(ext) > MAX_STRAIN || (temperature >= MELTING_POINT && random(1.0) > (1 - (temperature - MELTING_POINT) / 10000.0)))
+        return 1;
+    return 0;
 }
 
 void reset_bars()

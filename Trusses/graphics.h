@@ -13,6 +13,7 @@
 #include "wall.h"
 #include "button.h"
 #include "bar.h"
+#include "interface.h"
 
 void glut_print (float x, float y, std::string s, bool px = false);
 void display_fps(double dt);
@@ -33,6 +34,8 @@ void draw_rectangle(Vector2d p1, Vector2d p2, bool px);
 void draw_wall(const Wall& w);
 void draw_button(const Button& b);
 
+enum bars_color_mode_t {STRAIN_C = 0, TEMP_C};
+
 /////
 
 inline Vector2d metres_to_gl_coords(const Vector2d& v);
@@ -51,13 +54,10 @@ extern bool accelerations;
 extern bool lengths;
 extern bool extensions;
 extern bool coords;
-extern bool snap;
-
-extern double scale;
-
-extern bool drawing_wall;
 
 extern int window_width;
 extern int window_height;
+
+extern bars_color_mode_t bars_color_mode;
 
 #endif /* defined(__Trusses__graphics__) */

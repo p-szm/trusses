@@ -14,6 +14,10 @@
 
 #include "math.h"
 
+#define MAX_STRAIN 0.5
+#define MELTING_POINT 1800
+#define STIFFNESS_AT_TM 0.5
+
 struct Bar
 {
     int id_;
@@ -29,6 +33,10 @@ struct Bar
     double stiffness;
     
     void set_temperature(double t);
+    
+    void impose_constraint();
+    
+    int update();
     
     static int create(int id1, int id2);
     static int destroy(int obj_id);

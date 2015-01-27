@@ -12,6 +12,8 @@
 #include <iostream>
 #include <cmath>
 
+#define SMALL_NUM 1e-5
+
 struct Vector2d
 {
     double x;
