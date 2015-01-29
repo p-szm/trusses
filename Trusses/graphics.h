@@ -38,6 +38,10 @@ enum bars_color_mode_t {STRAIN_C = 0, TEMP_C};
 
 /////
 
+vec3 hsv_to_rgb(vec3 hsv);
+
+/////
+
 inline Vector2d metres_to_gl_coords(const Vector2d& v);
 inline double metres_to_gl_coords_x(double d);
 inline double metres_to_gl_coords_y(double d);

@@ -15,6 +15,10 @@
 #include "button.h"
 #include "interface.h"
 
+// TODO: Add actual strings, which don't have any tension below their minimum length
+// TODO: Implement blobs
+// TODO: There is some bug when removing particles, then saving and importing
+
 int main(int argc, char * argv[])
 {
     srand( (unsigned int) time(0) );
@@ -45,7 +49,7 @@ int main(int argc, char * argv[])
     
     glPointSize(5.0);
     glLineWidth(1.0);
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClearColor(0.12, 0.12, 0.12, 1.0);
     
     microsecond_time(t);
     delta_t = (t - prev_t)/1000000.0;

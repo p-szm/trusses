@@ -18,8 +18,7 @@
 #include "graphics.h"
 #include "interface.h"
 #include "interpreter.h"
-
-// TODO: this shouldn't be doubled (the definition exists in interpreter.cpp)
+#include "physics.h"
 
 template<typename T>
 void read_numbers(std::string str, std::vector<T> & target_v)
@@ -31,12 +30,9 @@ void read_numbers(std::string str, std::vector<T> & target_v)
     while (s)
     {
         T n;
-        
         // If s is a number
         if (s >> n)
-        {
             target_v.push_back(n);
-        }
     }
 }
 
@@ -74,8 +70,9 @@ int load(std::string filename)
         {
             std::vector<double> v;
             read_numbers(line, v);
-
-            Particle::create(v[0], v[1], false);
+            
+            if (v.size() == 2)
+                Particle::create(v[0], v[1], false);
         }
         
         // A fixed particle
@@ -84,16 +81,20 @@ int load(std::string filename)
             std::vector<double> v;
             read_numbers(line, v);
             
-            Particle::create(v[0], v[1], true);
+            if (v.size() == 2)
+                Particle::create(v[0], v[1], true);
         }
         
         // A bar
         else if (line.substr(0, 1) == "b")
         {
-            std::vector<int> v;
+            std::vector<double> v;
             read_numbers(line, v);
             
-            Bar::create(v[0], v[1]);
+            if (v.size() == 4)
+                Bar::create((int)v[0], (int)v[1], v[2], v[3]);
+            else if (v.size() == 2)
+                Bar::create((int)v[0], (int)v[1], 0.0, ROOM_TEMPERATURE);
         }
         
         // A wall
@@ -102,7 +103,8 @@ int load(std::string filename)
             std::vector<int> v;
             read_numbers(line, v);
             
-            Wall::create(Vector2d(v[0], v[1]), Vector2d(v[2], v[3]));
+            if (v.size() == 4)
+                Wall::create(Vector2d(v[0], v[1]), Vector2d(v[2], v[3]));
         }
     }
     
@@ -118,7 +120,7 @@ void save(std::string filename)
     std::ofstream file(filename);
     
     // Print time
-    file << date_str() << ' ' << time_str() << std::endl << std::endl;;
+    file << date_str() << ' ' << time_str() << std::endl << std::endl;
     
     // Print particles
     SlotMap<Particle>::iterator particles_it;
@@ -134,19 +136,16 @@ void save(std::string filename)
     file << std::endl;
     
     // Print bars
+    // b-bar_id particle1_id particle2_id strain temperature
     SlotMap<Bar>::iterator bars_it;
     for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
-    {
-        file << 'b' << bars_it->id_ << ' ' << bars_it->p1_id << ' ' << bars_it->p2_id << std::endl;
-    }
+        file << 'b' << bars_it->id_ << ' ' << bars_it->p1_id << ' ' << bars_it->p2_id << ' ' << bars_it->get_strain() << ' ' << bars_it->get_temperature() << std::endl;
     file << std::endl;
     
     // Print walls
     SlotMap<Wall>::iterator walls_it;
     for (walls_it = walls.begin(); walls_it != walls.end(); walls_it++)
-    {
         file << 'w' << walls_it->id_ << ' ' << walls_it->p1_ << ' ' << walls_it->p2_ << std::endl;
-    }
     file << std::endl;
     
     // Close the file
@@ -187,21 +186,13 @@ void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)
     
     // Create horizontal connections
     for (int j = 0; j < n; j++)
-    {
         for (int i = 0; i < n-1; i++)
-        {
-            Bar::create(id0 + j * n + i, id0 + j * n + i + 1);
-        }
-    }
+            Bar::create(id0 + j * n + i, id0 + j * n + i + 1, 0.0, ROOM_TEMPERATURE);
     
     // Create vertical connections
     for (int i = 0; i < n; i++)
-    {
         for (int j = 0; j < n-1; j++)
-        {
-            Bar::create(id0 + i + n * j, id0 + i + n * (j + 1));
-        }
-    }
+            Bar::create(id0 + i + n * j, id0 + i + n * (j + 1), 0.0, ROOM_TEMPERATURE);
 }
 
 std::string date_str()

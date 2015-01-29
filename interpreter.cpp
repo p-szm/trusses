@@ -279,7 +279,7 @@ void interpret_command(std::string cmd)
                 n1 = 0;
             if (n2 < 0)
                 n2 = 0;
-            Bar::create(n1, n2);
+            Bar::create(n1, n2, 0.0, ROOM_TEMPERATURE);
         }
         else if (words_number == 4 && words[2] == "stiffness" && is_number(words[3]))
         {
@@ -421,6 +421,21 @@ void interpret_command(std::string cmd)
                 n2 = 0;
             if (bars.exists(n1))
                 bars[n1].split(n2);
+        }
+    }
+    
+    else if (first_word == "strain")
+    {
+        if (words_number == 3 && is_number(words[1]) && is_number(words[2])) // TODO: Prevent it from taking doubles
+        {
+            // Accept only positive integers
+            // Interpret negative numbers as 0
+            int n1 = get_number<int>(words[1]);
+            double n2 = get_number<double>(words[2]);
+            if (n1 < 0)
+                n1 = 0;
+            if (bars.exists(n1))
+                bars[n1].set_strain(n2);
         }
     }
     

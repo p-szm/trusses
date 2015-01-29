@@ -14,11 +14,12 @@
 
 #define SMALL_NUM 1e-5
 
-struct Vector2d
+class Vector2d
 {
+public:
     double x;
     double y;
-    Vector2d(float a, float b): x(a), y(b) {}
+    Vector2d(float a, float b): x(a), y(b) {} // TODO: change this to double and see the result
     Vector2d() {};
     Vector2d operator+ (const Vector2d &v) { return Vector2d(x+v.x, y+v.y); }
     Vector2d operator- (const Vector2d &v) { return Vector2d(x-v.x, y-v.y); }
@@ -34,6 +35,15 @@ struct Vector2d
     
     friend std::ostream& operator << (std::ostream &out, const Vector2d &v) { out << v.x << ' ' << v.y; return out; }
     
+};
+
+struct vec3
+{
+    double x;
+    double y;
+    double z;
+    vec3(double a, double b, double c): x(a), y(b), z(c) {}
+    vec3() {}
 };
 
 float random(float range);

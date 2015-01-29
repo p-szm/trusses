@@ -61,10 +61,8 @@ void update_simulation()
     // Update each bar and add see if it will be destroyed
     std::vector<int> bars_to_destroy;
     for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
-    {
         if (bars_it->update())
             bars_to_destroy.push_back(bars_it->id_);
-    }
     
     // Destroy each bar that was previously added to the list
     for (int i = 0; i < bars_to_destroy.size(); i++)

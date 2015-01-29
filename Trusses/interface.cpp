@@ -274,7 +274,7 @@ void mouse_click (int button, int state, int x, int y)
         // If a particle was clicked and one was already selected
         else if (clicked_particle_id != -1 && selected_particle_id != -1)
         {
-            Bar::create(selected_particle_id, clicked_particle_id);
+            Bar::create(selected_particle_id, clicked_particle_id, 0.0, ROOM_TEMPERATURE);
             selected_particle_id = -1; // Unselect
         }
         
@@ -295,7 +295,7 @@ void mouse_click (int button, int state, int x, int y)
                 new_p_id = Particle::create(x_metres, y_metres, false);
             
             // Create a new bar
-            Bar::create(selected_particle_id, new_p_id);
+            Bar::create(selected_particle_id, new_p_id, 0.0, ROOM_TEMPERATURE);
             selected_particle_id = -1;
         }
         

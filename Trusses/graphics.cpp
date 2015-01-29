@@ -51,6 +51,38 @@ void glut_print (float x, float y, std::string s, bool px)
     for (i = 0; i < s.length(); i++) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, s[i]);
 }
 
+// H is in the range [0,360] degs
+vec3 hsv_to_rgb(vec3 hsv)
+{
+    // TODO: check if given hsv is valid
+    
+    double C = hsv.z * hsv.y;
+    double B = fmod((hsv.x/60.0), 2.0) - 1;
+    double X = C * (1 - abs_d(B));
+    double m = hsv.z - C;
+    int n = (int)hsv.x / 60;
+    
+    vec3 rgb;
+    if (n == 0)
+        rgb = vec3(C, X, 0);
+    else if (n == 1)
+        rgb = vec3(X, C, 0);
+    else if (n == 2)
+        rgb = vec3(0, C, X);
+    else if (n == 3)
+        rgb = vec3(0, X, C);
+    else if (n == 4)
+        rgb = vec3(X, 0, C);
+    else if (n == 5)
+        rgb = vec3(C, 0, X);
+    
+    rgb.x += m;
+    rgb.y += m;
+    rgb.z += m;
+    
+    return rgb;
+}
+
 void display_fps(double dt)
 {
     glColor3f(1.0, 1.0, 1.0);
@@ -327,28 +359,31 @@ void draw_bar(const Bar& b)
     if (bars_color_mode == STRAIN_C)
     {
         // Relative extension
-        double epsilon = b.extension() / b.length();
-        if (epsilon > 1.0)
-            epsilon = 1.0;
-        else if (epsilon < -1.0)
-            epsilon = -1.0;
+        double strain = b.get_strain();
+        if (strain > 1.0)
+            strain = 1.0;
+        else if (strain < -1.0)
+            strain = -1.0;
         
         int multiplier = 20;
         
-        if (epsilon > 0.0)
-            glColor3f(1.0, 1.0-epsilon*multiplier, 1.0-epsilon*multiplier);
+        if (strain > 0.0)
+            glColor3f(1.0, 1.0 - strain * multiplier, 1.0 - strain * multiplier);
         else
-            glColor3f(1.0+epsilon*multiplier, 1.0, 1.0);
+            glColor3f(1.0 + strain * multiplier, 1.0, 1.0);
     }
     // Color bars according to their temperature
     // TODO: Color it appropriately: black-red-yellow-white
     else if (bars_color_mode == TEMP_C)
     {
-        double temp_fraction = (b.temperature - ROOM_TEMPERATURE) / (MELTING_POINT - ROOM_TEMPERATURE);
+        double temp_fraction = (b.get_temperature() - ROOM_TEMPERATURE) / (MELTING_POINT - ROOM_TEMPERATURE);
         if (temp_fraction > 0.0)
             glColor3f(1.0, 1.0 - temp_fraction, 1.0 - temp_fraction); // red
         else
             glColor3f(1.0 + temp_fraction, 1.0, 1.0); // cyan
+        
+        // TODO
+        glColor3f(b.color.x, b.color.y, b.color.z);
     }
     
     glLineWidth(2.0);
@@ -381,7 +416,7 @@ void draw_bar(const Bar& b)
     if (extensions)
     {
         s.str("");
-        s << b.extension() / b.r0;
+        s << b.get_strain();
         glut_print(m_mid.x, m_mid.y - px_to_m(12.0), s.str());
     }
 }
