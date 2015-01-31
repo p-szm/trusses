@@ -27,8 +27,5 @@ extern double environment_temp;
 void microsecond_time (unsigned long long &t);
 void update_time();
 void update_simulation();
-void pause_simulation();
-void resume_simulation();
-bool simulation_is_paused();
 
 #endif /* defined(__Trusses__physics__) */

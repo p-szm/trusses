@@ -46,7 +46,6 @@ int Bar::create(int id1, int id2, double e, double temp)
     new_bar.temperature = temp; // Load every bar at room temperature (for now)
     new_bar.set_strain(e);
     new_bar.stiffness = -(1.0 - STIFFNESS_AT_TM) * new_bar.temperature / MELTING_POINT + 1.0; // Stiffness is 1 at 0K
-    new_bar.color = vec3(1.0, 1.0, 1.0);
     
     int new_id = bars.add(new_bar);
     
@@ -62,19 +61,6 @@ void Bar::set_temperature(double t)
     temperature = t;
     r0 = r_0K * (1 + THERMAL_COEFF * temperature); // Assume linear expansion with temperature
     stiffness = -(1.0 - STIFFNESS_AT_TM) * temperature / MELTING_POINT + 1.0; // Stiffness is 1 at 0K
-    
-    // Set the appropriate color based on temperature
-    //color = hsv_to_rgb(vec3(temperature/MELTING_POINT * 360, 1.0, 1.0)); // TODO
-    
-    double temp_chunk = MELTING_POINT / 3.0;
-    if (temperature <= temp_chunk)
-        color = vec3(temperature/temp_chunk, 0, 0);
-    else if (temperature <= 2 * temp_chunk)
-        color = vec3(1.0, (temperature - temp_chunk)/temp_chunk, 0.0);
-    else if (temperature <= 3 * temp_chunk)
-        color = vec3(1.0, 1.0, (temperature - 2 * temp_chunk)/temp_chunk);
-    else
-        color = vec3(1.0, 1.0, 1.0);
 }
 
 double Bar::get_temperature() const

@@ -14,12 +14,14 @@
 #include "physics.h" // for time
 #include "button.h"
 #include "interface.h"
+#include "temporary_label.h" // Temporary
 
 // TODO: Add actual strings, which don't have any tension below their minimum length
 // TODO: Implement blobs
 // TODO: There is some bug when removing particles, then saving and importing
 // TODO: Vlocities are wrong
 // TODO: Important! Check strain signs
+// TODO: Mouse at the edge scrolls the world
 
 int main(int argc, char * argv[])
 {
@@ -57,6 +59,8 @@ int main(int argc, char * argv[])
     delta_t = 0.02; // Start with something
     
     create_buttons();
+    
+    TempLabel::create("Editor mode - you can draw the structure", Vector2d(-110, window_height/2 - 20), 5000000); // 5s
     
     glEnable(GL_LINE_SMOOTH);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);

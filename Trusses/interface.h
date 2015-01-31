@@ -20,6 +20,9 @@ void mouse_passive_function(int x, int y);
 void mouse_drag_function(int x, int y);
 void start_drawing_wall();
 void stop_drawing_wall();
+void pause_simulation();
+void resume_simulation();
+bool simulation_is_paused();
 
 // * * * * * * * * * * //
 extern double scale;

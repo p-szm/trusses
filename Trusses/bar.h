@@ -38,8 +38,6 @@ struct Bar
     
     int update();
     
-    vec3 color;
-    
     // Split the bar into n_parts bars of equal lengths
     void split(unsigned int n_parts);
     

@@ -19,6 +19,7 @@
 #include "physics.h"
 #include "save.h"
 #include "interpreter.h"
+#include "temporary_label.h"
 
 // * * * * * * * * * * //
 double scale = 40.0; // pixels/metre
@@ -34,6 +35,7 @@ bool command_mode = false;
 bool full_screen = false;
 double dragging_force = 100.0;
 int min_click_dist = 10; // pixels
+bool simulation_paused = true;
 
 // * * * * * * * * * * //
 bool in_range_m(double d1, double d2);
@@ -90,15 +92,18 @@ void key_function(unsigned char key, int x, int y)
         else if (key == 'c')
         {
             if (bars_color_mode == STRAIN_C)
-                bars_color_mode = TEMP_C;
+                set_bars_color_mode(TEMP_C);
             else if (bars_color_mode == TEMP_C)
-                bars_color_mode = STRAIN_C;
+                set_bars_color_mode(STRAIN_C);
         }
         else if (key == 'f')
         {
             full_screen = !full_screen;
             if (full_screen)
+            {
                 glutFullScreen();
+                // TODO: Labels have to update their position
+            }
             else
             {
                 glutReshapeWindow(1100, 750);
@@ -351,6 +356,26 @@ void stop_drawing_wall()
 {
     drawing_wall = false;
     wall_points.clear();
+}
+
+void pause_simulation()
+{
+    simulation_paused = true;
+    temp_labels.clear();
+    TempLabel::create("Editor mode - you can draw the structure", Vector2d(-110, window_height/2 - 20), 5000000); // 5s
+}
+
+void resume_simulation()
+{
+    microsecond_time(t);
+    simulation_paused = false;
+    temp_labels.clear();
+    TempLabel::create("Simulation mode - you can drag the joints", Vector2d(-110, window_height/2 - 20), 5000000); // 5s
+}
+
+bool simulation_is_paused()
+{
+    return simulation_paused;
 }
 
 // True if two vectors (in metres) are closer than min_click_dist (in px)

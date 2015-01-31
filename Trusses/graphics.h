@@ -10,13 +10,13 @@
 #define __Trusses__graphics__
 
 // * * * * * * * * * * //
+enum bars_color_mode_t {STRAIN_C = 0, TEMP_C};
+
+// * * * * * * * * * * //
 void display();
 void reshape(int width, int height);
 void idle();
-
-// * * * * * * * * * * //
-enum bars_color_mode_t {STRAIN_C = 0, TEMP_C};
-extern bars_color_mode_t bars_color_mode;
+void set_bars_color_mode(bars_color_mode_t mode);
 
 // * * * * * * * * * * //
 extern int window_width;
@@ -29,5 +29,6 @@ extern bool extensions;
 extern bool coords;
 extern bool fancy_bars;
 extern bool show_particles;
+extern bars_color_mode_t bars_color_mode;
 
 #endif /* defined(__Trusses__graphics__) */

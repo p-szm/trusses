@@ -19,9 +19,12 @@
 #include "physics.h"
 #include "interface.h"
 #include "interpreter.h"
+#include "temporary_label.h"
 
 // * * * * * * * * * * //
 // Forward declarations
+
+// If px is true, it draws text in pixels relative to the window's centre
 void glut_print (float x, float y, std::string s, bool px = false);
 void display_fps(double dt);
 void display_time();
@@ -222,7 +225,18 @@ void draw_bar(const Bar& b)
             glColor3f(1.0 + temp_fraction, 1.0, 1.0); // cyan
         
         // TODO
-        glColor3f(b.color.x, b.color.y, b.color.z);
+        vec3 color;
+        double temp_chunk = MELTING_POINT / 3.0;
+        double temp = b.get_temperature();
+        if (temp <= temp_chunk)
+            color = vec3(temp / temp_chunk, 0, 0);
+        else if (temp <= 2 * temp_chunk)
+            color = vec3(1.0, (temp - temp_chunk) / temp_chunk, 0.0);
+        else if (temp <= 3 * temp_chunk)
+            color = vec3(1.0, 1.0, (temp - 2 * temp_chunk) / temp_chunk);
+        else
+            color = vec3(1.0, 1.0, 1.0);
+        glColor3f(color.x, color.y, color.z);
     }
     
     Vector2d gl_start = world_to_gl_coords(particles[b.p1_id].position_);
@@ -685,6 +699,14 @@ void display()
         glVertex2f(mouse_pos_gl.x, mouse_pos_gl.y);
         glEnd();
     }
+    
+    // Draw temporary labels
+    SlotMap<TempLabel>::iterator labels_it;
+    for (labels_it = temp_labels.begin(); labels_it != temp_labels.end(); labels_it++)
+    {
+        glColor4f(1.0, 1.0, 1.0, labels_it->alpha());
+        glut_print(labels_it->position.x, labels_it->position.y, labels_it->text, true);
+    }
 
     // Draw buttons
     for (int i = 0; i < buttons_number; i++)
@@ -723,9 +745,24 @@ void reshape(int width, int height)
 
 void idle()
 {
+    update_time();
+    
+    // Update labels
+    std::vector<int> labels_to_remove;
+    SlotMap<TempLabel>::iterator labels_it;
+    for (labels_it = temp_labels.begin(); labels_it != temp_labels.end(); labels_it++)
+        if (TempLabel::update(labels_it->id_))
+            labels_to_remove.push_back(labels_it->id_);
+    
+    // Remove labels that expired
+    for (int i = 0; i < labels_to_remove.size(); i++)
+        TempLabel::destroy(labels_to_remove[i]);
+    
     if (!simulation_is_paused())
     {
-        update_time();
+        // TODO: This is pretty accurate, but could be better
+        // It was too fast by about 0.5s when I tested it on 8 minutes
+        simulation_time += (t - prev_t);
         update_simulation();
     }
     glutPostRedisplay();
@@ -739,4 +776,9 @@ void idle()
     }
     */
     
+}
+
+void set_bars_color_mode(bars_color_mode_t mode)
+{
+    bars_color_mode = mode;
 }
