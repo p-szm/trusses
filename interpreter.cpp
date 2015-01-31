@@ -8,17 +8,28 @@
 
 #include "interpreter.h"
 
-#include "graphics.h"
-#include "save.h"
-#include "physics.h"
-#include "wall.h"
-
 #include <sstream>
 #include <vector>
 
-std::vector<std::string> commands;
-unsigned int current_cmd = 0; // From the back
+#include "particle.h"
+#include "bar.h"
+#include "wall.h"
+#include "physics.h"
+#include "graphics.h"
+#include "interface.h"
+#include "save.h"
 
+// * * * * * * * * * * //
+std::vector<std::string> commands;
+unsigned int current_cmd = 0;
+
+// * * * * * * * * * * //
+template<typename T> void extract_words(std::string str, std::vector<T> & target_v);
+bool is_number(std::string input);
+template <typename T> T get_number(std::string input);
+void interpret_command(std::string cmd);
+
+// * * * * * * * * * * //
 template<typename T>
 void extract_words(std::string str, std::vector<T> & target_v)
 {
@@ -33,15 +44,6 @@ void extract_words(std::string str, std::vector<T> & target_v)
         if (s >> n)
             target_v.push_back(n);
     }
-}
-
-bool begins_with(std::string str, std::string substring)
-{
-    size_t sub_length = substring.size();
-    if (str.substr(0, sub_length) == substring)
-        return true;
-    else
-        return false;
 }
 
 bool is_number(std::string input)
@@ -65,15 +67,6 @@ T get_number(std::string input)
         return n;
     else
         return 0;
-}
-
-// Cuts substring from the beginning of str and returns a new string
-std::string cut_out(std::string str, std::string substring)
-{
-    if (begins_with(str, substring))
-        return str.substr(substring.size());
-    else
-        return str;
 }
 
 void interpret_command(std::string cmd)
@@ -126,7 +119,8 @@ void interpret_command(std::string cmd)
                     int n = get_number<int>(words[2]);
                     if (n < 0)
                         n = 0;
-                    particles[n].oscillate = true;
+                    if (particles.exists(n))
+                        particles[n].oscillate = true;
                 }
             }
             else if (words[1] == "off")
@@ -137,7 +131,8 @@ void interpret_command(std::string cmd)
                     int n = get_number<int>(words[2]);
                     if (n < 0)
                         n = 0;
-                    particles[n].oscillate = false;
+                    if (particles.exists(n))
+                        particles[n].oscillate = false;
                 }
             }
         }
@@ -210,7 +205,7 @@ void interpret_command(std::string cmd)
     else if (first_word == "reset")
     {
         if (words_number == 1)
-            reset();
+            reset_everything();
         else
             std::cout << "Usage: reset" << std::endl;
     }

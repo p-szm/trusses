@@ -8,9 +8,9 @@
 
 #include "math.h"
 
-float random(float range)
+double random(double range)
 {
-    float r = 1.0 * rand() / RAND_MAX;
+    double r = 1.0 * rand() / RAND_MAX;
     return r * 2 * range - range;
 }
 

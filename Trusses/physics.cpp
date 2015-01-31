@@ -14,16 +14,19 @@
 
 #include <sys/time.h>
 
-unsigned long long int t = 0.0;
-unsigned long long int prev_t = 0.0;
-double delta_t = 0.0;
-double environment_temp = ROOM_TEMPERATURE;
-
 #define RELAX_ITER 30
 #define HORIZON 1000
 
-bool gravity = false;
+// * * * * * * * * * * //
+unsigned long long int simulation_time = 0;
+unsigned long long int t = 0;
+unsigned long long int prev_t = 0;
+double delta_t = 0.0;
+bool gravity = true;
+double environment_temp = ROOM_TEMPERATURE;
+bool simulation_paused = true;
 
+// * * * * * * * * * * //
 void microsecond_time (unsigned long long &t)
 // Returns system time in microseconds, used for introducing delays at low simulation speeds
 {
@@ -37,6 +40,8 @@ void update_time()
     prev_t = t;
     microsecond_time(t);
     delta_t = (t - prev_t)/1000000.0;
+    simulation_time += (t - prev_t); // TODO: This is pretty accurate, but could be better
+    // It was too fast by about 0.5s when I tested it on 8 minutes
 }
 
 void update_simulation()
@@ -77,4 +82,20 @@ void update_simulation()
     }
     for (int i = 0; i < particles_to_destroy.size(); i++)
         Particle::destroy(particles_to_destroy[i]);
+}
+
+void pause_simulation()
+{
+    simulation_paused = true;
+}
+
+void resume_simulation()
+{
+    microsecond_time(t);
+    simulation_paused = false;
+}
+
+bool simulation_is_paused()
+{
+    return simulation_paused;
 }

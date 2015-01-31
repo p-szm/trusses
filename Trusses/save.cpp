@@ -15,11 +15,14 @@
 #include <cmath>
 
 #include "particle.h"
+#include "bar.h"
+#include "wall.h"
+#include "physics.h"
 #include "graphics.h"
 #include "interface.h"
 #include "interpreter.h"
-#include "physics.h"
 
+// * * * * * * * * * * //
 template<typename T>
 void read_numbers(std::string str, std::vector<T> & target_v)
 {
@@ -36,6 +39,37 @@ void read_numbers(std::string str, std::vector<T> & target_v)
     }
 }
 
+std::string date_str()
+{
+    time_t rawtime;
+    struct tm * timeinfo;
+    
+    time ( &rawtime );
+    timeinfo = localtime ( &rawtime );
+    
+    std::ostringstream s;
+    
+    s << timeinfo->tm_year + 1900 << '-' << timeinfo->tm_mon + 1 << '-' << timeinfo->tm_mday;
+    
+    return s.str();
+}
+
+std::string time_str()
+{
+    time_t rawtime;
+    struct tm * timeinfo;
+    
+    time ( &rawtime );
+    timeinfo = localtime ( &rawtime );
+    
+    std::ostringstream s;
+    
+    s << timeinfo->tm_hour << '-' << timeinfo->tm_min << '-' << timeinfo->tm_sec;
+    
+    return s.str();
+}
+
+// * * * * * * * * * * //
 int load(std::string filename)
 {
     // TODO
@@ -152,13 +186,15 @@ void save(std::string filename)
     file.close();
 }
 
-void reset()
+void reset_everything()
 {
     reset_walls();
     reset_bars();
     reset_particles();
-    
-    selected_particle_id = -1;
+    selected_particles_ids.clear();
+    wall_points.clear();
+    pause_simulation();
+    simulation_time = 0;
 }
 
 void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)
@@ -193,34 +229,4 @@ void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n-1; j++)
             Bar::create(id0 + i + n * j, id0 + i + n * (j + 1), 0.0, ROOM_TEMPERATURE);
-}
-
-std::string date_str()
-{
-    time_t rawtime;
-    struct tm * timeinfo;
-    
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
-    
-    std::ostringstream s;
-    
-    s << timeinfo->tm_year + 1900 << '-' << timeinfo->tm_mon + 1 << '-' << timeinfo->tm_mday;
-    
-    return s.str();
-}
-
-std::string time_str()
-{
-    time_t rawtime;
-    struct tm * timeinfo;
-    
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
-    
-    std::ostringstream s;
-
-    s << timeinfo->tm_hour << '-' << timeinfo->tm_min << '-' << timeinfo->tm_sec;
-    
-    return s.str();
 }

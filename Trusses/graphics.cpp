@@ -12,30 +12,81 @@
 #include <GLUT/glut.h>
 #include <OpenGL/gl.h>
 
-#include "save.h"
-#include "physics.h"
+#include "particle.h"
+#include "bar.h"
+#include "wall.h"
 #include "button.h"
+#include "physics.h"
 #include "interface.h"
 #include "interpreter.h"
-#include "bar.h"
 
+// * * * * * * * * * * //
+// Forward declarations
+void glut_print (float x, float y, std::string s, bool px = false);
+void display_fps(double dt);
+void display_time();
+void display_temperature(double temp);
+void draw_gravity_indicator();
+void draw_particle(Particle& p);
+void draw_bar(const Bar& b);
+void draw_wall(const Wall& w);
+void draw_vector(Vector2d v, Vector2d start, float r, float g, float b);
+void draw_coords();
+void draw_command_line();
+void draw_button(const Button& b);
+void draw_rectangle(Vector2d p1, Vector2d p2, bool px);
+void draw_circle(Vector2d centre, double r, unsigned int n_points);
+void draw_cross(Vector2d pos, int size_px);
+
+// * * * * * * * * * * //
+inline Vector2d world_to_gl_coords(const Vector2d& v);
+inline double world_to_gl_coords_x(double d);
+inline double world_to_gl_coords_y(double d);
+inline Vector2d px_to_gl_coords(const Vector2d& v);
+inline double px_to_gl_coords_x(double d);
+inline double px_to_gl_coords_y(double d);
+
+// * * * * * * * * * * //
+vec3 hsv_to_rgb(vec3 hsv);
+
+// * * * * * * * * * * //
 int window_width = 1200;
 int window_height = 800;
-
 bool accelerations = false;
 bool velocities = false;
 bool lengths = false;
 bool extensions = false;
 bool coords = true;
 bool ids = false;
-
+bool fancy_bars = false;
+bool show_particles = true;
 bars_color_mode_t bars_color_mode = STRAIN_C;
 
+// * * * * * * * * * * //
+//
+// Converts the internal world coordinates to screen gl coordinates (between -1.0 and 1.0)
+Vector2d world_to_gl_coords(const Vector2d& v)
+{ return Vector2d(world_to_gl_coords_x(v.x), world_to_gl_coords_y(v.y)); }
+
+double world_to_gl_coords_x(double d)
+{ return (d + world_centre.x / scale) * 2.0 * scale / window_width; }
+
+double world_to_gl_coords_y(double d)
+{ return (d + world_centre.y / scale) * 2.0 * scale / window_height; }
+
+Vector2d px_to_gl_coords(const Vector2d& v)
+{ return Vector2d(px_to_gl_coords_x(v.x), px_to_gl_coords_y(v.y)); }
+
+double px_to_gl_coords_x(double d)
+{ return d * 2.0 / window_width; }
+
+double px_to_gl_coords_y(double d)
+{ return d * 2.0 / window_height; }
+
+// * * * * * * * * * * //
 void glut_print (float x, float y, std::string s, bool px)
 // Prints string at location (x,y) in a bitmap font
 {
-    unsigned short i;
-    
     if (px)
     {
         x = px_to_gl_coords_x(x);
@@ -43,44 +94,11 @@ void glut_print (float x, float y, std::string s, bool px)
     }
     else
     {
-        x = metres_to_gl_coords_x(x);
-        y = metres_to_gl_coords_y(y);
+        x = world_to_gl_coords_x(x);
+        y = world_to_gl_coords_y(y);
     }
-    
     glRasterPos2f(x, y);
-    for (i = 0; i < s.length(); i++) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, s[i]);
-}
-
-// H is in the range [0,360] degs
-vec3 hsv_to_rgb(vec3 hsv)
-{
-    // TODO: check if given hsv is valid
-    
-    double C = hsv.z * hsv.y;
-    double B = fmod((hsv.x/60.0), 2.0) - 1;
-    double X = C * (1 - abs_d(B));
-    double m = hsv.z - C;
-    int n = (int)hsv.x / 60;
-    
-    vec3 rgb;
-    if (n == 0)
-        rgb = vec3(C, X, 0);
-    else if (n == 1)
-        rgb = vec3(X, C, 0);
-    else if (n == 2)
-        rgb = vec3(0, C, X);
-    else if (n == 3)
-        rgb = vec3(0, X, C);
-    else if (n == 4)
-        rgb = vec3(X, 0, C);
-    else if (n == 5)
-        rgb = vec3(C, 0, X);
-    
-    rgb.x += m;
-    rgb.y += m;
-    rgb.z += m;
-    
-    return rgb;
+    for (unsigned short i = 0; i < s.length(); i++) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, s[i]);
 }
 
 void display_fps(double dt)
@@ -90,6 +108,16 @@ void display_fps(double dt)
     std::ostringstream s;
     s << "fps: " << int(1/dt);
     glut_print(-window_width/2.0+30, -window_height/2.0+20, s.str(), true);
+}
+
+void display_time()
+{
+    glColor3f(1.0, 1.0, 1.0);
+    
+    std::ostringstream s;
+    s.precision(1);
+    s << "Time: " << std::fixed << simulation_time/1000000.0;
+    glut_print(0, -window_height/2.0+20, s.str(), true);
 }
 
 void display_temperature(double temp)
@@ -113,213 +141,44 @@ void draw_gravity_indicator()
     if (gravity)
         s = "Gravity ON";
     else
-       s = "Gravity OFF";
+        s = "Gravity OFF";
     glut_print(-window_width/2.0+20, window_height/2.0-20, s, true);
 }
 
-// Position in world coords, size in px
-void draw_cross(Vector2d pos, int size_px)
-{
-    Vector2d pos_gl = metres_to_gl_coords(pos);
-    
-    glBegin(GL_LINES);
-    glVertex2f(pos_gl.x - px_to_gl_coords_x(size_px), pos_gl.y);
-    glVertex2f(pos_gl.x + px_to_gl_coords_x(size_px), pos_gl.y);
-    glVertex2f(pos_gl.x, pos_gl.y + px_to_gl_coords_y(size_px));
-    glVertex2f(pos_gl.x , pos_gl.y - px_to_gl_coords_y(size_px));
-    glEnd();
-}
-
-void display()
-{
-    // Clear the window
-    glClear(GL_COLOR_BUFFER_BIT);
-    
-    // Switch to the modelview matrix
-    glMatrixMode(GL_MODELVIEW);
-    
-    glLoadIdentity();
-    
-    if (coords)
-        draw_coords();
-    
-    // Draw the walls
-    SlotMap<Wall>::iterator walls_it;
-    for (walls_it = walls.begin(); walls_it != walls.end(); walls_it++)
-    {
-        draw_wall(*walls_it);
-    }
-    
-    // Draw the bars
-    SlotMap<Bar>::iterator bars_it;
-    for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
-    {
-        draw_bar(*bars_it);
-    }
-    
-    // Draw the particles
-    SlotMap<Particle>::iterator particles_it;
-    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
-    {
-        draw_particle(*particles_it);
-    }
-    
-    // Draw the vectors
-    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
-    {
-        if (!particles_it->fixed_)
-        {
-            // Draw the velocity vector
-            if (velocities)
-                draw_vector(particles_it->velocity_, particles_it->position_, 0.0, 0.5, 0.0);
-            
-            // Draw the acceleration vector
-            if (accelerations)
-                draw_vector(particles_it->acceleration_, particles_it->position_, 0.5, 0.0, 0.0);
-        }
-    }
-    
-    // Draw the wall cursor
-    if (drawing_wall)
-    {
-        glLineWidth(1);
-        glColor3f(1.0, 1.0, 1.0);
-        draw_cross(mouse_pos, 10);
-    }
-    
-    // Draw the wall points
-    for (int i = 0; i < wall_points.size(); i++)
-    {
-        glLineWidth(1);
-        glColor3f(1.0, 1.0, 1.0);
-        draw_cross(wall_points[i], 10);
-    }
-    
-    // Draw the snapped point
-    if (snap && snapped && !drawing_wall)
-    {
-        Vector2d pos_gl(metres_to_gl_coords_x(mouse_pos.x), metres_to_gl_coords_y(mouse_pos.y));
-        
-        glColor3f(1.0, 1.0, 1.0);
-        glPointSize(10);
-        glBegin(GL_POINTS);
-        glVertex2d(pos_gl.x, pos_gl.y);
-        glEnd();
-    }
-
-    // Draw buttons
-    for (int i = 0; i < buttons_number; i++)
-    {
-        draw_button(buttons[i]);
-    }
-    
-    display_fps(delta_t);
-    display_temperature(environment_temp);
-    draw_gravity_indicator();
-    
-    // Draw the command line
-    if (command_mode)
-    {
-        glColor3f(0.3, 0.3, 0.3);
-        glBegin(GL_QUADS);
-        glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0));
-        glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0));
-        glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0 + 30));
-        glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0 + 30));
-        glEnd();
-        
-        glColor3f(0.7, 0.7, 0.0);
-        glBegin(GL_LINES);
-        glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0 + 30));
-        glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0 + 30));
-        glEnd();
-        
-        glColor3f(1.0, 1.0, 1.0);
-        glut_print(-window_width/2.0+20, -window_height/2.0+10, commands[commands.size() - current_cmd - 1], true);
-    }
-    
-    glutSwapBuffers();
-}
-
-void reshape(int width, int height)
-{
-    // Define the viewport transformation
-    glViewport(0, 0, width, height);
-    window_width = width;
-    window_height = height;
-    glScalef(window_width/2.0, window_height/2.0, 1.0);
-    
-    //glMatrixMode(GL_PROJECTION);      // Select the Projection matrix for operation
-    //glLoadIdentity();                 // Reset Projection matrix
-    //gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
-    
-    // Reposition the buttons
-    for (int i = 0; i < buttons_number; i++)
-    {
-        buttons[i].update_position();
-    }
-}
-
-void idle()
-{
-    update_time();
-    update_simulation();
-    glutPostRedisplay();
-    
-    /*
-    static long int a = 0;
-    a++;
-    if (a % 100 == 0)
-    {
-        std::cout << delta_t << std::endl;
-    }
-    */
-    
-}
-
-//////////
-
 void draw_particle(Particle& p)
 {
+    // Draw the trace if it is enabled
     glColor3f(0.8, 0.8, 0.0);
     glPointSize(1);
     glBegin(GL_POINTS);
     for (int i = 0; i < p.trace.size(); i++)
     {
-        Vector2d t = metres_to_gl_coords(p.trace.get(i));
+        Vector2d t = world_to_gl_coords(p.trace.get(i));
         glVertex2f(t.x, t.y);
     }
     glEnd();
     
-    // Particle
+    // Particle's position
     Vector2d pos = p.position_;
-    Vector2d pos_gl = metres_to_gl_coords(pos);
+    Vector2d pos_gl = world_to_gl_coords(pos);
     
-    // If selected
-    if (selected_particle_id == p.id_)
-    {
-        glColor3f(1.0, 1.0, 0.0);
-        glPointSize(10);
-    }
     // If fixed
-    else if (p.fixed_)
+    if (p.fixed_)
     {
         glColor3f(1.0, 0.0, 0.0);
         glPointSize(8);
+        glBegin(GL_POINTS);
+        glVertex2f(pos_gl.x, pos_gl.y);
+        glEnd();
     }
-    else
+    else if (show_particles)
     {
         glColor3f(1.0, 1.0, 1.0);
-        glPointSize(5);
+        glPointSize(6);
+        glBegin(GL_POINTS);
+        glVertex2f(pos_gl.x, pos_gl.y);
+        glEnd();
     }
-    
-    // Increase the point size if highlighted and not selected
-    if (highlighted_particle_id == p.id_ && selected_particle_id != p.id_)
-        glPointSize(10);
-    
-    glBegin(GL_POINTS);
-    glVertex2f(pos_gl.x, pos_gl.y);
-    glEnd();
     
     if (ids)
     {
@@ -330,26 +189,6 @@ void draw_particle(Particle& p)
         glColor3f(0.8, 0.8, 0.0);
         glut_print(pos.x + px_to_m(5.0), pos.y + px_to_m(5.0), s.str());
     }
-}
-
-void draw_vector(Vector2d v, Vector2d start, float r, float g, float b)
-{
-    Vector2d gl_start = metres_to_gl_coords(start);
-    Vector2d gl_end = metres_to_gl_coords(start + v);
-    
-    glColor3f(r, g, b);
-    glLineWidth(1.0);
-    
-    glBegin(GL_LINES);
-    glVertex2f(gl_start.x, gl_start.y);
-    glVertex2f(gl_end.x, gl_end.y);
-    glEnd();
-    
-    glPointSize(5);
-    
-    glBegin(GL_POINTS);
-    glVertex2f(gl_end.x, gl_end.y);
-    glEnd();
 }
 
 void draw_bar(const Bar& b)
@@ -386,24 +225,53 @@ void draw_bar(const Bar& b)
         glColor3f(b.color.x, b.color.y, b.color.z);
     }
     
-    glLineWidth(2.0);
-    
-    Vector2d gl_start = metres_to_gl_coords(particles[b.p1_id].position_);
-    Vector2d gl_end = metres_to_gl_coords(particles[b.p2_id].position_);
-    
+    Vector2d gl_start = world_to_gl_coords(particles[b.p1_id].position_);
+    Vector2d gl_end = world_to_gl_coords(particles[b.p2_id].position_);
     Vector2d m_mid = 0.5 * (particles[b.p1_id].position_ + particles[b.p2_id].position_);
     
-    glBegin(GL_LINES);
-    glVertex2f(gl_start.x, gl_start.y);
-    glVertex2f(gl_end.x, gl_end.y);
-    glEnd();
+    if (!fancy_bars)
+    {
+        glLineWidth(2.0);
+        
+        glBegin(GL_LINES);
+        glVertex2f(gl_start.x, gl_start.y);
+        glVertex2f(gl_end.x, gl_end.y);
+        glEnd();
+    }
+    
+    else
+    {
+        glLineWidth(1.0);
+        
+        Vector2d p1_pos = particles[b.p1_id].position_;
+        Vector2d p2_pos = particles[b.p2_id].position_;
+        
+        // Draw circles at the ends
+        double b_radius = 0.02;
+        draw_circle(p1_pos, b_radius, 20); // 0.2m
+        draw_circle(p2_pos, b_radius, 20);
+        
+        Vector2d unit = (p2_pos - p1_pos).norm();
+        Vector2d normal = Vector2d(-unit.y, unit.x);
+        
+        Vector2d p1 = p1_pos + b_radius * normal;
+        Vector2d p2 = p2_pos + b_radius * normal;
+        Vector2d p3 = p1_pos - b_radius * normal;
+        Vector2d p4 = p2_pos - b_radius * normal;
+        
+        glBegin(GL_LINES);
+        glVertex2f(world_to_gl_coords_x(p1.x), world_to_gl_coords_y(p1.y));
+        glVertex2f(world_to_gl_coords_x(p2.x), world_to_gl_coords_y(p2.y));
+        glVertex2f(world_to_gl_coords_x(p3.x), world_to_gl_coords_y(p3.y));
+        glVertex2f(world_to_gl_coords_x(p4.x), world_to_gl_coords_y(p4.y));
+        glEnd();
+    }
     
     std::stringstream s;
     s.precision(3);
     
     if (ids)
     {
-        
         s << b.id_;
         glut_print(m_mid.x, m_mid.y, s.str());
     }
@@ -419,156 +287,6 @@ void draw_bar(const Bar& b)
         s << b.get_strain();
         glut_print(m_mid.x, m_mid.y - px_to_m(12.0), s.str());
     }
-}
-
-void draw_coords()
-{
-    // Find the position of the centre in gl coords
-    Vector2d gl_centre = px_to_gl_coords(world_centre);
-    
-    // Draw the axis
-    glColor3f(0.3, 0.3, 0.3);
-    glLineWidth(2.0);
-    
-    glBegin(GL_LINES);
-    glVertex2f(gl_centre.x, 1.0);
-    glVertex2f(gl_centre.x, -1.0);
-    glVertex2f(-1.0, gl_centre.y);
-    glVertex2f(1.0, gl_centre.y);
-    glEnd();
-    
-    // Draw the scale
-    glColor3f(0.3, 0.3, 0.3);
-    glLineWidth(1.0);
-    
-    glBegin(GL_LINES);
-    
-    double m_dist = 1.0; // Distance between lines in metres
-    
-    // For +ve y
-    for (int i = 1; metres_to_gl_coords_y(i * m_dist) < 1.0; i++)
-    {
-        double y_pos = metres_to_gl_coords_y(i * m_dist);
-        glVertex2f(-1.0, y_pos);
-        glVertex2f(1.0, y_pos);
-    }
-    // For -ve y
-    for (int i = -1; metres_to_gl_coords_y(i * m_dist) > -1.0; i--)
-    {
-        double y_pos = metres_to_gl_coords_y(i * m_dist);
-        glVertex2f(-1.0, y_pos);
-        glVertex2f(1.0, y_pos);
-    }
-    // For +ve x
-    for (int i = 1; metres_to_gl_coords_x(i * m_dist) < 1.0; i++)
-    {
-        double x_pos = metres_to_gl_coords_x(i * m_dist);
-        glVertex2f(x_pos, -1.0);
-        glVertex2f(x_pos, 1.0);
-    }
-    // For -ve x
-    for (int i = -1; metres_to_gl_coords_x(i * m_dist) > -1.0; i--)
-    {
-        double x_pos = metres_to_gl_coords_x(i * m_dist);
-        glVertex2f(x_pos, -1.0);
-        glVertex2f(x_pos, 1.0);
-    }
-    
-    glEnd();
-    
-    // Draw the scale (as a number)
-    std::ostringstream s;
-    s << m_dist;
-    glColor3f(0.5, 0.5, 0.5);
-    glut_print(m_dist, 0.0, s.str() + "m");
-}
-
-/////
-
-// Converts the internal world coordinates to screen gl coordinates (between -1.0 and 1.0)
-Vector2d metres_to_gl_coords(const Vector2d& v)
-{
-    return Vector2d(metres_to_gl_coords_x(v.x), metres_to_gl_coords_y(v.y));
-}
-
-double metres_to_gl_coords_x(double d)
-{
-    return (d + world_centre.x / scale) * 2.0 * scale / window_width;
-}
-
-double metres_to_gl_coords_y(double d)
-{
-    return (d + world_centre.y / scale) * 2.0 * scale / window_height;
-}
-
-Vector2d px_to_gl_coords(const Vector2d& v)
-{
-    return Vector2d(px_to_gl_coords_x(v.x), px_to_gl_coords_y(v.y));
-}
-
-double px_to_gl_coords_x(double d)
-{
-    return d * 2.0 / window_width;
-}
-
-double px_to_gl_coords_y(double d)
-{
-    return d * 2.0 / window_height;
-}
-
-/////
-
-void draw_rectangle(Vector2d p1, Vector2d p2, bool px)
-{
-    
-    Vector2d p1_gl;
-    Vector2d p2_gl;
-    
-    if (px)
-    {
-        // Convert from pixels to gl coords
-        p1_gl = px_to_gl_coords(p1);
-        p2_gl = px_to_gl_coords(p2);
-    }
-    else
-    {
-        // Convert from metres to gl coords
-        p1_gl = metres_to_gl_coords(p1);
-        p2_gl = metres_to_gl_coords(p2);
-    }
-    
-    glBegin(GL_LINE_LOOP);
-    glVertex2f(p1_gl.x, p1_gl.y);
-    glVertex2f(p1_gl.x, p2_gl.y);
-    glVertex2f(p2_gl.x, p2_gl.y);
-    glVertex2f(p2_gl.x, p1_gl.y);
-    glEnd();
-}
-
-void draw_button(const Button& b)
-{
-    if (b.active_)
-    {
-        glColor3f(1.0, 1.0, 0.0);
-        glLineWidth(2.0);
-    }
-    else if (b.highlighted_)
-    {
-        glColor3f(0.8, 0.8, 0.0);
-        glLineWidth(2.0);
-    }
-    else
-    {
-        glColor3f(1.0, 1.0, 1.0);
-        glLineWidth(2.0);
-    }
-    
-    Vector2d p1(b.centre_.x - b.width_/2.0, b.centre_.y - b.height_/2.0);
-    Vector2d p2(b.centre_.x + b.width_/2.0, b.centre_.y + b.height_/2.0);
-    
-    draw_rectangle(p1, p2, true);
-    
-    glut_print(b.centre_.x - b.width_/2.0 + 5, b.centre_.y - 4, b.text_, true);
 }
 
 void draw_wall(const Wall& w)
@@ -608,8 +326,8 @@ void draw_wall(const Wall& w)
             y2 = y_min + width + height - i * d;
         }
         
-        glVertex2f(metres_to_gl_coords_x(x1), metres_to_gl_coords_y(y1));
-        glVertex2f(metres_to_gl_coords_x(x2), metres_to_gl_coords_y(y2));
+        glVertex2f(world_to_gl_coords_x(x1), world_to_gl_coords_y(y1));
+        glVertex2f(world_to_gl_coords_x(x2), world_to_gl_coords_y(y2));
         
     }
     glEnd();
@@ -619,4 +337,384 @@ void draw_wall(const Wall& w)
     s << '(' << w.id_ << ')';
     glColor3f(0.0, 1.0, 1.0);
     glut_print(w.p2_.x, w.p2_.y, s.str());
+}
+
+void draw_vector(Vector2d v, Vector2d start, float r, float g, float b)
+{
+    Vector2d gl_start = world_to_gl_coords(start);
+    Vector2d gl_end = world_to_gl_coords(start + v);
+    
+    glColor3f(r, g, b);
+    glLineWidth(1.0);
+    
+    glBegin(GL_LINES);
+    glVertex2f(gl_start.x, gl_start.y);
+    glVertex2f(gl_end.x, gl_end.y);
+    glEnd();
+    
+    glPointSize(5);
+    
+    glBegin(GL_POINTS);
+    glVertex2f(gl_end.x, gl_end.y);
+    glEnd();
+}
+
+void draw_coords()
+{
+    // Find the position of the centre in gl coords
+    Vector2d gl_centre = px_to_gl_coords(world_centre);
+    
+    // Draw the axis
+    glColor3f(0.3, 0.3, 0.3);
+    glLineWidth(2.0);
+    
+    glBegin(GL_LINES);
+    glVertex2f(gl_centre.x, 1.0);
+    glVertex2f(gl_centre.x, -1.0);
+    glVertex2f(-1.0, gl_centre.y);
+    glVertex2f(1.0, gl_centre.y);
+    glEnd();
+    
+    // Draw the scale
+    glColor3f(0.3, 0.3, 0.3);
+    glLineWidth(1.0);
+    
+    glBegin(GL_LINES);
+    
+    double m_dist = 1.0; // Distance between lines in metres
+    
+    // For +ve y
+    for (int i = 1; world_to_gl_coords_y(i * m_dist) < 1.0; i++)
+    {
+        double y_pos = world_to_gl_coords_y(i * m_dist);
+        glVertex2f(-1.0, y_pos);
+        glVertex2f(1.0, y_pos);
+    }
+    // For -ve y
+    for (int i = -1; world_to_gl_coords_y(i * m_dist) > -1.0; i--)
+    {
+        double y_pos = world_to_gl_coords_y(i * m_dist);
+        glVertex2f(-1.0, y_pos);
+        glVertex2f(1.0, y_pos);
+    }
+    // For +ve x
+    for (int i = 1; world_to_gl_coords_x(i * m_dist) < 1.0; i++)
+    {
+        double x_pos = world_to_gl_coords_x(i * m_dist);
+        glVertex2f(x_pos, -1.0);
+        glVertex2f(x_pos, 1.0);
+    }
+    // For -ve x
+    for (int i = -1; world_to_gl_coords_x(i * m_dist) > -1.0; i--)
+    {
+        double x_pos = world_to_gl_coords_x(i * m_dist);
+        glVertex2f(x_pos, -1.0);
+        glVertex2f(x_pos, 1.0);
+    }
+    
+    glEnd();
+    
+    // Draw the scale (as a number)
+    std::ostringstream s;
+    s << m_dist;
+    glColor3f(0.5, 0.5, 0.5);
+    glut_print(m_dist, 0.0, s.str() + "m");
+}
+
+void draw_command_line()
+{
+    glColor3f(0.3, 0.3, 0.3);
+    glBegin(GL_QUADS);
+    glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0));
+    glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0));
+    glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0 + 30));
+    glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0 + 30));
+    glEnd();
+    
+    glColor3f(0.7, 0.7, 0.0);
+    glBegin(GL_LINES);
+    glVertex2f(px_to_gl_coords_x(window_width/2.0), px_to_gl_coords_y(-window_height/2.0 + 30));
+    glVertex2f(px_to_gl_coords_x(-window_width/2.0), px_to_gl_coords_y(-window_height/2.0 + 30));
+    glEnd();
+    
+    glColor3f(1.0, 1.0, 1.0);
+    glut_print(-window_width/2.0+20, -window_height/2.0+10, commands[commands.size() - current_cmd - 1], true);
+}
+
+void draw_button(const Button& b)
+{
+    if (b.active_)
+    {
+        glColor3f(1.0, 1.0, 0.0);
+        glLineWidth(2.0);
+    }
+    else if (b.highlighted_)
+    {
+        glColor3f(0.8, 0.8, 0.0);
+        glLineWidth(2.0);
+    }
+    else
+    {
+        glColor3f(1.0, 1.0, 1.0);
+        glLineWidth(2.0);
+    }
+    
+    Vector2d p1(b.centre_.x - b.width_/2.0, b.centre_.y - b.height_/2.0);
+    Vector2d p2(b.centre_.x + b.width_/2.0, b.centre_.y + b.height_/2.0);
+    
+    draw_rectangle(p1, p2, true);
+    
+    glut_print(b.centre_.x - b.width_/2.0 + 5, b.centre_.y - 4, b.text_, true);
+}
+
+void draw_rectangle(Vector2d p1, Vector2d p2, bool px)
+{
+    
+    Vector2d p1_gl, p2_gl;
+    if (px)
+    {
+        // Convert from pixels to gl coords
+        p1_gl = px_to_gl_coords(p1);
+        p2_gl = px_to_gl_coords(p2);
+    }
+    else
+    {
+        // Convert from metres to gl coords
+        p1_gl = world_to_gl_coords(p1);
+        p2_gl = world_to_gl_coords(p2);
+    }
+    
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(p1_gl.x, p1_gl.y);
+    glVertex2f(p1_gl.x, p2_gl.y);
+    glVertex2f(p2_gl.x, p2_gl.y);
+    glVertex2f(p2_gl.x, p1_gl.y);
+    glEnd();
+}
+
+// All in metres
+void draw_circle(Vector2d centre, double r, unsigned int n_points)
+{
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i < n_points; i++)
+    {
+        glVertex2f(world_to_gl_coords_x(centre.x + r * cos(i * 2 * M_PI / n_points)), world_to_gl_coords_y(centre.y + r * sin(i * 2 * M_PI / n_points)));
+    }
+    glEnd();
+}
+
+// Position in world coords, size in px
+void draw_cross(Vector2d pos, int size_px)
+{
+    Vector2d pos_gl = world_to_gl_coords(pos);
+    
+    glBegin(GL_LINES);
+    glVertex2f(pos_gl.x - px_to_gl_coords_x(size_px), pos_gl.y);
+    glVertex2f(pos_gl.x + px_to_gl_coords_x(size_px), pos_gl.y);
+    glVertex2f(pos_gl.x, pos_gl.y + px_to_gl_coords_y(size_px));
+    glVertex2f(pos_gl.x , pos_gl.y - px_to_gl_coords_y(size_px));
+    glEnd();
+}
+
+// * * * * * * * * * * //
+vec3 hsv_to_rgb(vec3 hsv) // H is in the range [0,360] degs
+{
+    // TODO: check if given hsv is valid
+    
+    double C = hsv.z * hsv.y;
+    double B = fmod((hsv.x/60.0), 2.0) - 1;
+    double X = C * (1 - abs_d(B));
+    double m = hsv.z - C;
+    int n = (int)hsv.x / 60;
+    
+    vec3 rgb;
+    if (n == 0)
+        rgb = vec3(C, X, 0);
+    else if (n == 1)
+        rgb = vec3(X, C, 0);
+    else if (n == 2)
+        rgb = vec3(0, C, X);
+    else if (n == 3)
+        rgb = vec3(0, X, C);
+    else if (n == 4)
+        rgb = vec3(X, 0, C);
+    else if (n == 5)
+        rgb = vec3(C, 0, X);
+    
+    rgb.x += m;
+    rgb.y += m;
+    rgb.z += m;
+    return rgb;
+}
+
+// * * * * * * * * * * //
+void display()
+{
+    // Clear the window
+    glClear(GL_COLOR_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    
+    bool drawing_mode = simulation_is_paused();
+    
+    if (drawing_mode && coords)
+        if (coords)
+            draw_coords();
+    
+    // Draw the walls
+    SlotMap<Wall>::iterator walls_it;
+    for (walls_it = walls.begin(); walls_it != walls.end(); walls_it++)
+        draw_wall(*walls_it);
+    
+    // Draw the bars
+    SlotMap<Bar>::iterator bars_it;
+    for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
+        draw_bar(*bars_it);
+    
+    // Draw the particles
+    SlotMap<Particle>::iterator particles_it;
+    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
+        draw_particle(*particles_it);
+    
+    // Draw the vectors
+    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
+    {
+        if (!particles_it->fixed_)
+        {
+            // Draw the velocity vector
+            if (velocities)
+                draw_vector(particles_it->velocity_, particles_it->position_, 0.0, 0.5, 0.0);
+            
+            // Draw the acceleration vector
+            if (accelerations)
+                draw_vector(particles_it->acceleration_, particles_it->position_, 0.5, 0.0, 0.0);
+        }
+    }
+    
+    // Only applies to the drawing mode
+    if (drawing_mode)
+    {
+        // Draw the wall points
+        for (int i = 0; i < wall_points.size(); i++)
+        {
+            glLineWidth(1);
+            glColor3f(1.0, 1.0, 1.0);
+            draw_cross(wall_points[i], 10);
+        }
+        
+        // Draw the wall cursor
+        if (drawing_wall)
+        {
+            glLineWidth(1);
+            glColor3f(1.0, 1.0, 1.0);
+            draw_cross(mouse_pos, 10);
+        }
+        
+        // Draw dashed lines between selected particles and mouse
+        // Draw the highlight for each selected particle
+        if (selected_particles_ids.size() != 0)
+        {
+            // Dashed lines
+            glEnable(GL_LINE_STIPPLE);
+            glLineStipple(1, 0x00FF);
+            glLineWidth(1.0);
+            glColor3f(1.0, 1.0, 0.0);
+            
+            glBegin(GL_LINES);
+            for (int i = 0; i < selected_particles_ids.size(); i++)
+            {
+                if (particles.exists(selected_particles_ids[i])) // Make sure that this particle exists
+                {
+                    Vector2d selected_pos = particles[selected_particles_ids[i]].position_;
+                    glVertex2f(world_to_gl_coords_x(selected_pos.x), world_to_gl_coords_y(selected_pos.y));
+                    glVertex2f(world_to_gl_coords_x(mouse_pos.x), world_to_gl_coords_y(mouse_pos.y));
+                }
+            }
+            glEnd();
+            
+            // Highlights
+            glColor3f(1.0, 1.0, 1.0);
+            glPointSize(8);
+            
+            glBegin(GL_POINTS);
+            for (int i = 0; i < selected_particles_ids.size(); i++)
+            {
+                int selected_id = selected_particles_ids[i];
+                if (particles.exists(selected_id)) // Make sure that this particle exists
+                {
+                    Vector2d pos_gl = world_to_gl_coords(particles[selected_id].position_);
+                    glVertex2f(pos_gl.x, pos_gl.y);
+                }
+            }
+            glEnd();
+            
+            glDisable(GL_LINE_STIPPLE);
+        }
+    }
+    
+    // Draw the snapped point
+    if (snap && snapped && !drawing_wall)
+    {
+        Vector2d pos_gl(world_to_gl_coords_x(mouse_pos.x), world_to_gl_coords_y(mouse_pos.y));
+        
+        glColor3f(1.0, 1.0, 1.0);
+        glPointSize(10);
+        glBegin(GL_POINTS);
+        glVertex2d(pos_gl.x, pos_gl.y);
+        glEnd();
+    }
+
+    // Draw buttons
+    for (int i = 0; i < buttons_number; i++)
+        draw_button(buttons[i]);
+    
+    display_fps(delta_t);
+    display_temperature(environment_temp);
+    draw_gravity_indicator();
+    display_time();
+    
+    // Draw the command line
+    if (command_mode)
+        draw_command_line();
+    
+    glutSwapBuffers();
+}
+
+void reshape(int width, int height)
+{
+    // Define the viewport transformation
+    glViewport(0, 0, width, height);
+    window_width = width;
+    window_height = height;
+    glScalef(window_width/2.0, window_height/2.0, 1.0);
+    
+    //glMatrixMode(GL_PROJECTION);      // Select the Projection matrix for operation
+    //glLoadIdentity();                 // Reset Projection matrix
+    //gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+    
+    // Reposition the buttons
+    for (int i = 0; i < buttons_number; i++)
+    {
+        buttons[i].update_position();
+    }
+}
+
+void idle()
+{
+    if (!simulation_is_paused())
+    {
+        update_time();
+        update_simulation();
+    }
+    glutPostRedisplay();
+    
+    /*
+    static long int a = 0;
+    a++;
+    if (a % 100 == 0)
+    {
+        std::cout << delta_t << std::endl;
+    }
+    */
+    
 }

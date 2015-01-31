@@ -9,9 +9,7 @@
 #ifndef __Trusses__button__
 #define __Trusses__button__
 
-#include <iostream>
 #include <vector>
-
 #include "math.h" // for Vector2d
 
 class Button
@@ -39,9 +37,6 @@ private:
     double height_;
     bool change_state_;
 };
-
-void button0_action(void);
-void button1_action(void);
 
 extern std::vector<Button> buttons;
 extern int buttons_number;

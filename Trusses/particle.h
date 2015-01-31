@@ -55,7 +55,7 @@ struct Particle
     static int create(double a, double b, bool fixed);
     static int destroy(int removed_id);
 private:
-    Particle(double a, double b): trace(100) {position_.x = a; position_.y = b;}
+    Particle(double a, double b): trace(500) {position_.x = a; position_.y = b;}
 };
 
 void print_particles();

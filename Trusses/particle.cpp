@@ -100,6 +100,11 @@ void Particle::impose_boundaries()
     SlotMap<Wall>::iterator walls_it;
     for (walls_it = walls.begin(); walls_it != walls.end(); walls_it++)
     {
+        // TODO: Think about fixed particles: they shouldn't be checked all the time, just when they are dragged
+        // For now:
+        if (fixed_)
+            continue;
+        
         double wall_top = walls_it->y_max();
         double wall_bottom = walls_it->y_min();
         double wall_left = walls_it->x_min();

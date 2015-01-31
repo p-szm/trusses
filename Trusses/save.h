@@ -14,13 +14,13 @@
 
 #define SAVE_PATH "/Users/patrick/workspace/saves/"
 
+// * * * * * * * * * * //
 int load(std::string filename);
 void save(std::string filename);
-
-void reset();
-
+void reset_everything();
 void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix);
 
+// * * * * * * * * * * //
 std::string date_str();
 std::string time_str();
 

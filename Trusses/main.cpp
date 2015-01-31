@@ -18,6 +18,8 @@
 // TODO: Add actual strings, which don't have any tension below their minimum length
 // TODO: Implement blobs
 // TODO: There is some bug when removing particles, then saving and importing
+// TODO: Vlocities are wrong
+// TODO: Important! Check strain signs
 
 int main(int argc, char * argv[])
 {
@@ -37,12 +39,12 @@ int main(int argc, char * argv[])
     // Register callback functions
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
-    glutMouseFunc(mouse_click);
-    glutKeyboardFunc(key_pressed);
+    glutMouseFunc(mouse_function);
+    glutKeyboardFunc(key_function);
     glutIdleFunc(idle);
-    glutPassiveMotionFunc(mouse_passive);
-    glutMotionFunc(mouse_drag);
-    glutSpecialFunc(special_key_down);
+    glutPassiveMotionFunc(mouse_passive_function);
+    glutMotionFunc(mouse_drag_function);
+    glutSpecialFunc(special_key_function);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -52,7 +54,7 @@ int main(int argc, char * argv[])
     glClearColor(0.12, 0.12, 0.12, 1.0);
     
     microsecond_time(t);
-    delta_t = (t - prev_t)/1000000.0;
+    delta_t = 0.02; // Start with something
     
     create_buttons();
     

@@ -8,6 +8,7 @@
 
 #include "button.h"
 #include "graphics.h"
+#include "interface.h"
 #include "save.h"
 #include "physics.h"
 
@@ -107,7 +108,7 @@ void button_snap_action(void)
 
 void button_reset_action(void)
 {
-    reset();
+    reset_everything();
 }
 
 void button_save_action(void)
@@ -134,7 +135,10 @@ void button_scale_down_action(void)
 
 void button_draw_wall_action(void)
 {
-    drawing_wall = true;
+    if (!drawing_wall)
+        start_drawing_wall();
+    else
+        stop_drawing_wall();
 }
 
 void create_buttons()
