@@ -27,6 +27,7 @@ extern Vector2d world_centre;
 extern bool snap;
 extern bool snapped;
 extern std::vector<int> selected_particles_ids;
+extern int active_particle_id;
 extern bool drawing_wall;
 extern std::vector<Vector2d> wall_points;
 extern Vector2d mouse_pos;

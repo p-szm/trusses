@@ -26,15 +26,20 @@ Vector2d world_centre(0.0, 0.0); // In pixels
 bool snap = true;
 bool snapped = false;
 std::vector<int> selected_particles_ids;
+int active_particle_id = -1;
 bool drawing_wall = false;
 std::vector<Vector2d> wall_points;
 Vector2d mouse_pos; // In world coords
 bool command_mode = false;
 bool full_screen = false;
+double dragging_force = 100.0;
 int min_click_dist = 10; // pixels
 
 // * * * * * * * * * * //
 bool in_range_m(double d1, double d2);
+
+// * * * * * * * * * * //
+Vector2d m_to_gl(Vector2d v) {return Vector2d(2 * v.x * scale / window_width, 2 * v.y * scale / window_height);}
 
 // * * * * * * * * * * //
 void key_function(unsigned char key, int x, int y)
@@ -148,7 +153,17 @@ void special_key_function(int key, int x, int y)
 
 void mouse_function(int button, int state, int x, int y)
 {
-    if (state == GLUT_UP)
+    bool drawing_mode = simulation_is_paused();
+    
+    // Release a particle
+    if (state == GLUT_UP && !drawing_mode)
+    {
+        // Zero its acceleration
+        particles[active_particle_id].external_acceleration_ = Vector2d(0.0, 0.0);
+        active_particle_id = -1;
+        return;
+    }
+    else if (state == GLUT_UP)
         return;
     
     // If snapping is enabled, mouse_pos is changed accordingly, so no need to think about snapping here
@@ -219,19 +234,10 @@ void mouse_function(int button, int state, int x, int y)
         }
     }
     
-    // Here particles can be dragged around by mouse
-    else
-    {
-        /*// Unselect particles
-        if (state == GLUT_UP)
-        {
-            if (selected_particle_id != -1)
-                particles[selected_particle_id].external_acceleration_ = Vector2d(0.0, 0.0);
-            
-            else if (clicked_particle_id == -1)
-                selected_particle_id = -1;
-        }*/
-    }
+    // // A particle was clicked and can be dragged around by mouse
+    else if (state == GLUT_DOWN && particles.exists(clicked_particle_id))
+        active_particle_id = clicked_particle_id;
+    
     
     glutPostRedisplay();
 }
@@ -291,8 +297,30 @@ void mouse_passive_function(int x, int y)
 
 void mouse_drag_function(int x, int y)
 {
-    double x_px = x - window_width / 2.0; // wrt centre of the screen, not the world
+    double x_px = x - window_width / 2.0; // Wrt the centre of the screen, not the world
     double y_px = -y  + window_height / 2.0;
+    double x_metres = px_to_m(x_px - world_centre.x); // In the worlds coordinates
+    double y_metres = px_to_m(y_px - world_centre.y);
+    mouse_pos = Vector2d(x_metres, y_metres);
+    
+    // Unsnap everything
+    snapped = false;
+    
+    bool drawing_mode = simulation_is_paused();
+    if (drawing_mode)
+    {
+        
+    }
+    else // Simulation mode
+    {
+        if (particles.exists(active_particle_id))
+        {
+            if (particles[active_particle_id].fixed_)
+                particles[active_particle_id].position_ = mouse_pos;
+            else
+                particles[active_particle_id].external_acceleration_ = dragging_force * m_to_gl(mouse_pos - particles[active_particle_id].position_);
+        }
+    }
     //double x_metres = px_to_m(x_px - world_centre.x);
     //double y_metres = px_to_m(y_px - world_centre.y);
     

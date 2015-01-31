@@ -193,6 +193,7 @@ void reset_everything()
     reset_particles();
     selected_particles_ids.clear();
     wall_points.clear();
+    active_particle_id = -1;
     pause_simulation();
     simulation_time = 0;
 }

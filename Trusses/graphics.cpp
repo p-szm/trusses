@@ -272,12 +272,12 @@ void draw_bar(const Bar& b)
     
     if (ids)
     {
+        glColor3f(0.8, 0.0, 0.8);
         s << b.id_;
         glut_print(m_mid.x, m_mid.y, s.str());
     }
     if (lengths)
     {
-        
         s << b.length();
         glut_print(m_mid.x, m_mid.y, s.str());
     }
@@ -332,11 +332,13 @@ void draw_wall(const Wall& w)
     }
     glEnd();
     
-    // Print ids
-    std::ostringstream s;
-    s << '(' << w.id_ << ')';
-    glColor3f(0.0, 1.0, 1.0);
-    glut_print(w.p2_.x, w.p2_.y, s.str());
+    if (ids)
+    {
+        std::ostringstream s;
+        s << w.id_;
+        glColor3f(0.0, 0.8, 0.8);
+        glut_print(w.p2_.x, w.p2_.y, s.str());
+    }
 }
 
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b)
@@ -660,7 +662,27 @@ void display()
         glColor3f(1.0, 1.0, 1.0);
         glPointSize(10);
         glBegin(GL_POINTS);
-        glVertex2d(pos_gl.x, pos_gl.y);
+        glVertex2f(pos_gl.x, pos_gl.y);
+        glEnd();
+    }
+    
+    // Draw the active particle
+    if (!drawing_mode && particles.exists(active_particle_id))
+    {
+        Particle* active_p = &particles[active_particle_id];
+        Vector2d particle_pos_gl = world_to_gl_coords( active_p->position_ );
+        Vector2d mouse_pos_gl = world_to_gl_coords(mouse_pos);
+        
+        glColor3f(0.8, 0.8, 0.0);
+        glPointSize(10);
+        glBegin(GL_POINTS);
+        glVertex2f(particle_pos_gl.x, particle_pos_gl.y);
+        glEnd();
+        
+        glLineWidth(1.0);
+        glBegin(GL_LINES);
+        glVertex2f(particle_pos_gl.x, particle_pos_gl.y);
+        glVertex2f(mouse_pos_gl.x, mouse_pos_gl.y);
         glEnd();
     }
 

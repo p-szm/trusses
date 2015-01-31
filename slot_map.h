@@ -37,7 +37,7 @@ public:
     int remove(int obj_id); // Removes object of this id from the container
     void clear();
     void print(); // Prints all the objects together with the internal state of the slot map
-    bool exists(unsigned int obj_id); // True if the objects exists in the container, false otherwise
+    bool exists(int obj_id); // True if the objects exists in the container, false otherwise
     unsigned int size() {return (unsigned int)container.size();}
 private:
     std::vector<T> container; // Holds objects in unspecified order (not sorted by ids)
@@ -142,9 +142,11 @@ unsigned int SlotMap<T>::locate(int obj_id)
 }
 
 template <typename T>
-bool SlotMap<T>::exists(unsigned int obj_id)
+bool SlotMap<T>::exists(int obj_id)
 {
-    if (slots.size() <= obj_id)
+    if (obj_id < 0)
+        return false;
+    else if (slots.size() <= obj_id)
         return false;
     if (slots[obj_id] == -1)
         return false;
