@@ -24,14 +24,14 @@ std::vector<std::string> commands;
 unsigned int current_cmd = 0;
 
 // * * * * * * * * * * //
-template<typename T> void extract_words(std::string str, std::vector<T> & target_v);
+void extract_words(std::string str, std::vector<std::string> & target_v);
 bool is_number(std::string input);
 template <typename T> T get_number(std::string input);
 void interpret_command(std::string cmd);
 
 // * * * * * * * * * * //
-template<typename T>
-void extract_words(std::string str, std::vector<T> & target_v)
+// Takes a string str and breaks it up into words which are put into target_v
+void extract_words(std::string str, std::vector<std::string> & target_v)
 {
     // Convert the string to the stringstream
     std::istringstream s(str);
@@ -39,8 +39,8 @@ void extract_words(std::string str, std::vector<T> & target_v)
     // Read every "word" of a stringstream
     while (s)
     {
-        // If s is of type T
-        T n;
+        // If s is of type string
+        std::string n;
         if (s >> n)
             target_v.push_back(n);
     }
@@ -105,37 +105,6 @@ void interpret_command(std::string cmd)
             gravity = false;
         else
             std::cout << "Usage: gravity <on/off>" << std::endl;
-    }
-    
-    else if (first_word == "oscillation")
-    {
-        if (words_number == 3)
-        {
-            if (words[1] == "on")
-            {
-                if (is_number(words[2]))
-                {
-                    // Interpret negative numbers as 0
-                    int n = get_number<int>(words[2]);
-                    if (n < 0)
-                        n = 0;
-                    if (particles.exists(n))
-                        particles[n].oscillate = true;
-                }
-            }
-            else if (words[1] == "off")
-            {
-                if (is_number(words[2]))
-                {
-                    // Interpret negative numbers as 0
-                    int n = get_number<int>(words[2]);
-                    if (n < 0)
-                        n = 0;
-                    if (particles.exists(n))
-                        particles[n].oscillate = false;
-                }
-            }
-        }
     }
     
     else if (first_word == "snap")

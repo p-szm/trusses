@@ -15,12 +15,13 @@
 int buttons_number = 0;
 std::vector<Button> buttons {};
 
-Button::Button(double w, double h, double x_sh, double y_sh, void (*a)(void), std::string t)
+Button::Button(double w, double h, double pos_x, double pos_y, int off_x, int off_y, void (*a)(void), std::string t)
 {
     width_ = w;
     height_ = h;
-    x_shift_ = x_sh;
-    y_shift_ = y_sh;
+    position = Vector2d(pos_x, pos_y);
+    offset = Vector2d(off_x, off_y);
+    
     action = a;
     highlighted_ = false;
     text_ = t;
@@ -29,16 +30,21 @@ Button::Button(double w, double h, double x_sh, double y_sh, void (*a)(void), st
     
     id_ = buttons_number;
     buttons_number ++;
-    
-    update_position(); // Updates the button's centre
+}
+
+int Button::create(double w, double h, double pos_x, double pos_y, int off_x, int off_y, void (*a)(void), std::string t)
+{
+    Button b = Button(w, h, pos_x, pos_y, off_x, off_y, a, t);
+    buttons.push_back(b);
+    return b.id_;
 }
 
 bool Button::is_hit(double x, double y)
 {
-    double left = centre_.x - width_ / 2.0;
-    double right = centre_.x + width_ / 2.0;
-    double top = centre_.y + height_ / 2.0;
-    double bottom = centre_.y - height_ / 2.0;
+    double left = position.x + px_to_gl_x(offset.x - width_ / 2.0);
+    double right = position.x + px_to_gl_x(offset.x + width_ / 2.0);
+    double top = position.y + px_to_gl_y(offset.y + height_ / 2.0);
+    double bottom = position.y + px_to_gl_y(offset.y - height_ / 2.0);
     
     if (x >= left && x <= right && y <= top && y >= bottom)
         return true;
@@ -51,24 +57,6 @@ void Button::execute_action()
     action();
     if (change_state_)
         active_ = !active_;
-}
-
-void Button::update_position()
-{
-    // Used when the window is resized
-    
-    double half_width = width_ / 2.0;
-    double half_height = height_ / 2.0;
-    
-    if (x_shift_ >= 0)
-        centre_.x = -window_width / 2.0 + half_width + x_shift_;
-    else
-        centre_.x = window_width / 2.0 - half_width + x_shift_;
-    
-    if (y_shift_ >= 0)
-        centre_.y = -window_height / 2.0 + half_height + y_shift_;
-    else
-        centre_.y = window_height / 2.0 - half_height + y_shift_;
 }
 
 void button_ids_action(void)
@@ -96,16 +84,6 @@ void button_rel_extensions_action(void)
     extensions = !extensions;
 }
 
-void button_coords_action(void)
-{
-    coords = !coords;
-}
-
-void button_snap_action(void)
-{
-    snap = !snap;
-}
-
 void button_reset_action(void)
 {
     reset_everything();
@@ -116,11 +94,6 @@ void button_save_action(void)
     std::string path = "/Users/patrick/Desktop/save-";
     path += date_str() + '-' + time_str();
     save(path);
-}
-
-void button_gravity_action(void)
-{
-    gravity = !gravity;
 }
 
 void button_scale_up_action(void)
@@ -143,23 +116,16 @@ void button_draw_wall_action(void)
 
 void create_buttons()
 {
-    buttons.push_back(Button(60, 30, -20, -20, &button_ids_action, "Ids"));
-    buttons.push_back(Button(60, 30, -20, -70, &button_velocities_action, "Vels"));
-    buttons.push_back(Button(60, 30, -20, -120, &button_accelerations_action, "Accels"));
-    buttons.push_back(Button(60, 30, -20, -170, &button_lengths_action, "Lengths"));
-    buttons.push_back(Button(60, 30, -20, -220, &button_rel_extensions_action, "Rel ext"));
-    buttons.push_back(Button(60, 30, -20, -270, &button_coords_action, "Coords"));
-    buttons.push_back(Button(60, 30, -20, -320, &button_snap_action, "Snap"));
-    buttons[6].active_ = true;
-    buttons.push_back(Button(60, 30, -20, -420, &button_reset_action, "Reset"));
-    buttons[7].change_state_ = false;
-    buttons.push_back(Button(60, 30, -20, -470, &button_save_action, "Save"));
-    buttons[8].change_state_ = false;
-    buttons.push_back(Button(60, 30, 23, -30, &button_gravity_action, "Gravity"));
-    buttons.push_back(Button(60, 30, -20, -570, &button_scale_up_action, "     +"));
-    buttons[10].change_state_ = false;
-    buttons.push_back(Button(60, 30, -20, -620, &button_scale_down_action, "     -"));
-    buttons[11].change_state_ = false;
-    buttons.push_back(Button(60, 30, -20, -670, &button_draw_wall_action, "Wall")); // 12
+    Button::create(60, 30, 1.0, 1.0, -50, -40, &button_ids_action, "Ids");
+    Button::create(60, 30, 1.0, 1.0, -50, -90, &button_velocities_action, "Vels");
+    Button::create(60, 30, 1.0, 1.0, -50, -140, &button_lengths_action, "Lengths");
+    Button::create(60, 30, 1.0, 1.0, -50, -190, &button_rel_extensions_action, "Rel ext");
+    Button::create(60, 30, 1.0, 1.0, -50, -240, &button_reset_action, "Reset");
+    Button::create(60, 30, 1.0, 1.0, -50, -290, &button_save_action, "Save");
+    int plus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -340, &button_scale_up_action, "     +");
+    buttons[plus_button_id].change_state_ = false;
+    int minus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -390, &button_scale_down_action, "     -");
+    buttons[minus_button_id].change_state_ = false;
+    Button::create(60, 30, 1.0, 1.0, -50, -440, &button_draw_wall_action, "Wall");
     
 }

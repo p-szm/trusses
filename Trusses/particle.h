@@ -11,7 +11,8 @@
 
 #include <vector>
 #include "math.h"
-#include "slot_map.h"
+#include "/Users/patrick/headers/slot_map.h"
+#include "/Users/patrick/headers/fixed_size.h"
 
 enum OSCIL_T {X, Y, CW, ACW};
 
@@ -38,13 +39,6 @@ struct Particle
     bool fixed_;
     bool dragged_;
     std::vector<int> bars_connected;
-    
-    // For oscillations of fixed particles
-    Oscillation oscillation_;
-    OSCIL_T oscil_dir;
-    // Moves the particle using its motion function
-    void move();
-    bool oscillate;
     
     bool trace_on;
     FixedSizeContainer<Vector2d> trace;

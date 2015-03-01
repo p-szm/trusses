@@ -11,27 +11,25 @@
 
 #include <iostream>
 #include "math.h"
-#include "slot_map.h"
+#include "/Users/patrick/headers/slot_map.h"
 
 class TempLabel
 {
 public:
     std::string text;
-    Vector2d position;
+    Vector2d position; // In gl coords, pinned to the centre of the label
+    Vector2d offset; // In pixels
     unsigned long long int max_time; // In microseconds
     unsigned long long int time;
     int id_;
     float alpha();
     
-    static int create(std::string str, Vector2d pos, double t);
+    static int create(std::string str, double pos_x, double pos_y, int off_x, int off_y, double t);
     static int destroy(int obj_id);
     static int update(int obj_id);
-    
 private:
-    TempLabel(std::string str, Vector2d pos, double t):
-        text(str), position(pos), max_time(t) {time = 0;};
-    TempLabel(std::string str, float x, float y, double t):
-        text(str), position(Vector2d(x, y)), max_time(t) {time = 0;};
+    TempLabel(std::string str, double pos_x, double pos_y, int off_x, int off_y, double t)
+        {text = str; position = Vector2d(pos_x, pos_y); offset = Vector2d(off_x, off_y); max_time = t; time = 0;};
 };
 
 extern SlotMap<TempLabel> temp_labels;

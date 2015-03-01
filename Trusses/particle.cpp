@@ -13,39 +13,6 @@
 
 SlotMap<Particle> particles;
 
-// Returns the next position
-Vector2d right(Vector2d pos)
-{
-    double speed = 1.0;
-    return (Vector2d(pos.x + speed * delta_t, pos.y));
-}
-
-// Moves the particle
-void Particle::move()
-{
-    double new_phase = oscillation_.phase + delta_t*oscillation_.frequency*2*M_PI;
-    oscillation_.phase = new_phase;
-    
-    if (oscil_dir == X)
-    {
-        position_.x = oscillation_.origin.x + oscillation_.amplitude * sin(oscillation_.phase);
-    }
-    else if (oscil_dir == Y)
-    {
-        position_.y = oscillation_.origin.y + oscillation_.amplitude * sin(oscillation_.phase);
-    }
-    else if (oscil_dir == CW)
-    {
-        position_.x = oscillation_.origin.x + oscillation_.amplitude * cos(oscillation_.phase);
-        position_.y = oscillation_.origin.y + oscillation_.amplitude * sin(oscillation_.phase);
-    }
-    else if (oscil_dir == ACW)
-    {
-        position_.x = oscillation_.origin.x + oscillation_.amplitude * cos(oscillation_.phase);
-        position_.y = oscillation_.origin.y + oscillation_.amplitude * sin(-oscillation_.phase);
-    }
-}
-
 int Particle::create(double a, double b, bool fixed)
 {
     Particle new_particle(a, b);
@@ -59,12 +26,6 @@ int Particle::create(double a, double b, bool fixed)
     
     new_particle.fixed_ = (fixed) ? true : false;
     new_particle.dragged_ = false;
-    
-    // Assume that the particle is fixed
-    new_particle.oscil_dir = X;
-    new_particle.oscillation_.phase = 0.0;
-    new_particle.oscillation_ = Oscillation(new_particle.position_, 0.5, 2);
-    new_particle.oscillate = false;
     
     // Trace
     new_particle.trace_on = false;
@@ -148,9 +109,7 @@ void Particle::impose_boundaries()
 
 void Particle::update()
 {
-    if (fixed_ && oscillate)
-        move();
-    else if (!fixed_)
+    if (!fixed_)
     {
         // External acceleration is the acceleration added by dragging with a mouse
         acceleration_ = external_acceleration_;

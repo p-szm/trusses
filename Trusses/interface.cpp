@@ -22,7 +22,8 @@
 #include "temporary_label.h"
 
 // * * * * * * * * * * //
-double scale = 40.0; // pixels/metre
+double scale = 50.0; // pixels/metre
+double grid_dist_px = 50.0; // In pixels
 Vector2d world_centre(0.0, 0.0); // In pixels
 bool snap = true;
 bool snapped = false;
@@ -36,15 +37,17 @@ bool full_screen = false;
 double dragging_force = 100.0;
 int min_click_dist = 10; // pixels
 bool simulation_paused = true;
+std::vector<bool> arrows(4); // left, right, up, down
 
 // * * * * * * * * * * //
 bool in_range_m(double d1, double d2);
 
 // * * * * * * * * * * //
+Vector2d m_to_gl_coords(Vector2d v) {return Vector2d(2 * (v.x * scale + world_centre.x) / window_width, 2 * (v.y * scale + world_centre.y) / window_height);}
 Vector2d m_to_gl(Vector2d v) {return Vector2d(2 * v.x * scale / window_width, 2 * v.y * scale / window_height);}
 
 // * * * * * * * * * * //
-void key_function(unsigned char key, int x, int y)
+void key_down_function(unsigned char key, int x, int y)
 {
     if (command_mode)
     {
@@ -127,33 +130,49 @@ void key_function(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
-void special_key_function(int key, int x, int y)
+void special_key_up(int key, int x, int y)
 {
-    // Arrows move the world around
+    // Remember which arrows were pressed
     if (key == GLUT_KEY_UP)
+        arrows[2] = true;
+    if (key == GLUT_KEY_DOWN)
+        arrows[3] = true;
+    if (key == GLUT_KEY_LEFT)
+        arrows[0] = true;
+    if (key == GLUT_KEY_RIGHT)
+        arrows[1] = true;
+    
+    if (command_mode)
     {
-        if (command_mode)
-        {
-            if (current_cmd < commands.size() - 1)
-                current_cmd++;
-        }
-        else
-            world_centre.y -= 10; // px
+        if (!arrows[0] && !arrows[1] && arrows[3] && !arrows[4] && current_cmd < commands.size() - 1)
+            current_cmd++;
+        else if (!arrows[0] && !arrows[1] && !arrows[3] && arrows[4] && current_cmd > 0)
+            current_cmd--;
     }
-    else if (key == GLUT_KEY_DOWN)
+    else
     {
-        if (command_mode)
-        {
-            if (current_cmd > 0)
-                current_cmd--;
-        }
-        else
+        if (arrows[0])
+            world_centre.x += 10;
+        if (arrows[1])
+            world_centre.x -= 10;
+        if (arrows[2])
+            world_centre.y -= 10;
+        if (arrows[3])
             world_centre.y += 10;
     }
-    else if (key == GLUT_KEY_LEFT)
-        world_centre.x += 10;
-    else if (key == GLUT_KEY_RIGHT)
-        world_centre.x -= 10;
+}
+
+void special_key_down(int key, int x, int y)
+{
+    // Remove the arrow from the list of pressed arrows
+    if (key == GLUT_KEY_UP)
+        arrows[2] = false;
+    if (key == GLUT_KEY_DOWN)
+        arrows[3] = false;
+    if (key == GLUT_KEY_LEFT)
+        arrows[0] = false;
+    if (key == GLUT_KEY_RIGHT)
+        arrows[1] = false;
 }
 
 void mouse_function(int button, int state, int x, int y)
@@ -161,7 +180,7 @@ void mouse_function(int button, int state, int x, int y)
     bool drawing_mode = simulation_is_paused();
     
     // Release a particle
-    if (state == GLUT_UP && !drawing_mode)
+    if (state == GLUT_UP && !drawing_mode && particles.exists(active_particle_id))
     {
         // Zero its acceleration
         particles[active_particle_id].external_acceleration_ = Vector2d(0.0, 0.0);
@@ -254,6 +273,7 @@ void mouse_passive_function(int x, int y)
     double y_px = -y  + window_height / 2.0;
     double x_metres = px_to_m(x_px - world_centre.x); // In the worlds coordinates
     double y_metres = px_to_m(y_px - world_centre.y);
+    Vector2d pos_gl = m_to_gl_coords(Vector2d(x_metres, y_metres));
     
     // Remember mouse position
     mouse_pos = Vector2d(x_metres, y_metres);
@@ -262,7 +282,7 @@ void mouse_passive_function(int x, int y)
     bool button_hit = false;
     for (int i = 0; i < buttons_number && button_hit == false; i++)
     {
-        if (buttons[i].is_hit(x_px, y_px))
+        if (buttons[i].is_hit(pos_gl.x, pos_gl.y))
         {
             buttons[i].highlighted_ = true;
             button_hit = true;
@@ -284,11 +304,12 @@ void mouse_passive_function(int x, int y)
         }
     }
     
-    // If it's not snapped yet, snap to the grid (only in drawing mode)
+    // If it's not snapped yet, snap to the grid (only in the drawing mode)
     if (!snapped && snap && simulation_is_paused())
     {
-        double closest_x = round(x_metres);
-        double closest_y = round(y_metres);
+        double grid_dist_m = grid_dist_px / scale;
+        double closest_x = round(x_metres / grid_dist_m) * grid_dist_m;
+        double closest_y = round(y_metres / grid_dist_m) * grid_dist_m;
         
         if (in_range_m(closest_x, x_metres) && in_range_m(closest_y, y_metres))
         {
@@ -320,30 +341,14 @@ void mouse_drag_function(int x, int y)
     {
         if (particles.exists(active_particle_id))
         {
+            // Particle is fixed
             if (particles[active_particle_id].fixed_)
                 particles[active_particle_id].position_ = mouse_pos;
+            // Particle is not fixed
             else
                 particles[active_particle_id].external_acceleration_ = dragging_force * m_to_gl(mouse_pos - particles[active_particle_id].position_);
         }
     }
-    //double x_metres = px_to_m(x_px - world_centre.x);
-    //double y_metres = px_to_m(y_px - world_centre.y);
-    
-    /*if (selected_particle_id != -1)
-     {
-     Particle* p = &particles[selected_particle_id];
-     if (p->fixed_)
-     {
-     p->position_ = Vector2d(x_metres, y_metres);
-     p->prev_position_ = p->position_;
-     }
-     else
-     {
-     Vector2d p_gl_pos = world_to_gl_coords(p->position_);
-     Vector2d mouse_gl_pos = world_to_gl_coords(Vector2d(x_metres, y_metres));
-     p->external_acceleration_ = 100 * Vector2d(mouse_gl_pos.x - p_gl_pos.x, mouse_gl_pos.y - p_gl_pos.y);
-     }
-     }*/
 }
 
 void start_drawing_wall()
@@ -362,7 +367,7 @@ void pause_simulation()
 {
     simulation_paused = true;
     temp_labels.clear();
-    TempLabel::create("Editor mode - you can draw the structure", Vector2d(-110, window_height/2 - 20), 5000000); // 5s
+    TempLabel::create("Editor mode - you can draw the structure. Press \"p\" when you are done", 0, 1.0, 0, -25, 5000000); // 5s
 }
 
 void resume_simulation()
@@ -370,7 +375,7 @@ void resume_simulation()
     microsecond_time(t);
     simulation_paused = false;
     temp_labels.clear();
-    TempLabel::create("Simulation mode - you can drag the joints", Vector2d(-110, window_height/2 - 20), 5000000); // 5s
+    TempLabel::create("Simulation mode - you can drag the joints", 0, 1.0, 0, -25, 5000000); // 5s
 }
 
 bool simulation_is_paused()

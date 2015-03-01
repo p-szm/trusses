@@ -10,7 +10,7 @@
 #define __Trusses__wall__
 
 #include <iostream>
-#include "slot_map.h"
+#include "/Users/patrick/headers/slot_map.h"
 
 #include "math.h"
 

@@ -22,14 +22,14 @@ public:
     double y;
     Vector2d() {x = 0.0, y = 0.0;};
     Vector2d(double a, double b): x(a), y(b) {}
-    Vector2d operator+ (const Vector2d &v) { return Vector2d(x+v.x, y+v.y); }
-    Vector2d operator- (const Vector2d &v) { return Vector2d(x-v.x, y-v.y); }
+    Vector2d operator+ (const Vector2d &v) const { return Vector2d(x+v.x, y+v.y); }
+    Vector2d operator- (const Vector2d &v) const { return Vector2d(x-v.x, y-v.y); }
     friend Vector2d operator- (const Vector2d &v) { return Vector2d(-v.x, -v.y); }
     Vector2d& operator+= (const Vector2d &v) { x+=v.x; y+=v.y; return *this; }
     Vector2d& operator-= (const Vector2d &v) { x-=v.x; y-=v.y; return *this; }
-    double operator* (const Vector2d &v) { return (x*v.x + y*v.y); }
+    double operator* (const Vector2d &v) const { return (x*v.x + y*v.y); }
     friend Vector2d operator* (const double &a, const Vector2d &v) { return Vector2d(v.x*a, v.y*a); }
-    Vector2d operator/ (const double &a) { return Vector2d(x/a, y/a); }
+    Vector2d operator/ (const double &a) const { return Vector2d(x/a, y/a); }
     friend Vector2d operator/ (const double &a, const Vector2d &v) { return Vector2d(v.x/a, v.y/a); }
     double abs2() const { return (x*x + y*y); }
     double abs() const { return sqrt(this->abs2()); }

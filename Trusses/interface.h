@@ -13,8 +13,10 @@
 #include <vector>
 
 // * * * * * * * * * * //
-void key_function(unsigned char key, int x, int y);
-void special_key_function(int key, int x, int y);
+void key_down_function(unsigned char key, int x, int y);
+//void key_down_function(unsigned char key, int x, int y);
+void special_key_up(int key, int x, int y);
+void special_key_down(int key, int x, int y);
 void mouse_function(int button, int state, int x, int y);
 void mouse_passive_function(int x, int y);
 void mouse_drag_function(int x, int y);
@@ -26,6 +28,7 @@ bool simulation_is_paused();
 
 // * * * * * * * * * * //
 extern double scale;
+extern double grid_dist_px;
 extern Vector2d world_centre;
 extern bool snap;
 extern bool snapped;

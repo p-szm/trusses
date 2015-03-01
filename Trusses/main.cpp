@@ -17,9 +17,8 @@
 #include "temporary_label.h" // Temporary
 
 // TODO: Add actual strings, which don't have any tension below their minimum length
-// TODO: Implement blobs
 // TODO: There is some bug when removing particles, then saving and importing
-// TODO: Vlocities are wrong
+// TODO: Velocities are wrong
 // TODO: Important! Check strain signs
 // TODO: Mouse at the edge scrolls the world
 
@@ -42,11 +41,13 @@ int main(int argc, char * argv[])
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutMouseFunc(mouse_function);
-    glutKeyboardFunc(key_function);
+    glutKeyboardFunc(key_down_function);
+    //glutKeyboardUpFunc(key_up_function);
     glutIdleFunc(idle);
     glutPassiveMotionFunc(mouse_passive_function);
     glutMotionFunc(mouse_drag_function);
-    glutSpecialFunc(special_key_function);
+    glutSpecialFunc(special_key_up);
+    glutSpecialUpFunc(special_key_down);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -60,7 +61,7 @@ int main(int argc, char * argv[])
     
     create_buttons();
     
-    TempLabel::create("Editor mode - you can draw the structure", Vector2d(-110, window_height/2 - 20), 5000000); // 5s
+    TempLabel::create("Editor mode - you can draw the structure. Press \"p\" when you are done", 0, 1.0, 0, -25, 5000000); // 5s
     
     glEnable(GL_LINE_SMOOTH);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);

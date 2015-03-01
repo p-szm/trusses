@@ -9,7 +9,7 @@
 #ifndef __Trusses__bar__
 #define __Trusses__bar__
 
-#include "slot_map.h"
+#include "/Users/patrick/headers/slot_map.h"
 
 #include "math.h"
 

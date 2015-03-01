@@ -11,9 +11,9 @@
 
 SlotMap<TempLabel> temp_labels;
 
-int TempLabel::create(std::string str, Vector2d pos, double t)
+int TempLabel::create(std::string str, double pos_x, double pos_y, int off_x, int off_y, double t)
 {
-    TempLabel new_label(str, pos, t);
+    TempLabel new_label(str, pos_x, pos_y, off_x, off_y, t);
     int new_id = temp_labels.add(new_label);
     return new_id;
 }
