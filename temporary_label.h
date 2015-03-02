@@ -23,13 +23,15 @@ public:
     unsigned long long int time;
     int id_;
     float alpha();
+    bool centre;
     
-    static int create(std::string str, double pos_x, double pos_y, int off_x, int off_y, double t);
+    // Anchored to the middle
+    static int create(std::string str, double pos_x, double pos_y, int off_x, int off_y, double t, bool centre_l = true);
     static int destroy(int obj_id);
     static int update(int obj_id);
 private:
-    TempLabel(std::string str, double pos_x, double pos_y, int off_x, int off_y, double t)
-        {text = str; position = Vector2d(pos_x, pos_y); offset = Vector2d(off_x, off_y); max_time = t; time = 0;};
+    TempLabel(std::string str, double pos_x, double pos_y, int off_x, int off_y, double t, bool centre_l = true)
+        {text = str; position = Vector2d(pos_x, pos_y); offset = Vector2d(off_x, off_y); max_time = t; time = 0; centre = centre_l;};
 };
 
 extern SlotMap<TempLabel> temp_labels;

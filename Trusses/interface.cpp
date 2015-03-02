@@ -130,7 +130,7 @@ void key_down_function(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
-void special_key_up(int key, int x, int y)
+void special_key_down(int key, int x, int y)
 {
     // Remember which arrows were pressed
     if (key == GLUT_KEY_UP)
@@ -144,10 +144,12 @@ void special_key_up(int key, int x, int y)
     
     if (command_mode)
     {
-        if (!arrows[0] && !arrows[1] && arrows[3] && !arrows[4] && current_cmd < commands.size() - 1)
-            current_cmd++;
-        else if (!arrows[0] && !arrows[1] && !arrows[3] && arrows[4] && current_cmd > 0)
+        // If down arrow is pressed
+        if (!arrows[0] && !arrows[1] && !arrows[2] && arrows[3] && current_cmd > 0)
             current_cmd--;
+        // If up arrow is pressed
+        else if (!arrows[0] && !arrows[1] && arrows[2] && !arrows[3] && current_cmd < commands.size() - 1)
+            current_cmd++;
     }
     else
     {
@@ -162,7 +164,7 @@ void special_key_up(int key, int x, int y)
     }
 }
 
-void special_key_down(int key, int x, int y)
+void special_key_up(int key, int x, int y)
 {
     // Remove the arrow from the list of pressed arrows
     if (key == GLUT_KEY_UP)

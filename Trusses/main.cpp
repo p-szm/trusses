@@ -23,7 +23,7 @@
 // TODO: Mouse at the edge scrolls the world
 
 int main(int argc, char * argv[])
-{
+{    
     srand( (unsigned int) time(0) );
     
     // Initiallize GLUT
@@ -46,8 +46,8 @@ int main(int argc, char * argv[])
     glutIdleFunc(idle);
     glutPassiveMotionFunc(mouse_passive_function);
     glutMotionFunc(mouse_drag_function);
-    glutSpecialFunc(special_key_up);
-    glutSpecialUpFunc(special_key_down);
+    glutSpecialFunc(special_key_down);
+    glutSpecialUpFunc(special_key_up);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

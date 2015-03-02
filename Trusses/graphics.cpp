@@ -191,12 +191,10 @@ void draw_bar(const Bar& b)
         else if (strain < -1.0)
             strain = -1.0;
         
-        int multiplier = 20;
-        
         if (strain > 0.0)
-            glColor3f(1.0, 1.0 - strain * multiplier, 1.0 - strain * multiplier);
+            glColor3f(1.0, 1.0 - strain / MAX_STRAIN, 1.0 - strain / MAX_STRAIN);
         else
-            glColor3f(1.0 + strain * multiplier, 1.0, 1.0);
+            glColor3f(1.0 + strain / MAX_STRAIN, 1.0, 1.0);
     }
     // Color bars according to their temperature
     // TODO: Color it appropriately: black-red-yellow-white
@@ -453,14 +451,14 @@ void draw_command_line()
     glBegin(GL_QUADS);
     glVertex2f(px_to_gl_x(-window_width/2.0), px_to_gl_y(-window_height/2.0));
     glVertex2f(px_to_gl_x(window_width/2.0), px_to_gl_y(-window_height/2.0));
-    glVertex2f(px_to_gl_x(window_width/2.0), px_to_gl_y(-window_height/2.0 + 30));
-    glVertex2f(px_to_gl_x(-window_width/2.0), px_to_gl_y(-window_height/2.0 + 30));
+    glVertex2f(px_to_gl_x(window_width/2.0), px_to_gl_y(-window_height/2.0 + COMMAND_LINE_SIZE));
+    glVertex2f(px_to_gl_x(-window_width/2.0), px_to_gl_y(-window_height/2.0 + COMMAND_LINE_SIZE));
     glEnd();
     
     glColor3f(0.7, 0.7, 0.0);
     glBegin(GL_LINES);
-    glVertex2f(px_to_gl_x(window_width/2.0), px_to_gl_y(-window_height/2.0 + 30));
-    glVertex2f(px_to_gl_x(-window_width/2.0), px_to_gl_y(-window_height/2.0 + 30));
+    glVertex2f(px_to_gl_x(window_width/2.0), px_to_gl_y(-window_height/2.0 + COMMAND_LINE_SIZE));
+    glVertex2f(px_to_gl_x(-window_width/2.0), px_to_gl_y(-window_height/2.0 + COMMAND_LINE_SIZE));
     glEnd();
     
     glColor3f(1.0, 1.0, 1.0);
@@ -731,9 +729,14 @@ void display()
     for (labels_it = temp_labels.begin(); labels_it != temp_labels.end(); labels_it++)
     {
         glColor4f(1.0, 1.0, 1.0, labels_it->alpha());
-        glut_print(labels_it->position.x + px_to_gl_x(labels_it->offset.x - labels_it->text.size() * 2.8),
+        if (labels_it->centre)
+            glut_print(labels_it->position.x + px_to_gl_x(labels_it->offset.x - labels_it->text.size() * 2.8),
                    labels_it->position.y + px_to_gl_y(labels_it->offset.y - 6),
                    labels_it->text, GL);
+        else
+            glut_print(labels_it->position.x + px_to_gl_x(labels_it->offset.x),
+                       labels_it->position.y + px_to_gl_y(labels_it->offset.y),
+                       labels_it->text, GL);
     }
 
     // Draw buttons

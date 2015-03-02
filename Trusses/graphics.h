@@ -10,6 +10,8 @@
 #define __Trusses__graphics__
 #include "math.h"
 
+#define COMMAND_LINE_SIZE 30
+
 // * * * * * * * * * * //
 enum bars_color_mode_t {STRAIN_C = 0, TEMP_C};
 

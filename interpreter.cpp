@@ -18,10 +18,11 @@
 #include "graphics.h"
 #include "interface.h"
 #include "save.h"
+#include "temporary_label.h"
 
 // * * * * * * * * * * //
 std::vector<std::string> commands;
-unsigned int current_cmd = 0;
+unsigned int current_cmd = 0; // 0 means current command
 
 // * * * * * * * * * * //
 void extract_words(std::string str, std::vector<std::string> & target_v);
@@ -85,50 +86,42 @@ void interpret_command(std::string cmd)
     
     if (first_word == "ids")
     {
-        if (words_number == 1)
-            std::cout << "ids=" << ids << std::endl;
-        else if (words_number == 2 && words[1] == "on")
+        if (words_number == 2 && words[1] == "on")
             ids = true;
         else if (words_number == 2 && words[1] == "off")
             ids = false;
         else
-            std::cout << "Usage: ids <on/off>" << std::endl;
+            TempLabel::create("Usage: ids <on/off>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "gravity")
     {
-        if (words_number == 1)
-            std::cout << "gravity=" << ids << std::endl;
-        else if (words_number == 2 && words[1] == "on")
+        if (words_number == 2 && words[1] == "on")
             gravity = true;
         else if (words_number == 2 && words[1] == "off")
             gravity = false;
         else
-            std::cout << "Usage: gravity <on/off>" << std::endl;
+            TempLabel::create("Usage: gravity <on/off>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "snap")
     {
-        if (words_number == 1)
-            std::cout << "snap=" << snap << std::endl;
-        else if (words_number == 2 && words[1] == "on")
+        if (words_number == 2 && words[1] == "on")
             snap = true;
         else if (words_number == 2 && words[1] == "off")
             snap = false;
         else
-            std::cout << "Usage: snap <on/off>" << std::endl;
+            TempLabel::create("Usage: snap <on/off>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "coords")
     {
-        if (words_number == 1)
-            std::cout << "coords=" << coords << std::endl;
-        else if (words_number == 2 && words[1] == "on")
+        if (words_number == 2 && words[1] == "on")
             coords = true;
         else if (words_number == 2 && words[1] == "off")
             coords = false;
         else
-            std::cout << "Usage: coords <on/off>" << std::endl;
+            TempLabel::create("Usage: coords <on/off>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "load")
@@ -144,10 +137,10 @@ void interpret_command(std::string cmd)
             
             // Try to load the file
             if (load(filepath))
-                std::cout << "Could not load " << filepath << std::endl;
+                TempLabel::create("Could not load" + filepath, -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
         }
         else
-            std::cout << "Usage: load <file>" << std::endl;
+            TempLabel::create("Usage: load <file>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "save")
@@ -165,9 +158,7 @@ void interpret_command(std::string cmd)
             save(path);
         }
         else
-        {
-            std::cout << "Usage: save (filename)" << std::endl;
-        }
+            TempLabel::create("Usage: save <filename>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
     
     // Reset
@@ -176,7 +167,7 @@ void interpret_command(std::string cmd)
         if (words_number == 1)
             reset_everything();
         else
-            std::cout << "Usage: reset" << std::endl;
+            TempLabel::create("Usage: reset", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "zoom")
@@ -186,7 +177,7 @@ void interpret_command(std::string cmd)
         else if (words_number == 2 && words[1] == "out")
             scale /= 1.2;
         else
-            std::cout << "Usage: zoom <in/out>" << std::endl;
+            TempLabel::create("Usage: zoom <in/out>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
     
     // TODO: Maybe scale should be just an int?
@@ -198,12 +189,12 @@ void interpret_command(std::string cmd)
         {
             double new_scale = get_number<double>(words[1]);
             if (new_scale <= 0.0)
-                std::cout << "Scale has to be positive!" << std::endl;
+                TempLabel::create("Scale has to be positive", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
             else
                 scale = new_scale;
         }
         else
-            std::cout << "Usage: scale <double>" << std::endl;
+            TempLabel::create("Usage: scale <double>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "wall")
@@ -225,7 +216,7 @@ void interpret_command(std::string cmd)
         else if (words_number == 3 && is_number(words[1]) && is_number(words[2]))
             Particle::create(get_number<double>(words[1]), get_number<double>(words[2]), false);
         else
-            std::cout << "Usage: particle <double> <double>" << std::endl;
+            TempLabel::create("Usage: particle <double> <double>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
     
     // TODO: accept only positive integers
@@ -271,7 +262,7 @@ void interpret_command(std::string cmd)
             }
         }
         else
-            std::cout << "Usage: bar <int> <int>" << std::endl;
+            TempLabel::create("Usage: bar <int> <int>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "fix")
@@ -405,5 +396,5 @@ void interpret_command(std::string cmd)
     
     // The command was not recognised
     else
-        std::cout << "Command not found" << std::endl;
+        TempLabel::create("Command not found", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false); // 5s
 }
