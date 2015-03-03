@@ -21,8 +21,8 @@ void reshape(int width, int height);
 void idle();
 void set_bars_color_mode(bars_color_mode_t mode);
 inline Vector2d px_to_gl(const Vector2d& v);
-inline double px_to_gl_x(double d);
-inline double px_to_gl_y(double d);
+double px_to_gl_x(double d);
+double px_to_gl_y(double d);
 
 // * * * * * * * * * * //
 extern int window_width;

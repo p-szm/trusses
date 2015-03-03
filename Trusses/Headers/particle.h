@@ -11,8 +11,8 @@
 
 #include <vector>
 #include "math.h"
-#include "/Users/patrick/headers/slot_map.h"
-#include "/Users/patrick/headers/fixed_size.h"
+#include "slot_map.h"
+#include "fixed_size.h"
 
 enum OSCIL_T {X, Y, CW, ACW};
 

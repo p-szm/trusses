@@ -9,18 +9,6 @@
 /* Begin PBXBuildFile section */
 		CD74D2181A52F51A000B6F31 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2171A52F51A000B6F31 /* OpenGL.framework */; };
 		CD74D21A1A52F520000B6F31 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2191A52F520000B6F31 /* GLUT.framework */; };
-		CD8A12031A7D4D3400DBFC4D /* temporary_label.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD8A12011A7D4D3400DBFC4D /* temporary_label.cpp */; };
-		CD8AE56D1A6F0D9100E3BEA0 /* interpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD8AE56B1A6F0D9100E3BEA0 /* interpreter.cpp */; };
-		CDD4AA981A5AB6EF00E2DC67 /* bar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA8E1A5AB6EF00E2DC67 /* bar.cpp */; };
-		CDD4AA991A5AB6EF00E2DC67 /* button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA8F1A5AB6EF00E2DC67 /* button.cpp */; };
-		CDD4AA9A1A5AB6EF00E2DC67 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA901A5AB6EF00E2DC67 /* graphics.cpp */; };
-		CDD4AA9B1A5AB6EF00E2DC67 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA911A5AB6EF00E2DC67 /* interface.cpp */; };
-		CDD4AA9C1A5AB6EF00E2DC67 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA921A5AB6EF00E2DC67 /* main.cpp */; };
-		CDD4AA9D1A5AB6EF00E2DC67 /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA931A5AB6EF00E2DC67 /* math.cpp */; };
-		CDD4AA9E1A5AB6EF00E2DC67 /* particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA941A5AB6EF00E2DC67 /* particle.cpp */; };
-		CDD4AA9F1A5AB6EF00E2DC67 /* physics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA951A5AB6EF00E2DC67 /* physics.cpp */; };
-		CDD4AAA01A5AB6EF00E2DC67 /* save.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA961A5AB6EF00E2DC67 /* save.cpp */; };
-		CDD4AAA11A5AB6EF00E2DC67 /* wall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD4AA971A5AB6EF00E2DC67 /* wall.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,29 +27,9 @@
 		CD74D20D1A5214CC000B6F31 /* Trusses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Trusses; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD74D2171A52F51A000B6F31 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		CD74D2191A52F520000B6F31 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
-		CD8A12011A7D4D3400DBFC4D /* temporary_label.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = temporary_label.cpp; sourceTree = SOURCE_ROOT; };
-		CD8A12021A7D4D3400DBFC4D /* temporary_label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = temporary_label.h; sourceTree = SOURCE_ROOT; };
-		CD8AE56B1A6F0D9100E3BEA0 /* interpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interpreter.cpp; sourceTree = SOURCE_ROOT; };
-		CD8AE56C1A6F0D9100E3BEA0 /* interpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interpreter.h; sourceTree = SOURCE_ROOT; };
-		CDD4AA851A5AB6DC00E2DC67 /* bar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bar.h; path = Trusses/bar.h; sourceTree = SOURCE_ROOT; };
-		CDD4AA861A5AB6DC00E2DC67 /* button.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = button.h; path = Trusses/button.h; sourceTree = SOURCE_ROOT; };
-		CDD4AA871A5AB6DC00E2DC67 /* graphics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = graphics.h; path = Trusses/graphics.h; sourceTree = SOURCE_ROOT; };
-		CDD4AA881A5AB6DC00E2DC67 /* interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = interface.h; path = Trusses/interface.h; sourceTree = SOURCE_ROOT; };
-		CDD4AA891A5AB6DC00E2DC67 /* math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = math.h; path = Trusses/math.h; sourceTree = SOURCE_ROOT; };
-		CDD4AA8A1A5AB6DC00E2DC67 /* particle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = particle.h; path = Trusses/particle.h; sourceTree = SOURCE_ROOT; };
-		CDD4AA8B1A5AB6DC00E2DC67 /* physics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = physics.h; path = Trusses/physics.h; sourceTree = SOURCE_ROOT; };
-		CDD4AA8C1A5AB6DC00E2DC67 /* save.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = save.h; path = Trusses/save.h; sourceTree = SOURCE_ROOT; };
-		CDD4AA8D1A5AB6DC00E2DC67 /* wall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = wall.h; path = Trusses/wall.h; sourceTree = SOURCE_ROOT; };
-		CDD4AA8E1A5AB6EF00E2DC67 /* bar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bar.cpp; path = Trusses/bar.cpp; sourceTree = SOURCE_ROOT; };
-		CDD4AA8F1A5AB6EF00E2DC67 /* button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = button.cpp; path = Trusses/button.cpp; sourceTree = SOURCE_ROOT; };
-		CDD4AA901A5AB6EF00E2DC67 /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = graphics.cpp; path = Trusses/graphics.cpp; sourceTree = SOURCE_ROOT; };
-		CDD4AA911A5AB6EF00E2DC67 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interface.cpp; path = Trusses/interface.cpp; sourceTree = SOURCE_ROOT; };
-		CDD4AA921A5AB6EF00E2DC67 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = Trusses/main.cpp; sourceTree = SOURCE_ROOT; };
-		CDD4AA931A5AB6EF00E2DC67 /* math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = math.cpp; path = Trusses/math.cpp; sourceTree = SOURCE_ROOT; };
-		CDD4AA941A5AB6EF00E2DC67 /* particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = particle.cpp; path = Trusses/particle.cpp; sourceTree = SOURCE_ROOT; };
-		CDD4AA951A5AB6EF00E2DC67 /* physics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = physics.cpp; path = Trusses/physics.cpp; sourceTree = SOURCE_ROOT; };
-		CDD4AA961A5AB6EF00E2DC67 /* save.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = save.cpp; path = Trusses/save.cpp; sourceTree = SOURCE_ROOT; };
-		CDD4AA971A5AB6EF00E2DC67 /* wall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wall.cpp; path = Trusses/wall.cpp; sourceTree = SOURCE_ROOT; };
+		CDB830251AA62AFA0037122B /* External */ = {isa = PBXFileReference; lastKnownFileType = folder; name = External; path = Trusses/External; sourceTree = SOURCE_ROOT; };
+		CDB830261AA62AFA0037122B /* Headers */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Headers; path = Trusses/Headers; sourceTree = SOURCE_ROOT; };
+		CDB830271AA62AFA0037122B /* Source */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Source; path = Trusses/Source; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,48 +66,12 @@
 		CD74D20F1A5214CC000B6F31 /* Trusses */ = {
 			isa = PBXGroup;
 			children = (
-				CDD4AA611A56AE4B00E2DC67 /* Headers */,
-				CDD4AA621A56AE6400E2DC67 /* Source */,
+				CDB830251AA62AFA0037122B /* External */,
+				CDB830261AA62AFA0037122B /* Headers */,
+				CDB830271AA62AFA0037122B /* Source */,
 			);
 			name = Trusses;
 			path = Oscillator;
-			sourceTree = "<group>";
-		};
-		CDD4AA611A56AE4B00E2DC67 /* Headers */ = {
-			isa = PBXGroup;
-			children = (
-				CDD4AA851A5AB6DC00E2DC67 /* bar.h */,
-				CDD4AA861A5AB6DC00E2DC67 /* button.h */,
-				CDD4AA871A5AB6DC00E2DC67 /* graphics.h */,
-				CDD4AA881A5AB6DC00E2DC67 /* interface.h */,
-				CD8AE56C1A6F0D9100E3BEA0 /* interpreter.h */,
-				CDD4AA891A5AB6DC00E2DC67 /* math.h */,
-				CDD4AA8A1A5AB6DC00E2DC67 /* particle.h */,
-				CDD4AA8B1A5AB6DC00E2DC67 /* physics.h */,
-				CDD4AA8C1A5AB6DC00E2DC67 /* save.h */,
-				CD8A12021A7D4D3400DBFC4D /* temporary_label.h */,
-				CDD4AA8D1A5AB6DC00E2DC67 /* wall.h */,
-			);
-			name = Headers;
-			sourceTree = "<group>";
-		};
-		CDD4AA621A56AE6400E2DC67 /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				CDD4AA8E1A5AB6EF00E2DC67 /* bar.cpp */,
-				CDD4AA8F1A5AB6EF00E2DC67 /* button.cpp */,
-				CDD4AA901A5AB6EF00E2DC67 /* graphics.cpp */,
-				CDD4AA911A5AB6EF00E2DC67 /* interface.cpp */,
-				CD8AE56B1A6F0D9100E3BEA0 /* interpreter.cpp */,
-				CDD4AA921A5AB6EF00E2DC67 /* main.cpp */,
-				CDD4AA931A5AB6EF00E2DC67 /* math.cpp */,
-				CDD4AA941A5AB6EF00E2DC67 /* particle.cpp */,
-				CDD4AA951A5AB6EF00E2DC67 /* physics.cpp */,
-				CDD4AA961A5AB6EF00E2DC67 /* save.cpp */,
-				CD8A12011A7D4D3400DBFC4D /* temporary_label.cpp */,
-				CDD4AA971A5AB6EF00E2DC67 /* wall.cpp */,
-			);
-			name = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -198,18 +130,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CDD4AA981A5AB6EF00E2DC67 /* bar.cpp in Sources */,
-				CDD4AA9E1A5AB6EF00E2DC67 /* particle.cpp in Sources */,
-				CDD4AAA01A5AB6EF00E2DC67 /* save.cpp in Sources */,
-				CDD4AAA11A5AB6EF00E2DC67 /* wall.cpp in Sources */,
-				CDD4AA991A5AB6EF00E2DC67 /* button.cpp in Sources */,
-				CDD4AA9A1A5AB6EF00E2DC67 /* graphics.cpp in Sources */,
-				CD8A12031A7D4D3400DBFC4D /* temporary_label.cpp in Sources */,
-				CDD4AA9C1A5AB6EF00E2DC67 /* main.cpp in Sources */,
-				CD8AE56D1A6F0D9100E3BEA0 /* interpreter.cpp in Sources */,
-				CDD4AA9B1A5AB6EF00E2DC67 /* interface.cpp in Sources */,
-				CDD4AA9D1A5AB6EF00E2DC67 /* math.cpp in Sources */,
-				CDD4AA9F1A5AB6EF00E2DC67 /* physics.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

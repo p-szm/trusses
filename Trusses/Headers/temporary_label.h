@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include "math.h"
-#include "/Users/patrick/headers/slot_map.h"
+#include "slot_map.h"
 
 class TempLabel
 {
