@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD5982C91AA6459A0011526F /* button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD5982BE1AA6459A0011526F /* button.cpp */; };
+		CD5982CA1AA6459A0011526F /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD5982BF1AA6459A0011526F /* graphics.cpp */; };
+		CD5982CB1AA6459A0011526F /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD5982C01AA6459A0011526F /* interface.cpp */; };
+		CD5982CC1AA6459A0011526F /* interpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD5982C11AA6459A0011526F /* interpreter.cpp */; };
+		CD5982CD1AA6459A0011526F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD5982C21AA6459A0011526F /* main.cpp */; };
+		CD5982CE1AA6459A0011526F /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD5982C31AA6459A0011526F /* math.cpp */; };
+		CD5982CF1AA6459A0011526F /* particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD5982C41AA6459A0011526F /* particle.cpp */; };
+		CD5982D01AA6459A0011526F /* physics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD5982C51AA6459A0011526F /* physics.cpp */; };
+		CD5982D11AA6459A0011526F /* save.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD5982C61AA6459A0011526F /* save.cpp */; };
+		CD5982D21AA6459A0011526F /* temporary_label.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD5982C71AA6459A0011526F /* temporary_label.cpp */; };
+		CD5982D31AA6459A0011526F /* wall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD5982C81AA6459A0011526F /* wall.cpp */; };
+		CD5982D51AA646430011526F /* bar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD5982D41AA646430011526F /* bar.cpp */; };
 		CD74D2181A52F51A000B6F31 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2171A52F51A000B6F31 /* OpenGL.framework */; };
 		CD74D21A1A52F520000B6F31 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2191A52F520000B6F31 /* GLUT.framework */; };
 /* End PBXBuildFile section */
@@ -24,12 +36,34 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CD5982AF1AA6459A0011526F /* fixed_size.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fixed_size.h; sourceTree = "<group>"; };
+		CD5982B01AA6459A0011526F /* slot_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slot_map.h; sourceTree = "<group>"; };
+		CD5982B21AA6459A0011526F /* bar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bar.h; sourceTree = "<group>"; };
+		CD5982B31AA6459A0011526F /* button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = button.h; sourceTree = "<group>"; };
+		CD5982B41AA6459A0011526F /* graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = graphics.h; sourceTree = "<group>"; };
+		CD5982B51AA6459A0011526F /* interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface.h; sourceTree = "<group>"; };
+		CD5982B61AA6459A0011526F /* interpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interpreter.h; sourceTree = "<group>"; };
+		CD5982B71AA6459A0011526F /* math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
+		CD5982B81AA6459A0011526F /* particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = particle.h; sourceTree = "<group>"; };
+		CD5982B91AA6459A0011526F /* physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = physics.h; sourceTree = "<group>"; };
+		CD5982BA1AA6459A0011526F /* save.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = save.h; sourceTree = "<group>"; };
+		CD5982BB1AA6459A0011526F /* temporary_label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = temporary_label.h; sourceTree = "<group>"; };
+		CD5982BC1AA6459A0011526F /* wall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wall.h; sourceTree = "<group>"; };
+		CD5982BE1AA6459A0011526F /* button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = button.cpp; sourceTree = "<group>"; };
+		CD5982BF1AA6459A0011526F /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graphics.cpp; sourceTree = "<group>"; };
+		CD5982C01AA6459A0011526F /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface.cpp; sourceTree = "<group>"; };
+		CD5982C11AA6459A0011526F /* interpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interpreter.cpp; sourceTree = "<group>"; };
+		CD5982C21AA6459A0011526F /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		CD5982C31AA6459A0011526F /* math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = math.cpp; sourceTree = "<group>"; };
+		CD5982C41AA6459A0011526F /* particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = particle.cpp; sourceTree = "<group>"; };
+		CD5982C51AA6459A0011526F /* physics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = physics.cpp; sourceTree = "<group>"; };
+		CD5982C61AA6459A0011526F /* save.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = save.cpp; sourceTree = "<group>"; };
+		CD5982C71AA6459A0011526F /* temporary_label.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = temporary_label.cpp; sourceTree = "<group>"; };
+		CD5982C81AA6459A0011526F /* wall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wall.cpp; sourceTree = "<group>"; };
+		CD5982D41AA646430011526F /* bar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bar.cpp; sourceTree = "<group>"; };
 		CD74D20D1A5214CC000B6F31 /* Trusses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Trusses; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD74D2171A52F51A000B6F31 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		CD74D2191A52F520000B6F31 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
-		CDB830251AA62AFA0037122B /* External */ = {isa = PBXFileReference; lastKnownFileType = folder; name = External; path = Trusses/External; sourceTree = SOURCE_ROOT; };
-		CDB830261AA62AFA0037122B /* Headers */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Headers; path = Trusses/Headers; sourceTree = SOURCE_ROOT; };
-		CDB830271AA62AFA0037122B /* Source */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Source; path = Trusses/Source; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,12 +79,61 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CD5982AE1AA6459A0011526F /* External */ = {
+			isa = PBXGroup;
+			children = (
+				CD5982AF1AA6459A0011526F /* fixed_size.h */,
+				CD5982B01AA6459A0011526F /* slot_map.h */,
+			);
+			name = External;
+			path = Trusses/External;
+			sourceTree = SOURCE_ROOT;
+		};
+		CD5982B11AA6459A0011526F /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				CD5982B21AA6459A0011526F /* bar.h */,
+				CD5982B31AA6459A0011526F /* button.h */,
+				CD5982B41AA6459A0011526F /* graphics.h */,
+				CD5982B51AA6459A0011526F /* interface.h */,
+				CD5982B61AA6459A0011526F /* interpreter.h */,
+				CD5982B71AA6459A0011526F /* math.h */,
+				CD5982B81AA6459A0011526F /* particle.h */,
+				CD5982B91AA6459A0011526F /* physics.h */,
+				CD5982BA1AA6459A0011526F /* save.h */,
+				CD5982BB1AA6459A0011526F /* temporary_label.h */,
+				CD5982BC1AA6459A0011526F /* wall.h */,
+			);
+			name = Headers;
+			path = Trusses/Headers;
+			sourceTree = SOURCE_ROOT;
+		};
+		CD5982BD1AA6459A0011526F /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				CD5982D41AA646430011526F /* bar.cpp */,
+				CD5982BE1AA6459A0011526F /* button.cpp */,
+				CD5982BF1AA6459A0011526F /* graphics.cpp */,
+				CD5982C01AA6459A0011526F /* interface.cpp */,
+				CD5982C11AA6459A0011526F /* interpreter.cpp */,
+				CD5982C21AA6459A0011526F /* main.cpp */,
+				CD5982C31AA6459A0011526F /* math.cpp */,
+				CD5982C41AA6459A0011526F /* particle.cpp */,
+				CD5982C51AA6459A0011526F /* physics.cpp */,
+				CD5982C61AA6459A0011526F /* save.cpp */,
+				CD5982C71AA6459A0011526F /* temporary_label.cpp */,
+				CD5982C81AA6459A0011526F /* wall.cpp */,
+			);
+			name = Source;
+			path = Trusses/Source;
+			sourceTree = SOURCE_ROOT;
+		};
 		CD74D2041A5214CC000B6F31 = {
 			isa = PBXGroup;
 			children = (
+				CD74D20F1A5214CC000B6F31 /* Trusses */,
 				CD74D2191A52F520000B6F31 /* GLUT.framework */,
 				CD74D2171A52F51A000B6F31 /* OpenGL.framework */,
-				CD74D20F1A5214CC000B6F31 /* Trusses */,
 				CD74D20E1A5214CC000B6F31 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -66,9 +149,9 @@
 		CD74D20F1A5214CC000B6F31 /* Trusses */ = {
 			isa = PBXGroup;
 			children = (
-				CDB830251AA62AFA0037122B /* External */,
-				CDB830261AA62AFA0037122B /* Headers */,
-				CDB830271AA62AFA0037122B /* Source */,
+				CD5982AE1AA6459A0011526F /* External */,
+				CD5982B11AA6459A0011526F /* Headers */,
+				CD5982BD1AA6459A0011526F /* Source */,
 			);
 			name = Trusses;
 			path = Oscillator;
@@ -130,6 +213,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD5982D31AA6459A0011526F /* wall.cpp in Sources */,
+				CD5982CC1AA6459A0011526F /* interpreter.cpp in Sources */,
+				CD5982CF1AA6459A0011526F /* particle.cpp in Sources */,
+				CD5982D21AA6459A0011526F /* temporary_label.cpp in Sources */,
+				CD5982D11AA6459A0011526F /* save.cpp in Sources */,
+				CD5982CA1AA6459A0011526F /* graphics.cpp in Sources */,
+				CD5982C91AA6459A0011526F /* button.cpp in Sources */,
+				CD5982CD1AA6459A0011526F /* main.cpp in Sources */,
+				CD5982CB1AA6459A0011526F /* interface.cpp in Sources */,
+				CD5982D51AA646430011526F /* bar.cpp in Sources */,
+				CD5982CE1AA6459A0011526F /* math.cpp in Sources */,
+				CD5982D01AA6459A0011526F /* physics.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
