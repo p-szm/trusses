@@ -27,6 +27,9 @@ void resume_simulation();
 bool simulation_is_paused();
 
 // * * * * * * * * * * //
+void register_callbacks();
+
+// * * * * * * * * * * //
 extern double scale;
 extern double grid_dist_px;
 extern Vector2d world_centre;

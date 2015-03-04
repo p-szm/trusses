@@ -792,3 +792,36 @@ void set_bars_color_mode(bars_color_mode_t mode)
 {
     bars_color_mode = mode;
 }
+
+// * * * * * * * * * * //
+void setup_graphics(int argc, char * argv[])
+{
+    // Initiallize GLUT
+    glutInit(&argc, argv);
+    
+    // Setup for the new window
+    glutInitWindowPosition(160, 80);
+    glutInitWindowSize(window_width, window_height);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
+    
+    // Create a window
+    glutCreateWindow("Trusses simulation");
+    
+    // Register callback functions
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+    
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    
+    glPointSize(5.0);
+    glLineWidth(1.0);
+    glClearColor(0.12, 0.12, 0.12, 1.0);
+    
+    glEnable(GL_LINE_SMOOTH);
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glEnable(GL_POINT_SMOOTH);
+    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}

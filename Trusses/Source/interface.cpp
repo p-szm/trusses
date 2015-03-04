@@ -23,7 +23,7 @@
 
 // * * * * * * * * * * //
 double scale = 50.0; // pixels/metre
-double grid_dist_px = 50.0; // In pixels
+double grid_dist_px = 30.0; // In pixels
 Vector2d world_centre(0.0, 0.0); // In pixels
 bool snap = true;
 bool snapped = false;
@@ -220,7 +220,7 @@ void mouse_function(int button, int state, int x, int y)
     }
     
     // Drawing mode
-    if (simulation_is_paused() && state == GLUT_DOWN)
+    if (simulation_is_paused() && state == GLUT_DOWN && glutGetModifiers() == 0)
     {
         if (drawing_wall)
         {
@@ -258,6 +258,13 @@ void mouse_function(int button, int state, int x, int y)
             Bar::create(selected_particles_ids[0], selected_particles_ids[1], 0.0, ROOM_TEMPERATURE);
             selected_particles_ids.clear();
         }
+    }
+    
+    // Shift
+    else if (simulation_is_paused() && state == GLUT_DOWN && glutGetModifiers() == GLUT_ACTIVE_SHIFT)
+    {
+        if (clicked_particle_id != -1)
+            Particle::destroy(clicked_particle_id);
     }
     
     // // A particle was clicked and can be dragged around by mouse
@@ -391,4 +398,17 @@ bool in_range_m(double d1, double d2)
     if (abs_d(d1 - d2) * scale < min_click_dist)
         return true;
     return false;
+}
+
+// * * * * * * * * * * //
+void register_callbacks()
+{
+    glutMouseFunc(mouse_function);
+    glutKeyboardFunc(key_down_function);
+    //glutKeyboardUpFunc(key_up_function);
+    glutIdleFunc(idle);
+    glutPassiveMotionFunc(mouse_passive_function);
+    glutMotionFunc(mouse_drag_function);
+    glutSpecialFunc(special_key_down);
+    glutSpecialUpFunc(special_key_up);
 }

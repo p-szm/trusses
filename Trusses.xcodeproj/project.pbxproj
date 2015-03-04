@@ -131,9 +131,9 @@
 		CD74D2041A5214CC000B6F31 = {
 			isa = PBXGroup;
 			children = (
-				CD74D20F1A5214CC000B6F31 /* Trusses */,
 				CD74D2191A52F520000B6F31 /* GLUT.framework */,
 				CD74D2171A52F51A000B6F31 /* OpenGL.framework */,
+				CD74D20F1A5214CC000B6F31 /* Trusses */,
 				CD74D20E1A5214CC000B6F31 /* Products */,
 			);
 			sourceTree = "<group>";

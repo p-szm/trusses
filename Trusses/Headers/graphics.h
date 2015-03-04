@@ -25,6 +25,9 @@ double px_to_gl_x(double d);
 double px_to_gl_y(double d);
 
 // * * * * * * * * * * //
+void setup_graphics(int argc, char * argv[]);
+
+// * * * * * * * * * * //
 extern int window_width;
 extern int window_height;
 extern bool ids;
