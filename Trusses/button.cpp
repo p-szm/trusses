@@ -13,7 +13,7 @@
 #include "physics.h"
 
 int buttons_number = 0;
-std::vector<Button> buttons {};
+std::vector<Button> buttons;
 
 Button::Button(double w, double h, double pos_x, double pos_y, int off_x, int off_y, void (*a)(void), std::string t)
 {

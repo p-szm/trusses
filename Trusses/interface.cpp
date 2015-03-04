@@ -8,8 +8,13 @@
 
 #include "interface.h"
 
+#ifdef __APPLE__
 #include <GLUT/glut.h>
 #include <OpenGL/gl.h>
+#else
+#include <GL/glut.h>
+#endif
+#include <cstdlib>
 
 #include "particle.h"
 #include "bar.h"

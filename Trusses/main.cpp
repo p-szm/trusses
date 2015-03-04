@@ -6,9 +6,13 @@
 //  Copyright (c) 2014 Patrick Szmucer. All rights reserved.
 //
 
-#include <iostream>
+#ifdef __APPLE__
 #include <GLUT/glut.h>
 #include <OpenGL/gl.h>
+#else
+#include <GL/glut.h>
+#endif
+#include <iostream>
 
 #include "graphics.h"
 #include "physics.h" // for time

@@ -84,7 +84,7 @@ int load(std::string filename)
     // But check the function read_numbers
     
     // Open the file
-    std::ifstream file(filename);
+    std::ifstream file(filename.c_str());
     
     // Check if the file was opened successfully
     if (!file.is_open())
@@ -151,7 +151,7 @@ int load(std::string filename)
 void save(std::string filename)
 {
     // Open the file
-    std::ofstream file(filename);
+    std::ofstream file(filename.c_str());
     
     // Print time
     file << date_str() << ' ' << time_str() << std::endl << std::endl;

@@ -32,7 +32,7 @@ public:
     Vector2d operator/ (const double &a) const { return Vector2d(x/a, y/a); }
     friend Vector2d operator/ (const double &a, const Vector2d &v) { return Vector2d(v.x/a, v.y/a); }
     double abs2() const { return (x*x + y*y); }
-    double abs() const { return sqrt(this->abs2()); }
+    double abs() const { return std::sqrt(this->abs2()); }
     Vector2d norm() const { double s(this->abs()); if (s==0) return *this; else return Vector2d(x/s, y/s); }
     friend std::ostream& operator << (std::ostream &out, const Vector2d &v) { out << v.x << ' ' << v.y; return out; }
 };
