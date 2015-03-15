@@ -98,12 +98,12 @@ void button_save_action(void)
 
 void button_scale_up_action(void)
 {
-    scale *= 1.1;
+    world.scale *= 1.1;
 }
 
 void button_scale_down_action(void)
 {
-    scale /= 1.1;
+    world.scale /= 1.1;
 }
 
 void button_draw_wall_action(void)
@@ -128,4 +128,19 @@ void create_buttons()
     buttons[minus_button_id].change_state_ = false;
     Button::create(60, 30, 1.0, 1.0, -50, -440, &button_draw_wall_action, "Wall");
     
+}
+
+void highlight_buttons(double x, double y)
+{
+    bool button_hit = false;
+    for (int i = 0; i < buttons_number && button_hit == false; i++)
+    {
+        if (buttons[i].is_hit(x, y))
+        {
+            buttons[i].highlighted_ = true;
+            button_hit = true;
+        }
+        else
+            buttons[i].highlighted_ = false;
+    }
 }

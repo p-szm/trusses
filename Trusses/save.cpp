@@ -83,6 +83,8 @@ int load(std::string filename)
     // --- Fixed
     // But check the function read_numbers
     
+    reset_everything();
+    
     // Open the file
     std::ifstream file(filename.c_str());
     

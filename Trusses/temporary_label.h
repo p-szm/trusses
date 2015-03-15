@@ -22,7 +22,7 @@ public:
     unsigned long long int max_time; // In microseconds
     unsigned long long int time;
     int id_;
-    float alpha();
+    float alpha() const;
     bool centre;
     
     // Anchored to the middle
@@ -33,6 +33,9 @@ private:
     TempLabel(std::string str, double pos_x, double pos_y, int off_x, int off_y, double t, bool centre_l = true)
         {text = str; position = Vector2d(pos_x, pos_y); offset = Vector2d(off_x, off_y); max_time = t; time = 0; centre = centre_l;};
 };
+
+// Update's labels and removes ones that expired
+void update_labels();
 
 extern SlotMap<TempLabel> temp_labels;
 

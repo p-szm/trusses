@@ -41,5 +41,6 @@ extern std::vector<Button> buttons;
 extern int buttons_number;
 
 void create_buttons();
+void highlight_buttons(double x, double y);
 
 #endif /* defined(__Trusses__button__) */

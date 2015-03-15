@@ -104,16 +104,6 @@ void interpret_command(std::string cmd)
             TempLabel::create("Usage: gravity <on/off>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
     
-    else if (first_word == "snap")
-    {
-        if (words_number == 2 && words[1] == "on")
-            snap = true;
-        else if (words_number == 2 && words[1] == "off")
-            snap = false;
-        else
-            TempLabel::create("Usage: snap <on/off>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
-    }
-    
     else if (first_word == "coords")
     {
         if (words_number == 2 && words[1] == "on")
@@ -173,9 +163,9 @@ void interpret_command(std::string cmd)
     else if (first_word == "zoom")
     {
         if (words_number == 2 && words[1] == "in")
-            scale *= 1.2;
+            world.scale *= 1.2;
         else if (words_number == 2 && words[1] == "out")
-            scale /= 1.2;
+            world.scale /= 1.2;
         else
             TempLabel::create("Usage: zoom <in/out>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
     }
@@ -184,14 +174,14 @@ void interpret_command(std::string cmd)
     else if (first_word == "scale")
     {
         if (words_number == 1)
-            std::cout << "scale=" << scale << std::endl;
+            std::cout << "scale=" << world.scale << std::endl;
         else if (words_number == 2 && is_number(words[1]))
         {
             double new_scale = get_number<double>(words[1]);
             if (new_scale <= 0.0)
                 TempLabel::create("Scale has to be positive", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
             else
-                scale = new_scale;
+                world.scale = new_scale;
         }
         else
             TempLabel::create("Usage: scale <double>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);

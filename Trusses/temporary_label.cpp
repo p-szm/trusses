@@ -37,10 +37,24 @@ int TempLabel::update(int obj_id)
     return 0;
 }
 
-float TempLabel::alpha()
+float TempLabel::alpha() const
 {
     float time_fraction = 1.0 * time / max_time;
     if (time_fraction > 0.7)
         return (1 - time_fraction) / 0.3;
     return 1.0;
+}
+
+void update_labels()
+{
+    // Update labels
+    std::vector<int> labels_to_remove;
+    SlotMap<TempLabel>::iterator labels_it;
+    for (labels_it = temp_labels.begin(); labels_it != temp_labels.end(); labels_it++)
+        if (TempLabel::update(labels_it->id_))
+            labels_to_remove.push_back(labels_it->id_);
+    
+    // Remove labels that expired
+    for (int i = 0; i < labels_to_remove.size(); i++)
+        TempLabel::destroy(labels_to_remove[i]);
 }

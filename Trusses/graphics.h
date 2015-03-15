@@ -16,9 +16,11 @@
 enum bars_color_mode_t {STRAIN_C = 0, TEMP_C};
 
 // * * * * * * * * * * //
-void display();
+void editor_display();
+void simulation_display();
 void reshape(int width, int height);
-void idle();
+void editor_idle();
+void simulation_idle();
 void set_bars_color_mode(bars_color_mode_t mode);
 inline Vector2d px_to_gl(const Vector2d& v);
 double px_to_gl_x(double d);
