@@ -39,7 +39,7 @@ int main(int argc, char * argv[])
     microsecond_time(t);
     delta_t = 0.02; // Start with something
     
-    create_buttons();
+    create_buttons_editor();
     TempLabel::create("Editor mode - you can draw the structure. Press \"p\" when you are done", 0, 1.0, 0, -25, 5000000); // 5s
     
     glutMainLoop();

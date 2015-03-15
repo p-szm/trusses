@@ -12,7 +12,6 @@
 #include "save.h"
 #include "physics.h"
 
-int buttons_number = 0;
 std::vector<Button> buttons;
 
 Button::Button(double w, double h, double pos_x, double pos_y, int off_x, int off_y, void (*a)(void), std::string t)
@@ -28,8 +27,7 @@ Button::Button(double w, double h, double pos_x, double pos_y, int off_x, int of
     active_ = false;
     change_state_ = true;
     
-    id_ = buttons_number;
-    buttons_number ++;
+    id_ = (int)buttons.size();
 }
 
 int Button::create(double w, double h, double pos_x, double pos_y, int off_x, int off_y, void (*a)(void), std::string t)
@@ -114,26 +112,39 @@ void button_draw_wall_action(void)
         stop_drawing_wall();
 }
 
-void create_buttons()
+void create_buttons_editor()
 {
-    Button::create(60, 30, 1.0, 1.0, -50, -40, &button_ids_action, "Ids");
-    Button::create(60, 30, 1.0, 1.0, -50, -90, &button_velocities_action, "Vels");
-    Button::create(60, 30, 1.0, 1.0, -50, -140, &button_lengths_action, "Lengths");
-    Button::create(60, 30, 1.0, 1.0, -50, -190, &button_rel_extensions_action, "Rel ext");
-    Button::create(60, 30, 1.0, 1.0, -50, -240, &button_reset_action, "Reset");
-    Button::create(60, 30, 1.0, 1.0, -50, -290, &button_save_action, "Save");
-    int plus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -340, &button_scale_up_action, "     +");
-    buttons[plus_button_id].change_state_ = false;
-    int minus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -390, &button_scale_down_action, "     -");
-    buttons[minus_button_id].change_state_ = false;
-    Button::create(60, 30, 1.0, 1.0, -50, -440, &button_draw_wall_action, "Wall");
+    Button::create(60, 30, 1.0, 1.0, -50, -40, &button_save_action, "Save");
+    Button::create(60, 30, 1.0, 1.0, -50, -85, &button_reset_action, "Reset");
     
+    Button::create(60, 30, 1.0, 1.0, -50, -150, &button_lengths_action, "Lengths");
+    Button::create(60, 30, 1.0, 1.0, -50, -195, &button_rel_extensions_action, "Rel ext");
+    Button::create(60, 30, 1.0, 1.0, -50, -240, &button_draw_wall_action, "Wall");
+
+    int plus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -305, &button_scale_up_action, "     +");
+    buttons[plus_button_id].change_state_ = false;
+    int minus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -350, &button_scale_down_action, "     -");
+    buttons[minus_button_id].change_state_ = false;
+}
+
+void create_buttons_simulation()
+{
+    Button::create(60, 30, 1.0, 1.0, -50, -40, &button_save_action, "Save");
+    Button::create(60, 30, 1.0, 1.0, -50, -85, &button_reset_action, "Reset");
+    
+    Button::create(60, 30, 1.0, 1.0, -50, -150, &button_lengths_action, "Lengths");
+    Button::create(60, 30, 1.0, 1.0, -50, -195, &button_rel_extensions_action, "Rel ext");
+    
+    int plus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -305, &button_scale_up_action, "     +");
+    buttons[plus_button_id].change_state_ = false;
+    int minus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -350, &button_scale_down_action, "     -");
+    buttons[minus_button_id].change_state_ = false;
 }
 
 void highlight_buttons(double x, double y)
 {
     bool button_hit = false;
-    for (int i = 0; i < buttons_number && button_hit == false; i++)
+    for (int i = 0; i < buttons.size() && button_hit == false; i++)
     {
         if (buttons[i].is_hit(x, y))
         {

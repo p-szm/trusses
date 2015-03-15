@@ -204,7 +204,7 @@ void editor_mouse(int button, int state, int x, int y)
     
     // Check if any button was pressed
     int pressed_button_id = -1;
-    for (int i = 0; i < buttons_number && pressed_button_id == -1; i++)
+    for (int i = 0; i < buttons.size() && pressed_button_id == -1; i++)
         if (buttons[i].highlighted_)
         {
             buttons[i].execute_action();
@@ -273,7 +273,7 @@ void simulation_mouse(int button, int state, int x, int y)
     
     // Check if any button was pressed
     int pressed_button_id = -1;
-    for (int i = 0; i < buttons_number && pressed_button_id == -1; i++)
+    for (int i = 0; i < buttons.size() && pressed_button_id == -1; i++)
         if (buttons[i].highlighted_)
         {
             buttons[i].execute_action();
@@ -344,8 +344,12 @@ void pause_simulation()
     glutPassiveMotionFunc(editor_mouse_passive);
     
     simulation_paused = true;
+    
     temp_labels.clear();
     TempLabel::create("Editor mode - you can draw the structure. Press \"p\" when you are done", 0, 1.0, 0, -25, 5000000); // 5s
+    
+    buttons.clear();
+    create_buttons_editor();
     
     mouse.min_click_dist = 10;
 }
@@ -360,8 +364,12 @@ void resume_simulation()
     
     microsecond_time(t);
     simulation_paused = false;
+    
     temp_labels.clear();
     TempLabel::create("Simulation mode - you can drag the joints", 0, 1.0, 0, -25, 5000000); // 5s
+    
+    buttons.clear();
+    create_buttons_simulation();
     
     mouse.min_click_dist = 20;
 }

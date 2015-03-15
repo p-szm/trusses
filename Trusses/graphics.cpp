@@ -605,6 +605,18 @@ vec3 hsv_to_rgb(vec3 hsv) // H is in the range [0,360] degs
     return rgb;
 }
 
+void draw_point(Vector2d pos, coord_t mode)
+{
+    if (mode == WORLD)
+        pos = world_to_gl_coords(pos);
+    else if (mode == PX) // Not implemented
+        return;
+
+    glBegin(GL_POINTS);
+    glVertex2f(pos.x, pos.y);
+    glEnd();
+}
+
 // * * * * * * * * * * //
 void editor_display()
 {
@@ -647,6 +659,32 @@ void editor_display()
         draw_cross(mouse.pos_world, 10);
     }
     
+    // Will be snapped in metres
+    Vector2d snapped_pos = mouse.pos_world;
+    
+    // Snap to the closest particle
+    int closest_part_id = mouse.closest_particle();
+    if (closest_part_id != -1 && mouse.in_range(particles[closest_part_id].position_))
+    {
+        snapped_pos = particles[closest_part_id].position_;
+        glColor3f(0.8, 0.8, 0);
+        glPointSize(10);
+        draw_point(snapped_pos, WORLD);
+    }
+    
+    // Snap to the closest grid point
+    else
+    {
+        Vector2d closest_grid = mouse.closest_grid();
+        if (mouse.in_range(closest_grid))
+        {
+            snapped_pos = closest_grid;
+            glColor3f(0.8, 0.8, 0);
+            glPointSize(10);
+            draw_point(snapped_pos, WORLD);
+        }
+    }
+    
     // Draw dashed lines between selected particles and mouse
     // Draw the highlight for each selected particle
     if (selected_particles_ids.size() != 0)
@@ -658,13 +696,14 @@ void editor_display()
         glColor3f(1.0, 1.0, 0.0);
         
         glBegin(GL_LINES);
+        // For every selected particle (there could potentially be more in the future)
         for (int i = 0; i < selected_particles_ids.size(); i++)
         {
             if (particles.exists(selected_particles_ids[i])) // Make sure that this particle exists
             {
                 Vector2d selected_pos = particles[selected_particles_ids[i]].position_;
                 glVertex2f(world_to_gl_coords_x(selected_pos.x), world_to_gl_coords_y(selected_pos.y));
-                glVertex2f(mouse.pos_gl.x, mouse.pos_gl.y);
+                glVertex2f(world_to_gl_coords_x(snapped_pos.x), world_to_gl_coords_y(snapped_pos.y));
             }
         }
         glEnd();
@@ -688,36 +727,12 @@ void editor_display()
         glDisable(GL_LINE_STIPPLE);
     }
     
-    int closest_part_id = mouse.closest_particle();
-    if (closest_part_id != -1 && mouse.in_range(particles[closest_part_id].position_))
-    {
-        Vector2d closest_pos = world_to_gl_coords(particles[closest_part_id].position_);
-        glColor3f(0.8, 0.8, 0);
-        glPointSize(10);
-        glBegin(GL_POINTS);
-        glVertex2f(closest_pos.x, closest_pos.y);
-        glEnd();
-    }
-    else // Highlight the closest grid point
-    {
-        Vector2d closest_grid = mouse.closest_grid();
-        if (mouse.in_range(closest_grid))
-        {
-            Vector2d closest_grid_gl = world_to_gl_coords(closest_grid);
-            glColor3f(0.8, 0.8, 0);
-            glPointSize(10);
-            glBegin(GL_POINTS);
-            glVertex2f(closest_grid_gl.x, closest_grid_gl.y);
-            glEnd();
-        }
-    }
-    
     // Draw temporary labels
     for (int i = 0; i < temp_labels.size(); i++)
         draw_label(temp_labels[i]);
     
     // Draw buttons
-    for (int i = 0; i < buttons_number; i++)
+    for (int i = 0; i < buttons.size(); i++)
         draw_button(buttons[i]);
     
     //display_fps(delta_t);
@@ -801,7 +816,7 @@ void simulation_display()
         draw_label(temp_labels[i]);
     
     // Draw buttons
-    for (int i = 0; i < buttons_number; i++)
+    for (int i = 0; i < buttons.size(); i++)
         draw_button(buttons[i]);
     
     //display_fps(delta_t);

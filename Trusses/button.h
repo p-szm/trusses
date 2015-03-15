@@ -23,7 +23,8 @@ public:
     bool is_hit(double x, double y);// Checks if x and y are inside the button's limits. x and y are in gl coords
     void execute_action(); // Executes the action and changes the button's state
     friend void draw_button(const Button& rect); // It needs to access private width_ and height_ variables
-    friend void create_buttons(); // It needs to access the private change_state_ variable
+    friend void create_buttons_editor(); // It needs to access the private change_state_ variable
+    friend void create_buttons_simulation();
     
 private:
     void (*action)(void); // This will be executed when the button is clicked
@@ -38,9 +39,9 @@ private:
 };
 
 extern std::vector<Button> buttons;
-extern int buttons_number;
 
-void create_buttons();
+void create_buttons_editor();
+void create_buttons_simulation();
 void highlight_buttons(double x, double y);
 
 #endif /* defined(__Trusses__button__) */
