@@ -13,6 +13,7 @@
 #include <sstream>
 #include <vector>
 #include <cmath>
+#include <map>
 
 #include "particle.h"
 #include "bar.h"
@@ -69,14 +70,23 @@ std::string time_str()
     return s.str();
 }
 
+template <class T>
+T number(std::string str)
+{
+    // Convert the string to the stringstream
+    std::istringstream s(str);
+    
+    T n;
+    if (s >> n)
+        return n;
+    return 0;
+}
+
 // * * * * * * * * * * //
 int load(std::string filename)
 {
     // TODO
     // Check if the file is valid
-    
-    // Important:
-    // Sort out the problem with ids when loading
     
     // Important:
     // App freezes when loading walls
@@ -90,12 +100,14 @@ int load(std::string filename)
     
     // Check if the file was opened successfully
     if (!file.is_open())
-    {
-        std::cerr << "File " << filename << " could not be opened" << std::endl;
         return 1;
-    }
     
-    std::cout << "File " << filename << " successfully opened" << std::endl;
+    // This map is necessary as particles are saved by ids,
+    // and ids do not necessarily range uniformly from 0 to n-1.
+    // They might have gaps, for example 0,1,2,3,5,6,8,9.
+    // We therefore need to map these imported ids to 0,1,2,3,4,5,6,7
+    // or etc.
+    std::map<int, int> particles_map;
     
     // Read the file line by line
     std::string line;
@@ -108,7 +120,14 @@ int load(std::string filename)
             read_numbers(line, v);
             
             if (v.size() == 2)
+            {
+                // TODO: Some more error checking here
+                // Map the imported ids to the ids from 0...n-1
+                int p_id = number<int>(line.substr(1, line.find(" ")));
+                particles_map[p_id] = (int)particles_map.size();
+                
                 Particle::create(v[0], v[1], false);
+            }
         }
         
         // A fixed particle
@@ -118,7 +137,13 @@ int load(std::string filename)
             read_numbers(line, v);
             
             if (v.size() == 2)
+            {
+                // Map the imported ids to the ids from 0...n-1
+                int p_id = number<int>(line.substr(1, line.find(" ")));
+                particles_map[p_id] = (int)particles_map.size();
+             
                 Particle::create(v[0], v[1], true);
+            }
         }
         
         // A bar
@@ -128,9 +153,9 @@ int load(std::string filename)
             read_numbers(line, v);
             
             if (v.size() == 4)
-                Bar::create((int)v[0], (int)v[1], v[2], v[3]);
+                Bar::create(particles_map[v[0]], particles_map[v[1]], v[2], v[3]);
             else if (v.size() == 2)
-                Bar::create((int)v[0], (int)v[1], 0.0, ROOM_TEMPERATURE);
+                Bar::create(particles_map[v[0]], particles_map[v[1]], 0.0, ROOM_TEMPERATURE);
         }
         
         // A wall

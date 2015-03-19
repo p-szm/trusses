@@ -91,7 +91,7 @@ void interpret_command(std::string cmd)
         else if (words_number == 2 && words[1] == "off")
             ids = false;
         else
-            TempLabel::create("Usage: ids <on/off>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
+            TempLabel::create("Usage: ids <on/off>", -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "gravity")
@@ -101,7 +101,7 @@ void interpret_command(std::string cmd)
         else if (words_number == 2 && words[1] == "off")
             gravity = false;
         else
-            TempLabel::create("Usage: gravity <on/off>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
+            TempLabel::create("Usage: gravity <on/off>", -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "coords")
@@ -111,7 +111,7 @@ void interpret_command(std::string cmd)
         else if (words_number == 2 && words[1] == "off")
             coords = false;
         else
-            TempLabel::create("Usage: coords <on/off>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
+            TempLabel::create("Usage: coords <on/off>", -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "load")
@@ -127,10 +127,10 @@ void interpret_command(std::string cmd)
             
             // Try to load the file
             if (load(filepath))
-                TempLabel::create("Could not load" + filepath, -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
+                TempLabel::create("Could not load " + filepath, -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false);
         }
         else
-            TempLabel::create("Usage: load <file>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
+            TempLabel::create("Usage: load <file>", -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "save")
@@ -148,7 +148,7 @@ void interpret_command(std::string cmd)
             save(path);
         }
         else
-            TempLabel::create("Usage: save <filename>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
+            TempLabel::create("Usage: save <filename>", -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false);
     }
     
     // Reset
@@ -157,7 +157,7 @@ void interpret_command(std::string cmd)
         if (words_number == 1)
             reset_everything();
         else
-            TempLabel::create("Usage: reset", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
+            TempLabel::create("Usage: reset", -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "zoom")
@@ -167,7 +167,7 @@ void interpret_command(std::string cmd)
         else if (words_number == 2 && words[1] == "out")
             world.scale /= 1.2;
         else
-            TempLabel::create("Usage: zoom <in/out>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
+            TempLabel::create("Usage: zoom <in/out>", -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false);
     }
     
     // TODO: Maybe scale should be just an int?
@@ -179,12 +179,12 @@ void interpret_command(std::string cmd)
         {
             double new_scale = get_number<double>(words[1]);
             if (new_scale <= 0.0)
-                TempLabel::create("Scale has to be positive", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
+                TempLabel::create("Scale has to be positive", -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false);
             else
                 world.scale = new_scale;
         }
         else
-            TempLabel::create("Usage: scale <double>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
+            TempLabel::create("Usage: scale <double>", -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "wall")
@@ -206,7 +206,7 @@ void interpret_command(std::string cmd)
         else if (words_number == 3 && is_number(words[1]) && is_number(words[2]))
             Particle::create(get_number<double>(words[1]), get_number<double>(words[2]), false);
         else
-            TempLabel::create("Usage: particle <double> <double>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
+            TempLabel::create("Usage: particle <double> <double>", -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false);
     }
     
     // TODO: accept only positive integers
@@ -252,7 +252,7 @@ void interpret_command(std::string cmd)
             }
         }
         else
-            TempLabel::create("Usage: bar <int> <int>", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false);
+            TempLabel::create("Usage: bar <int> <int>", -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false);
     }
     
     else if (first_word == "fix")
@@ -386,5 +386,5 @@ void interpret_command(std::string cmd)
     
     // The command was not recognised
     else
-        TempLabel::create("Command not found", -1.0, -1.0, 20, 15, INFO_LABEL_TIME, false); // 5s
+        TempLabel::create("Command not found", -1.0, -1.0, 20, BOTTOM_MARGIN, INFO_LABEL_TIME, false); // 5s
 }

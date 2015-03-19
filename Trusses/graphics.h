@@ -11,6 +11,9 @@
 #include "math.h"
 
 #define COMMAND_LINE_SIZE 30
+#define BOTTOM_MARGIN 20
+#define TOP_MARGIN 25
+
 #define WORLD_VIEW -window_width/(2.0*world.scale) + world.centre.x, window_width/(2.0*world.scale) + world.centre.x, -window_height/(2.0*world.scale) + world.centre.y, window_height/(2.0*world.scale) + world.centre.y
 #define UI_VIEW -1, 1, -1, 1
 

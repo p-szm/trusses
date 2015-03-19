@@ -18,10 +18,8 @@
 #include "physics.h" // for time
 #include "button.h"
 #include "interface.h"
-#include "temporary_label.h" // Temporary
+#include "temporary_label.h"
 
-// TODO: Add actual strings, which don't have any tension below their minimum length
-// TODO: There is some bug when removing particles, then saving and importing
 // TODO: Velocities are wrong
 // TODO: Important! Check strain signs
 // TODO: Mouse at the edge scrolls the world
@@ -42,7 +40,7 @@ int main(int argc, char * argv[])
     delta_t = 0.02; // Start with something
     
     create_buttons_editor();
-    TempLabel::create("Editor mode - you can draw the structure. Press \"p\" when you are done", 0, 1.0, 0, -25, 5000000); // 5s
+    TempLabel::create("Editor mode - you can draw the structure. Press \"p\" when you are done", 0, 1.0, 0, -TOP_MARGIN, MODE_LABEL_TIME);
     
     glutMainLoop();
     

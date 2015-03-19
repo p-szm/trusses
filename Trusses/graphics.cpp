@@ -99,7 +99,7 @@ void display_time()
     std::ostringstream s;
     s.precision(1);
     s << "Time: " << std::fixed << simulation_time/1000000.0 << " s";
-    glut_print(0, -1 + px_to_ui_y(20), s.str());
+    glut_print(0, -1 + px_to_ui_y(BOTTOM_MARGIN), s.str());
 }
 
 void display_temperature(double temp)
@@ -112,7 +112,7 @@ void display_temperature(double temp)
     std::ostringstream s;
     s.precision(5);
     s << "T = " << int(temp) << " K";
-    glut_print(1 - px_to_ui_x(80), -1 + px_to_ui_y(20), s.str());
+    glut_print(1 - px_to_ui_x(80), -1 + px_to_ui_y(BOTTOM_MARGIN), s.str());
 }
 
 void draw_particle(Particle& p)
