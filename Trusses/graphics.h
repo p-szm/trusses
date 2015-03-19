@@ -11,6 +11,8 @@
 #include "math.h"
 
 #define COMMAND_LINE_SIZE 30
+#define WORLD_VIEW -window_width/(2.0*world.scale) + world.centre.x, window_width/(2.0*world.scale) + world.centre.x, -window_height/(2.0*world.scale) + world.centre.y, window_height/(2.0*world.scale) + world.centre.y
+#define UI_VIEW -1, 1, -1, 1
 
 // * * * * * * * * * * //
 enum bars_color_mode_t {STRAIN_C = 0, TEMP_C};
@@ -22,9 +24,6 @@ void reshape(int width, int height);
 void editor_idle();
 void simulation_idle();
 void set_bars_color_mode(bars_color_mode_t mode);
-inline Vector2d px_to_gl(const Vector2d& v);
-double px_to_gl_x(double d);
-double px_to_gl_y(double d);
 
 // * * * * * * * * * * //
 void setup_graphics(int argc, char * argv[]);

@@ -31,14 +31,14 @@ Mouse mouse;
 World world;
 
 double grid_dist_px = 30.0; // In pixels
-const double scroll_speed = 0.03; // gl/iteration
+const double scroll_speed = 0.3; // gl/iteration
 std::vector<int> selected_particles_ids;
 int active_particle_id = -1;
 bool drawing_wall = false;
 std::vector<Vector2d> wall_points;
 bool command_mode = false;
 bool full_screen = false;
-double dragging_force = 100.0;
+double dragging_force = 1000.0; // Newtons/px
 bool simulation_paused = true;
 std::vector<bool> arrows(4); // left, right, up, down
 
@@ -46,11 +46,11 @@ std::vector<bool> arrows(4); // left, right, up, down
 bool in_range_m(double d1, double d2);
 
 // * * * * * * * * * * //
+Vector2d px_to_m(const Vector2d& v) {return Vector2d(px_to_m(v.x), px_to_m(v.y));}
 double px_to_m(double d) {return d / world.scale;}
-Vector2d m_to_gl_coords(Vector2d v) {return Vector2d(2 * world.scale * (v.x - world.centre.x) / window_width, 2 * world.scale * (v.y - world.centre.y) / window_height);}
-Vector2d m_to_gl(Vector2d v) {return Vector2d(2 * v.x * world.scale / window_width, 2 * v.y * world.scale / window_height);}
-double gl_to_m_x(double g) {return window_width * g / (2 * world.scale);}
-double gl_to_m_y(double g) {return window_height * g / (2 * world.scale);}
+Vector2d px_to_ui(const Vector2d& v) {return Vector2d(px_to_ui_x(v.x), px_to_ui_y(v.y));}
+double px_to_ui_x(double d) {return d / (window_width/2.0);}
+double px_to_ui_y(double d) {return d / (window_height/2.0);}
 
 // * * * * * * * * * * //
 void key_down_function(unsigned char key, int x, int y)
@@ -160,13 +160,13 @@ void special_key_down(int key, int x, int y)
     else
     {
         if (arrows[0])
-            world.centre.x -= gl_to_m_x(scroll_speed);
+            world.centre.x -= scroll_speed;
         if (arrows[1])
-            world.centre.x += gl_to_m_x(scroll_speed);
+            world.centre.x += scroll_speed;
         if (arrows[2])
-            world.centre.y += gl_to_m_y(scroll_speed);
+            world.centre.y += scroll_speed;
         if (arrows[3])
-            world.centre.y -= gl_to_m_y(scroll_speed);
+            world.centre.y -= scroll_speed;
     }
 }
 
@@ -205,11 +205,13 @@ void editor_mouse(int button, int state, int x, int y)
     // Check if any button was pressed
     int pressed_button_id = -1;
     for (int i = 0; i < buttons.size() && pressed_button_id == -1; i++)
+    {
         if (buttons[i].highlighted_)
         {
             buttons[i].execute_action();
             return;
         }
+    }
     
     if (drawing_wall)
     {
@@ -274,14 +276,16 @@ void simulation_mouse(int button, int state, int x, int y)
     // Check if any button was pressed
     int pressed_button_id = -1;
     for (int i = 0; i < buttons.size() && pressed_button_id == -1; i++)
+    {
         if (buttons[i].highlighted_)
         {
             buttons[i].execute_action();
             return;
         }
+    }
     
     // A particle was clicked and can be dragged around by mouse
-    else if (state == GLUT_DOWN && particles.exists(clicked_particle_id))
+    if (pressed_button_id == -1 && state == GLUT_DOWN && particles.exists(clicked_particle_id))
         active_particle_id = clicked_particle_id;
     
     glutPostRedisplay();
@@ -290,17 +294,14 @@ void simulation_mouse(int button, int state, int x, int y)
 void editor_mouse_passive(int x, int y)
 {
     mouse.update_from_px(x, y);
-    
-    highlight_buttons(mouse.pos_gl.x, mouse.pos_gl.y);
+    highlight_buttons(mouse.pos_ui.x, mouse.pos_ui.y);
 }
 
 // When the mouse is just hovered
 void simulation_mouse_passive(int x, int y)
 {
     mouse.update_from_px(x, y);
-    
-    // Highlight the buttons
-    highlight_buttons(mouse.pos_gl.x, mouse.pos_gl.y);
+    highlight_buttons(mouse.pos_ui.x, mouse.pos_ui.y);
 }
 
 void editor_mouse_drag(int x, int y)
@@ -319,7 +320,8 @@ void simulation_mouse_drag(int x, int y)
             particles[active_particle_id].position_ = mouse.pos_world;
         // Particle is not fixed
         else
-            particles[active_particle_id].external_acceleration_ = dragging_force * m_to_gl(mouse.pos_world - particles[active_particle_id].position_);
+            particles[active_particle_id].external_acceleration_ =
+                dragging_force * (mouse.pos_world - particles[active_particle_id].position_) / world.scale;
     }
 }
 
@@ -404,7 +406,7 @@ void Mouse::update_from_px(int x, int y)
 {
     pos_screen = Vector2d(x - window_width / 2.0, -y  + window_height / 2.0);
     pos_world = Vector2d(px_to_m(pos_screen.x) + world.centre.x, px_to_m(pos_screen.y) + world.centre.y);
-    pos_gl = m_to_gl_coords(pos_world);
+    pos_ui = Vector2d(x * 2.0 / window_width - 1.0, 1.0 - y * 2.0 / window_height);
 }
 
 int Mouse::closest_particle()

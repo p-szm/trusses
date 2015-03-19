@@ -39,10 +39,10 @@ int Button::create(double w, double h, double pos_x, double pos_y, int off_x, in
 
 bool Button::is_hit(double x, double y)
 {
-    double left = position.x + px_to_gl_x(offset.x - width_ / 2.0);
-    double right = position.x + px_to_gl_x(offset.x + width_ / 2.0);
-    double top = position.y + px_to_gl_y(offset.y + height_ / 2.0);
-    double bottom = position.y + px_to_gl_y(offset.y - height_ / 2.0);
+    double left = position.x + px_to_ui_x(offset.x - width_ / 2.0);
+    double right = position.x + px_to_ui_x(offset.x + width_ / 2.0);
+    double top = position.y + px_to_ui_y(offset.y + height_ / 2.0);
+    double bottom = position.y + px_to_ui_y(offset.y - height_ / 2.0);
     
     if (x >= left && x <= right && y <= top && y >= bottom)
         return true;

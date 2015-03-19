@@ -29,10 +29,15 @@ void stop_drawing_wall();
 void pause_simulation();
 void resume_simulation();
 bool simulation_is_paused();
+void register_callbacks();
 
 // * * * * * * * * * * //
-void register_callbacks();
+// Some helper functions to convert between the coordinates
+Vector2d px_to_m(const Vector2d& v);
 double px_to_m(double d);
+Vector2d px_to_ui(const Vector2d& v);
+double px_to_ui_x(double d);
+double px_to_ui_y(double d);
 
 // * * * * * * * * * * //
 
@@ -44,12 +49,13 @@ public:
     Vector2d pos_world = Vector2d(std::numeric_limits<float>::max(),
                                   std::numeric_limits<float>::max());
     
-    // In gl coolrinates (-1.0, 1.0)
-    Vector2d pos_gl = Vector2d(2.0, 0.0);
-    
-    // In pixels, centred at top left
+    // In pixels, centred at the centre
     Vector2d pos_screen = Vector2d(std::numeric_limits<float>::max(),
                                    std::numeric_limits<float>::max());
+    
+    // In UI coords (-1, 1)
+    Vector2d pos_ui = Vector2d(std::numeric_limits<float>::max(),
+                               std::numeric_limits<float>::max());
     
     // Updates pos_world, pos_gl and pos_screen variables from
     // the position of mouse in pixels (starting at top left corner).
