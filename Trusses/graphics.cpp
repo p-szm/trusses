@@ -119,8 +119,9 @@ void draw_particle(Particle& p)
 {
     // Draw the trace if it is enabled
     glColor3f(0.8, 0.8, 0.0);
-    glPointSize(1);
-    glBegin(GL_POINTS);
+    glLineWidth(1);
+    
+    glBegin(GL_LINE_STRIP);
     for (int i = 0; i < p.trace.size(); i++)
     {
         Vector2d t = p.trace.get(i);

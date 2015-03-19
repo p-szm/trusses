@@ -1,9 +1,15 @@
 #include <vector>
+#include <stdexcept>
 
 template <typename T>
 class FixedSizeContainer
 {
 public:
+    T* begin();
+    const T* begin() const;
+    T* end();
+    const T* end() const;
+    
     void add(T obj);
     void print() const;
     const T& last_element() const;
@@ -11,7 +17,7 @@ public:
     const T& get(unsigned int i) const;
     void clear();
     FixedSizeContainer(unsigned int n): max_size(n) {current_pos = 0;}
-private:
+    //private:
     unsigned int max_size;
     std::vector<T> container;
     unsigned int current_pos;
@@ -42,6 +48,8 @@ void FixedSizeContainer<T>::print() const
 template <typename T>
 const T& FixedSizeContainer<T>::last_element() const
 {
+    if (size() == 0)
+        throw std::out_of_range("there are no elements in the container");
     if (current_pos == 0)
         return container.back();
     return container[current_pos - 1];
@@ -56,7 +64,18 @@ unsigned int FixedSizeContainer<T>::size() const
 template <typename T>
 const T& FixedSizeContainer<T>::get(unsigned int i) const
 {
-    return container.at(i);
+    if (i >= size())
+        throw std::out_of_range("index out of range");
+    
+    size_t index;
+    
+    // If the container was already wrapped
+    if (size() == max_size)
+        index = (current_pos + i) % max_size;
+    else
+        index = i;
+    
+    return container.at(index);
 }
 
 template <typename T>

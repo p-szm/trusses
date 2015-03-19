@@ -26,7 +26,6 @@
 // TODO: Important! Check strain signs
 // TODO: Mouse at the edge scrolls the world
 // TODO: Simplify the collision with walls
-// TODO: Change the trace so it is drawn in LINE_STRIP, not POINTS
 // TODO: Clean up key_down_function
 
 int main(int argc, char * argv[])
