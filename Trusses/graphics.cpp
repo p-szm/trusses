@@ -684,8 +684,9 @@ void editor_display()
     gluOrtho2D(UI_VIEW);
     
     // Draw temporary labels
-    for (int i = 0; i < temp_labels.size(); i++)
-        draw_label(temp_labels[i]);
+    SlotMap<TempLabel>::iterator labels_it;
+    for (labels_it = temp_labels.begin(); labels_it != temp_labels.end(); labels_it++)
+        draw_label(*labels_it);
     
     // Draw buttons
     for (int i = 0; i < buttons.size(); i++)
