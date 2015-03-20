@@ -10,20 +10,21 @@
 #include "particle.h"
 #include "physics.h"
 #include "graphics.h"
+#include "temporary_label.h"
 
 SlotMap<Bar> bars;
 
 int Bar::create(int id1, int id2, double e, double temp)
 {
-    if (id1 == id2)
+    if (!particles.exists(id1) || !particles.exists(id2))
     {
-        std::cout << "Canot create a bar connecting the same particle" << std::endl;
+        issue_label("One or more required particles don't exist", WARNING_LABEL_TIME);
         return -1;
     }
     
-    if (!particles.exists(id1) || !particles.exists(id2))
+    if (id1 == id2)
     {
-        std::cout << "One or more required particles don't exist" << std::endl;
+        issue_label("Cannot create a bar connecting the same particle", WARNING_LABEL_TIME);
         return -1;
     }
     
@@ -35,7 +36,7 @@ int Bar::create(int id1, int id2, double e, double temp)
         int bar_id = particles[id1].bars_connected[i];
         if ( bars[bar_id].p1_id == id2 || bars[bar_id].p2_id == id2)
         {
-            std::cout << "Bar between these particles already exists" << std::endl;
+            issue_label("Bar between these particles already exists", WARNING_LABEL_TIME);
             return -1;
         }
     }
@@ -83,7 +84,7 @@ int Bar::destroy(int obj_id)
 {
     if (!bars.exists(obj_id))
     {
-        std::cout << "This bar doesn't exist" << std::endl;
+        issue_label("This bar does not exist", WARNING_LABEL_TIME);
         return 1;
     }
     
@@ -179,7 +180,7 @@ void Bar::split(unsigned int n_parts)
 {
     if (n_parts < 2)
     {
-        std::cout << "Cannot divide bar in less than 2 parts" << std::endl;
+        issue_label("Cannot divide a bar into less than two parts", WARNING_LABEL_TIME);
         return;
     }
     

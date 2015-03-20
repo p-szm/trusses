@@ -8,6 +8,7 @@
 
 #include "temporary_label.h"
 #include "physics.h"
+#include "graphics.h"
 
 SlotMap<TempLabel> temp_labels;
 
@@ -57,4 +58,12 @@ void update_labels()
     // Remove labels that expired
     for (int i = 0; i < labels_to_remove.size(); i++)
         TempLabel::destroy(labels_to_remove[i]);
+}
+
+void issue_label(std::string text, unsigned long long int text_time)
+{
+    TempLabel::create(text, -1.0, -1.0, 20, BOTTOM_MARGIN, text_time, false);
+    #ifdef LOG
+    std::cout << text << std::endl;
+    #endif
 }

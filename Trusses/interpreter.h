@@ -12,8 +12,6 @@
 #include <iostream>
 #include <vector>
 
-#define INFO_LABEL_TIME 2000000
-
 // * * * * * * * * * * //
 void interpret_command(std::string cmd);
 

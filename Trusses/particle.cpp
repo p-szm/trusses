@@ -10,6 +10,7 @@
 #include "physics.h"
 #include "bar.h"
 #include "wall.h"
+#include "temporary_label.h"
 
 SlotMap<Particle> particles;
 
@@ -39,7 +40,7 @@ int Particle::destroy(int obj_id)
 {
     if (!particles.exists(obj_id))
     {
-        std::cout << "This particle doesn't exist" << std::endl;
+        issue_label("This particle does not exist", WARNING_LABEL_TIME);
         return 1;
     }
     

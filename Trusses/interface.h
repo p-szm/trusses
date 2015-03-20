@@ -13,8 +13,6 @@
 #include <vector>
 #include <limits>
 
-#define MODE_LABEL_TIME 5000000
-
 // * * * * * * * * * * //
 void key_down_function(unsigned char key, int x, int y);
 //void key_down_function(unsigned char key, int x, int y);

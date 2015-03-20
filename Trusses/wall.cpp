@@ -7,11 +7,18 @@
 //
 
 #include "wall.h"
+#include "temporary_label.h"
 
 SlotMap<Wall> walls;
 
 int Wall::create(Vector2d p1, Vector2d p2)
 {
+    if (abs_d(p1.x - p2.x) < SMALL_NUM || abs_d(p1.y - p2.y) < SMALL_NUM)
+    {
+        issue_label("Cannot create a wall", WARNING_LABEL_TIME);
+        return 1;
+    }
+    
     Wall new_wall(p1, p2);
     int new_id = walls.add(new_wall);
     

@@ -22,6 +22,7 @@
 #include "graphics.h"
 #include "interface.h"
 #include "interpreter.h"
+#include "temporary_label.h"
 
 // * * * * * * * * * * //
 template<typename T>
@@ -172,6 +173,8 @@ int load(std::string filename)
     // Close the file
     file.close();
     
+    issue_label("File loaded", INFO_LABEL_TIME);
+    
     return 0;
 }
 
@@ -211,6 +214,9 @@ void save(std::string filename)
     
     // Close the file
     file.close();
+    
+    std::string text = "Saved as " + filename;
+    issue_label(text, INFO_LABEL_TIME);
 }
 
 void reset_everything()

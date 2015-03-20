@@ -13,6 +13,10 @@
 #include "math.h"
 #include "slot_map.h"
 
+#define MODE_LABEL_TIME 5000000
+#define WARNING_LABEL_TIME 3000000
+#define INFO_LABEL_TIME 3000000
+
 class TempLabel
 {
 public:
@@ -36,6 +40,9 @@ private:
 
 // Update's labels and removes ones that expired
 void update_labels();
+
+// Creates a label with given text in the bottom left corner
+void issue_label(std::string text, unsigned long long int text_time);
 
 extern SlotMap<TempLabel> temp_labels;
 
