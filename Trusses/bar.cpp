@@ -148,12 +148,17 @@ void Bar::impose_constraint()
     float mult1 = (im1 / (im1 + im2)) * stiffness;
     float mult2 = stiffness - mult1;
     
-    // TODO: A connection between fixed and not fixed particle is probably not handled correctly.
-    // If one particle is fixed, the other should move two times further in the direction of the fixed particle.
-    if (!p1->fixed_)
+    // If one particle is fixed, the other should move two times farther in the direction of the fixed particle.
+    if (!p1->fixed_ && !p2->fixed_)
+    {
         p1->position_ += mult1 * ext * unit21();
-    if (!p2->fixed_)
         p2->position_ += mult2 * ext * unit12();
+    }
+    else if (!p1->fixed_) // and p2 is fixed
+        p1->position_ += 2 * mult1 * ext * unit21();
+    else if (!p2->fixed_) // and p1 is fixed
+        p2->position_ += 2 * mult2 * ext * unit12();
+    // else both are fixed
 }
 
 // Returns 1 if bar will be destroyed, 0 otherwise
