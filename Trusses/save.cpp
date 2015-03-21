@@ -162,7 +162,7 @@ int load(std::string filename)
         // A wall
         else if (line.substr(0, 1) == "w")
         {
-            std::vector<int> v;
+            std::vector<double> v;
             read_numbers(line, v);
             
             if (v.size() == 4)
