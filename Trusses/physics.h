@@ -14,6 +14,7 @@
 #define ROOM_TEMPERATURE 288
 #define ENERGY_ABSORPTION 0.5
 #define GRAVITY 9.81
+#define HORIZON 1000
 
 // * * * * * * * * * * //
 extern unsigned long long int simulation_time; // In us

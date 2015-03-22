@@ -365,7 +365,9 @@ void interpret_command(std::string cmd)
             if (n2 < 0)
                 n2 = 0;
             if (bars.exists(n1))
-                bars[n1].split(n2);
+                bars[n1].split(n1, n2);
+            else
+                issue_label("This bar does not exist", WARNING_LABEL_TIME);
         }
     }
     

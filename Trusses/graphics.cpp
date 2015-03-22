@@ -43,6 +43,8 @@ void draw_label(const TempLabel& l);
 void draw_rectangle(Vector2d p1, Vector2d p2, bool filled);
 void draw_circle(Vector2d centre, double r, unsigned int n_points);
 void draw_cross(Vector2d pos, int size_px);
+void draw_point(Vector2d pos);
+void draw_horizon();
 
 // * * * * * * * * * * //
 vec3 hsv_to_rgb(vec3 hsv);
@@ -561,6 +563,19 @@ void draw_point(Vector2d pos)
 {
     glBegin(GL_POINTS);
     glVertex2f(pos.x, pos.y);
+    glEnd();
+}
+
+// For debugging
+void draw_horizon()
+{
+    glColor3f(1.0, 1.0, 1.0);
+    glLineWidth(2);
+    glBegin(GL_LINE_LOOP);
+    glVertex2d(-HORIZON, -HORIZON);
+    glVertex2d(HORIZON, -HORIZON);
+    glVertex2d(HORIZON, HORIZON);
+    glVertex2d(-HORIZON, HORIZON);
     glEnd();
 }
 

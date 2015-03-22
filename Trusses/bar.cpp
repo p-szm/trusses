@@ -116,7 +116,7 @@ int Bar::destroy(int obj_id)
 double Bar::length() const
 {
     Vector2d pos1 = particles[p1_id].position_;
-    Vector2d pos2 =particles[p2_id].position_;
+    Vector2d pos2 = particles[p2_id].position_;
     double ans = (pos1 - pos2).abs();
     return ans;
 }
@@ -176,22 +176,29 @@ int Bar::update()
     return 0;
 }
 
-void Bar::split(unsigned int n_parts)
+void Bar::split(int bar_id, unsigned int n_parts)
 {
+    if (!bars.exists(bar_id))
+    {
+        issue_label("This bar does not exist", WARNING_LABEL_TIME);
+    }
+    
     if (n_parts < 2)
     {
         issue_label("Cannot divide a bar into less than two parts", WARNING_LABEL_TIME);
         return;
     }
     
-    int id_start = p1_id;
-    int id_end = p2_id;
+    Bar* this_bar = &bars[bar_id];
+    
+    int id_start = this_bar->p1_id;
+    int id_end = this_bar->p2_id;
     Vector2d pos_start = particles[id_start].position_;
     Vector2d pos_end = particles[id_end].position_;
     
-    double temp = temperature;
-    double new_r0 = r0 / n_parts;
-    double new_r_0K = r_0K / n_parts;
+    double temp = this_bar->temperature;
+    double new_r0 = this_bar->r0 / n_parts;
+    double new_r_0K = this_bar->r_0K / n_parts;
     Vector2d Dr = (pos_end - pos_start) / n_parts;
     
     // Create new particles
@@ -201,17 +208,17 @@ void Bar::split(unsigned int n_parts)
          new_ids.push_back( Particle::create(pos_start.x + i * Dr.x, pos_start.y + i * Dr.y, false) );
     }
     
+    // Remove the first bar
+    Bar::destroy(bar_id);
+    
     // Connect particles with bars
-    // Don't delete the first one, but instead modify it
+    // Don't delete the first one, but modify it instead
     for (int i = 0; i < new_ids.size() + 1; i++)
     {
         int new_bar_id;
         
         if (i == 0)
-        {
-            p2_id = new_ids[0];
-            new_bar_id = id_;
-        }
+            new_bar_id = Bar::create(id_start, new_ids[0], 0.0, ROOM_TEMPERATURE);
         else if (i == new_ids.size())
             new_bar_id = Bar::create(new_ids.back(), id_end, 0.0, ROOM_TEMPERATURE);
         else

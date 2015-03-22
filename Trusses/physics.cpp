@@ -15,7 +15,6 @@
 #include <sys/time.h>
 
 #define RELAX_ITER 30
-#define HORIZON 1000
 
 // * * * * * * * * * * //
 unsigned long long int simulation_time = 0;

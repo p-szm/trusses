@@ -46,11 +46,11 @@ int Particle::destroy(int obj_id)
     
     // Remove all the bars that this particle was connected to
     Particle* this_p = &particles[obj_id];
-    while (this_p->bars_connected.size() > 0)
+    size_t no_bars_connected = this_p->bars_connected.size();
+    for (int i = 0; i < no_bars_connected; i++)
         Bar::destroy(this_p->bars_connected.back());
     
     int result = particles.remove(obj_id);
-    
     return result;
 }
 

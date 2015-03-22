@@ -39,7 +39,9 @@ struct Bar
     int update();
     
     // Split the bar into n_parts bars of equal lengths
-    void split(unsigned int n_parts);
+    // static function, because this bar has to be removed
+    // in the process.
+    static void split(int bar_id, unsigned int n_parts);
     
     void set_strain(double e);
     double get_strain() const;
