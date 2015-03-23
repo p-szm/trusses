@@ -37,6 +37,9 @@ Tool::~Tool() {}
 
 void WallTool::mouse_click(int button, int state)
 {
+    if (state == GLUT_UP)
+        return;
+    
     Vector2d mouse_pos = mouse.snap();
     
     if (points.size() != 2)
