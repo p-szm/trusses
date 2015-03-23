@@ -1,6 +1,6 @@
 //
 //  main.cpp
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 30/12/2014.
 //  Copyright (c) 2014 Patrick Szmucer. All rights reserved.
@@ -25,6 +25,9 @@
 // TODO: Mouse at the edge scrolls the world
 // TODO: Simplify the collision with walls
 // TODO: Clean up key_down_function
+// TODO: Particles can penetrate the corners of the walls
+// TODO: Check every SlotMap container if it's not being
+// iterated over without using iterators
 
 int main(int argc, char * argv[])
 {

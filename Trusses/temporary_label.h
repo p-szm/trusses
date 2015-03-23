@@ -13,7 +13,8 @@
 #include "math.h"
 #include "slot_map.h"
 
-#define MODE_LABEL_TIME 5000000
+#define MODE_LABEL_TIME 4000000
+#define TOOL_LABEL_TIME 3000000
 #define WARNING_LABEL_TIME 3000000
 #define INFO_LABEL_TIME 3000000
 

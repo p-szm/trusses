@@ -1,6 +1,6 @@
 //
 //  save.cpp
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 01/01/2015.
 //  Copyright (c) 2015 Patrick Szmucer. All rights reserved.
@@ -224,11 +224,9 @@ void reset_everything()
     reset_walls();
     reset_bars();
     reset_particles();
-    selected_particles_ids.clear();
-    wall_points.clear();
-    active_particle_id = -1;
     pause_simulation();
     simulation_time = 0;
+    Tool::set(new BarsTool);
 }
 
 void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)

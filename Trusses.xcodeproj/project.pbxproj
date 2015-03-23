@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		CD74D2181A52F51A000B6F31 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2171A52F51A000B6F31 /* OpenGL.framework */; };
 		CD74D21A1A52F520000B6F31 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2191A52F520000B6F31 /* GLUT.framework */; };
+		CD8A92B61ABF2E5D00108900 /* tools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD8A92B41ABF2E5D00108900 /* tools.cpp */; };
+		CD8A92B91AC0851C00108900 /* mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD8A92B71AC0851C00108900 /* mouse.cpp */; };
 		CD9875211AA75D980035DCC2 /* bar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9875071AA75D980035DCC2 /* bar.cpp */; };
 		CD9875221AA75D980035DCC2 /* button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9875091AA75D980035DCC2 /* button.cpp */; };
 		CD9875231AA75D980035DCC2 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD98750C1AA75D980035DCC2 /* graphics.cpp */; };
@@ -39,6 +41,10 @@
 		CD74D20D1A5214CC000B6F31 /* Trusses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Trusses; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD74D2171A52F51A000B6F31 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		CD74D2191A52F520000B6F31 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		CD8A92B41ABF2E5D00108900 /* tools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tools.cpp; sourceTree = SOURCE_ROOT; };
+		CD8A92B51ABF2E5D00108900 /* tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tools.h; sourceTree = SOURCE_ROOT; };
+		CD8A92B71AC0851C00108900 /* mouse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mouse.cpp; sourceTree = SOURCE_ROOT; };
+		CD8A92B81AC0851C00108900 /* mouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mouse.h; sourceTree = SOURCE_ROOT; };
 		CD9875071AA75D980035DCC2 /* bar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bar.cpp; path = Trusses/bar.cpp; sourceTree = SOURCE_ROOT; };
 		CD9875081AA75D980035DCC2 /* bar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bar.h; path = Trusses/bar.h; sourceTree = SOURCE_ROOT; };
 		CD9875091AA75D980035DCC2 /* button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = button.cpp; path = Trusses/button.cpp; sourceTree = SOURCE_ROOT; };
@@ -109,6 +115,8 @@
 				CD98750D1AA75D980035DCC2 /* graphics.h */,
 				CD98750E1AA75D980035DCC2 /* interface.cpp */,
 				CD98750F1AA75D980035DCC2 /* interface.h */,
+				CD8A92B71AC0851C00108900 /* mouse.cpp */,
+				CD8A92B81AC0851C00108900 /* mouse.h */,
 				CD9875101AA75D980035DCC2 /* interpreter.cpp */,
 				CD9875111AA75D980035DCC2 /* interpreter.h */,
 				CD9875121AA75D980035DCC2 /* main.cpp */,
@@ -125,6 +133,8 @@
 				CD98751E1AA75D980035DCC2 /* temporary_label.h */,
 				CD98751F1AA75D980035DCC2 /* wall.cpp */,
 				CD9875201AA75D980035DCC2 /* wall.h */,
+				CD8A92B41ABF2E5D00108900 /* tools.cpp */,
+				CD8A92B51ABF2E5D00108900 /* tools.h */,
 			);
 			name = Trusses;
 			path = Oscillator;
@@ -188,12 +198,14 @@
 			files = (
 				CD9875211AA75D980035DCC2 /* bar.cpp in Sources */,
 				CD98752B1AA75D980035DCC2 /* save.cpp in Sources */,
+				CD8A92B61ABF2E5D00108900 /* tools.cpp in Sources */,
 				CD9875221AA75D980035DCC2 /* button.cpp in Sources */,
 				CD9875261AA75D980035DCC2 /* main.cpp in Sources */,
 				CD9875281AA75D980035DCC2 /* math.cpp in Sources */,
 				CD9875231AA75D980035DCC2 /* graphics.cpp in Sources */,
 				CD98752C1AA75D980035DCC2 /* temporary_label.cpp in Sources */,
 				CD9875291AA75D980035DCC2 /* particle.cpp in Sources */,
+				CD8A92B91AC0851C00108900 /* mouse.cpp in Sources */,
 				CD9875241AA75D980035DCC2 /* interface.cpp in Sources */,
 				CD98752D1AA75D980035DCC2 /* wall.cpp in Sources */,
 				CD98752A1AA75D980035DCC2 /* physics.cpp in Sources */,

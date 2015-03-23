@@ -14,18 +14,6 @@
 #include "slot_map.h"
 #include "fixed_size.h"
 
-enum OSCIL_T {X, Y, CW, ACW};
-
-struct Oscillation
-{
-    Vector2d origin;
-    double amplitude;
-    double frequency;
-    double phase;
-    Oscillation(Vector2d orig, double amp, double freq): origin(orig), amplitude(amp), frequency(freq) {}
-    Oscillation() {}
-};
-
 struct Particle
 {
     int id_;

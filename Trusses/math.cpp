@@ -1,6 +1,6 @@
 //
 //  math.cpp
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 02/01/2015.
 //  Copyright (c) 2015 Patrick Szmucer. All rights reserved.

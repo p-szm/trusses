@@ -1,6 +1,6 @@
 //
 //  graphics.cpp
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 30/12/2014.
 //  Copyright (c) 2014 Patrick Szmucer. All rights reserved.
@@ -87,7 +87,7 @@ void glut_print (float x, float y, std::string s)
 
 void display_fps(double dt)
 {
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(WHITE);
     
     std::ostringstream s;
     s << "fps: " << int(1/dt);
@@ -96,7 +96,7 @@ void display_fps(double dt)
 
 void display_time()
 {
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(WHITE);
     
     std::ostringstream s;
     s.precision(1);
@@ -107,9 +107,9 @@ void display_time()
 void display_temperature(double temp)
 {    
     if (temp > MELTING_POINT)
-        glColor3f(0.8, 0.0, 0.0);
+        glColor3f(RED);
     else
-        glColor3f(1.0, 1.0, 1.0);
+        glColor3f(WHITE);
     
     std::ostringstream s;
     s.precision(5);
@@ -120,7 +120,7 @@ void display_temperature(double temp)
 void draw_particle(Particle& p)
 {
     // Draw the trace if it is enabled
-    glColor3f(0.8, 0.8, 0.0);
+    glColor3f(GOLD);
     glLineWidth(1);
     
     glBegin(GL_LINE_STRIP);
@@ -137,7 +137,7 @@ void draw_particle(Particle& p)
     // If fixed
     if (p.fixed_)
     {
-        glColor3f(1.0, 0.0, 0.0);
+        glColor3f(RED);
         glPointSize(8);
         glBegin(GL_POINTS);
         glVertex2f(pos.x, pos.y);
@@ -145,7 +145,7 @@ void draw_particle(Particle& p)
     }
     else if (show_particles)
     {
-        glColor3f(1.0, 1.0, 1.0);
+        glColor3f(WHITE);
         glPointSize(6);
         glBegin(GL_POINTS);
         glVertex2f(pos.x, pos.y);
@@ -158,7 +158,7 @@ void draw_particle(Particle& p)
         s << p.id_;
         
         // Add 5 pixels in eah direction
-        glColor3f(0.8, 0.8, 0.0);
+        glColor3f(GOLD);
         glut_print(pos.x + px_to_m(5.0), pos.y + px_to_m(5.0), s.str());
     }
 }
@@ -254,7 +254,7 @@ void draw_bar(const Bar& b)
     
     if (ids)
     {
-        glColor3f(0.8, 0.0, 0.8);
+        glColor3f(FUCHSIA);
         s << b.id_;
         glut_print(m_mid.x, m_mid.y, s.str());
     }
@@ -273,7 +273,7 @@ void draw_bar(const Bar& b)
 
 void draw_wall(const Wall& w)
 {
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(WHITE);
     glLineWidth(2.0);
     
     draw_rectangle(w.p1_, w.p2_, false);
@@ -318,7 +318,7 @@ void draw_wall(const Wall& w)
     {
         std::ostringstream s;
         s << w.id_;
-        glColor3f(0.0, 0.8, 0.8);
+        glColor3f(AQUA);
         glut_print(w.p2_.x, w.p2_.y, s.str());
     }
 }
@@ -350,7 +350,7 @@ void draw_coords()
     double top = window_top();
     
     // Draw the centre lines
-    glColor3f(0.3, 0.3, 0.3);
+    glColor3f(DARK_GREY);
     glLineWidth(2.0);
     
     glBegin(GL_LINES);
@@ -360,7 +360,7 @@ void draw_coords()
     glVertex2f(window_right(), 0);
     glEnd();
     
-    glColor3f(0.3, 0.3, 0.3);
+    glColor3f(DARK_GREY);
     glLineWidth(1.0);
     glBegin(GL_LINES);
     
@@ -428,7 +428,7 @@ void draw_coords()
     std::ostringstream s;
     s.precision(2);
     s << si_dist;
-    glColor3f(0.5, 0.5, 0.5);
+    glColor3f(GREY);
     glut_print(m_dist, 0.0, s.str() + unit);
 }
 
@@ -436,7 +436,7 @@ void draw_command_line()
 {
     double cmd_size = px_to_ui_y(COMMAND_LINE_SIZE);
     
-    glColor3f(0.3, 0.3, 0.3);
+    glColor3f(DARK_GREY);
     glBegin(GL_QUADS);
     glVertex2f(-1, -1);
     glVertex2f(1, -1);
@@ -444,13 +444,13 @@ void draw_command_line()
     glVertex2f(-1, -1 + cmd_size);
     glEnd();
     
-    glColor3f(0.7, 0.7, 0.0);
+    glColor3f(GOLD);
     glBegin(GL_LINES);
     glVertex2f(1, -1 + cmd_size);
     glVertex2f(-1, -1 + cmd_size);
     glEnd();
     
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(WHITE);
     glut_print(-1 + px_to_ui_x(20), -1 + px_to_ui_y(10), commands[commands.size() - current_cmd - 1]);
 }
 
@@ -458,22 +458,22 @@ void draw_button(const Button& b)
 {
     Vector2d centre = b.position + px_to_ui(b.offset);
     Vector2d size = px_to_ui(Vector2d(b.width_/2.0, b.height_/2.0));
-    glColor3f(0.2, 0.2, 0.2);
+    glColor3f(DARK_GREY);
     draw_rectangle(centre - size, centre + size, true);
     
     if (b.active_)
     {
-        glColor3f(1.0, 1.0, 0.0);
+        glColor3f(YELLOW);
         glLineWidth(2.0);
     }
     else if (b.highlighted_)
     {
-        glColor3f(0.8, 0.8, 0.0);
+        glColor3f(GOLD);
         glLineWidth(2.0);
     }
     else
     {
-        glColor3f(1.0, 1.0, 1.0);
+        glColor3f(WHITE);
         glLineWidth(2.0);
     }
     draw_rectangle(centre - size, centre + size, false);
@@ -569,7 +569,7 @@ void draw_point(Vector2d pos)
 // For debugging
 void draw_horizon()
 {
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(WHITE);
     glLineWidth(2);
     glBegin(GL_LINE_LOOP);
     glVertex2d(-HORIZON, -HORIZON);
@@ -580,7 +580,7 @@ void draw_horizon()
 }
 
 // * * * * * * * * * * //
-void editor_display()
+void display()
 {
     // Clear the window
     glClear(GL_COLOR_BUFFER_BIT);
@@ -590,144 +590,9 @@ void editor_display()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(WORLD_VIEW);
-
-    if (coords)
+    
+    if (coords && simulation_is_paused())
         draw_coords();
-    
-    // Draw the walls
-    SlotMap<Wall>::iterator walls_it;
-    for (walls_it = walls.begin(); walls_it != walls.end(); walls_it++)
-        draw_wall(*walls_it);
-    
-    // Draw the bars
-    SlotMap<Bar>::iterator bars_it;
-    for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
-        draw_bar(*bars_it);
-    
-    // Draw the particles
-    SlotMap<Particle>::iterator particles_it;
-    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
-        draw_particle(*particles_it);
-    
-    // Draw the wall points
-    for (int i = 0; i < wall_points.size(); i++)
-    {
-        glLineWidth(1);
-        glColor3f(1.0, 1.0, 1.0);
-        draw_cross(wall_points[i], 10);
-    }
-    
-    // Draw the wall cursor
-    if (drawing_wall)
-    {
-        glLineWidth(1);
-        glColor3f(1.0, 1.0, 1.0);
-        draw_cross(mouse.pos_world, 10);
-    }
-    
-    // Will be snapped in metres
-    Vector2d snapped_pos = mouse.pos_world;
-    
-    // Snap to the closest particle
-    int closest_part_id = mouse.closest_particle();
-    if (closest_part_id != -1 && mouse.in_range(particles[closest_part_id].position_))
-    {
-        snapped_pos = particles[closest_part_id].position_;
-        glColor3f(0.8, 0.8, 0);
-        glPointSize(10);
-        draw_point(snapped_pos);
-    }
-    
-    // Snap to the closest grid point
-    else
-    {
-        Vector2d closest_grid = mouse.closest_grid();
-        if (mouse.in_range(closest_grid))
-        {
-            snapped_pos = closest_grid;
-            glColor3f(0.8, 0.8, 0);
-            glPointSize(10);
-            draw_point(snapped_pos);
-        }
-    }
-    
-    // Draw dashed lines between selected particles and mouse
-    // Draw the highlight for each selected particle
-    if (selected_particles_ids.size() != 0)
-    {
-        // Dashed lines
-        glEnable(GL_LINE_STIPPLE);
-        glLineStipple(1, 0x00FF);
-        glLineWidth(1.0);
-        glColor3f(1.0, 1.0, 0.0);
-        
-        glBegin(GL_LINES);
-        // For every selected particle (there could potentially be more in the future)
-        for (int i = 0; i < selected_particles_ids.size(); i++)
-        {
-            if (particles.exists(selected_particles_ids[i])) // Make sure that this particle exists
-            {
-                Vector2d selected_pos = particles[selected_particles_ids[i]].position_;
-                glVertex2f(selected_pos.x, selected_pos.y);
-                glVertex2f(snapped_pos.x, snapped_pos.y);
-            }
-        }
-        glEnd();
-        
-        // Highlights
-        glColor3f(1.0, 1.0, 1.0);
-        glPointSize(8);
-        
-        glBegin(GL_POINTS);
-        for (int i = 0; i < selected_particles_ids.size(); i++)
-        {
-            int selected_id = selected_particles_ids[i];
-            if (particles.exists(selected_id)) // Make sure that this particle exists
-            {
-                Vector2d pos = particles[selected_id].position_;
-                glVertex2f(pos.x, pos.y);
-            }
-        }
-        glEnd();
-        
-        glDisable(GL_LINE_STIPPLE);
-    }
-    
-    // Switch to the UI view
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(UI_VIEW);
-    
-    // Draw temporary labels
-    SlotMap<TempLabel>::iterator labels_it;
-    for (labels_it = temp_labels.begin(); labels_it != temp_labels.end(); labels_it++)
-        draw_label(*labels_it);
-    
-    // Draw buttons
-    for (int i = 0; i < buttons.size(); i++)
-        draw_button(buttons[i]);
-    
-    //display_fps(delta_t);
-    display_temperature(environment_temp);
-    display_time();
-    
-    // Draw the command line
-    if (command_mode)
-        draw_command_line();
-    
-    glutSwapBuffers();
-}
-
-void simulation_display()
-{
-    // Clear the window
-    glClear(GL_COLOR_BUFFER_BIT);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(WORLD_VIEW);
     
     // Draw the walls
     SlotMap<Wall>::iterator walls_it;
@@ -756,36 +621,8 @@ void simulation_display()
             if (!particles_it->fixed_)
                 draw_vector(particles_it->acceleration_, particles_it->position_, 0.0, 0.5, 0.0);
     
-    // Highlight a particle if it's close to the mouse
-    int closest_part_id = mouse.closest_particle();
-    if (closest_part_id != -1 && mouse.in_range(particles[closest_part_id].position_))
-    {
-        Vector2d closest_pos = particles[closest_part_id].position_;
-        glColor3f(0.8, 0.8, 0);
-        glPointSize(10);
-        glBegin(GL_POINTS);
-        glVertex2f(closest_pos.x, closest_pos.y);
-        glEnd();
-    }
-    
-    // Draw the active particle
-    if (particles.exists(active_particle_id))
-    {
-        Particle* active_p = &particles[active_particle_id];
-        Vector2d particle_pos_gl = active_p->position_ ;
-        
-        glColor3f(0.8, 0.8, 0.0);
-        glPointSize(10);
-        glBegin(GL_POINTS);
-        glVertex2f(particle_pos_gl.x, particle_pos_gl.y);
-        glEnd();
-        
-        glLineWidth(1.0);
-        glBegin(GL_LINES);
-        glVertex2f(particle_pos_gl.x, particle_pos_gl.y);
-        glVertex2f(mouse.pos_world.x, mouse.pos_world.y);
-        glEnd();
-    }
+    // Draw the tool-specific things
+    current_tool->display();
     
     // Switch to the UI view
     glMatrixMode(GL_PROJECTION);
@@ -793,14 +630,14 @@ void simulation_display()
     gluOrtho2D(UI_VIEW);
     
     // Draw temporary labels
-    for (int i = 0; i < temp_labels.size(); i++)
-        draw_label(temp_labels[i]);
+    SlotMap<TempLabel>::iterator label_it;
+    for (label_it = temp_labels.begin(); label_it != temp_labels.end(); label_it++)
+        draw_label(*label_it);
     
     // Draw buttons
     for (int i = 0; i < buttons.size(); i++)
         draw_button(buttons[i]);
     
-    //display_fps(delta_t);
     display_temperature(environment_temp);
     display_time();
     
@@ -825,26 +662,6 @@ void reshape(int width, int height)
     window_height = height;
 }
 
-void editor_idle()
-{
-    update_time();
-    update_labels();
-    glutPostRedisplay();
-}
-
-void simulation_idle()
-{
-    update_time();
-    update_labels();
-    
-    // TODO: This is pretty accurate, but could be better
-    // It was too fast by about 0.5s when I tested it on 8 minutes
-    simulation_time += (t - prev_t);
-    
-    update_simulation();
-    glutPostRedisplay();
-}
-
 void set_bars_color_mode(bars_color_mode_t mode)
 {
     bars_color_mode = mode;
@@ -865,7 +682,7 @@ void setup_graphics(int argc, char * argv[])
     glutCreateWindow("Trusses simulation");
     
     // Register callback functions
-    glutDisplayFunc(editor_display);
+    glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     
     glMatrixMode(GL_MODELVIEW);
@@ -874,7 +691,6 @@ void setup_graphics(int argc, char * argv[])
     glPointSize(5.0);
     glLineWidth(1.0);
     glClearColor(0.12, 0.12, 0.12, 1.0);
-    
     glEnable(GL_LINE_SMOOTH);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glEnable(GL_POINT_SMOOTH);

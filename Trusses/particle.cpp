@@ -1,6 +1,6 @@
 //
 //  particle.cpp
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 30/12/2014.
 //  Copyright (c) 2014 Patrick Szmucer. All rights reserved.

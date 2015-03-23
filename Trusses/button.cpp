@@ -1,6 +1,6 @@
 //
 //  button.cpp
-//  Oscillator
+//  Trusses
 //
 //  Created by Patrick Szmucer on 02/01/2015.
 //  Copyright (c) 2015 Patrick Szmucer. All rights reserved.
@@ -106,10 +106,12 @@ void button_scale_down_action(void)
 
 void button_draw_wall_action(void)
 {
-    if (!drawing_wall)
-        start_drawing_wall();
-    else
-        stop_drawing_wall();
+    Tool::set(new WallTool);
+}
+
+void button_selection_action(void)
+{
+    Tool::set(new SelectionTool);
 }
 
 void create_buttons_editor()
@@ -120,10 +122,11 @@ void create_buttons_editor()
     Button::create(60, 30, 1.0, 1.0, -50, -150, &button_lengths_action, "Lengths");
     Button::create(60, 30, 1.0, 1.0, -50, -195, &button_rel_extensions_action, "Rel ext");
     Button::create(60, 30, 1.0, 1.0, -50, -240, &button_draw_wall_action, "Wall");
+    Button::create(60, 30, 1.0, 1.0, -50, -285, &button_selection_action, "Select");
 
-    int plus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -305, &button_scale_up_action, "     +");
+    int plus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -350, &button_scale_up_action, "     +");
     buttons[plus_button_id].change_state_ = false;
-    int minus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -350, &button_scale_down_action, "     -");
+    int minus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -395, &button_scale_down_action, "     -");
     buttons[minus_button_id].change_state_ = false;
 }
 
@@ -135,9 +138,9 @@ void create_buttons_simulation()
     Button::create(60, 30, 1.0, 1.0, -50, -150, &button_lengths_action, "Lengths");
     Button::create(60, 30, 1.0, 1.0, -50, -195, &button_rel_extensions_action, "Rel ext");
     
-    int plus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -305, &button_scale_up_action, "     +");
+    int plus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -350, &button_scale_up_action, "     +");
     buttons[plus_button_id].change_state_ = false;
-    int minus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -350, &button_scale_down_action, "     -");
+    int minus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -395, &button_scale_down_action, "     -");
     buttons[minus_button_id].change_state_ = false;
 }
 
