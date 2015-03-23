@@ -27,7 +27,7 @@
 // * * * * * * * * * * //
 World world;
 double grid_dist_px = 30.0; // In pixels
-const double scroll_speed = 0.3; // gl/iteration
+const double scroll_speed = 10; // px/iteration
 bool command_mode = false;
 bool full_screen = false;
 bool simulation_paused = true;
@@ -156,13 +156,13 @@ void special_key_down(int key, int x, int y)
     else
     {
         if (arrows[0])
-            world.centre.x -= scroll_speed;
+            world.centre.x -= px_to_m(scroll_speed);
         if (arrows[1])
-            world.centre.x += scroll_speed;
+            world.centre.x += px_to_m(scroll_speed);
         if (arrows[2])
-            world.centre.y += scroll_speed;
+            world.centre.y += px_to_m(scroll_speed);
         if (arrows[3])
-            world.centre.y -= scroll_speed;
+            world.centre.y -= px_to_m(scroll_speed);
     }
 }
 
