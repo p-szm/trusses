@@ -11,6 +11,9 @@
 #include "interface.h"
 #include "save.h"
 #include "physics.h"
+#include "wall_tool.h"
+#include "selection_tool.h"
+#include "obstacle_tool.h"
 
 std::vector<Button> buttons;
 
@@ -106,12 +109,17 @@ void button_scale_down_action(void)
 
 void button_draw_wall_action(void)
 {
-    Tool::set(new WallTool);
+    Tool::set(current_tool, new WallTool);
 }
 
 void button_selection_action(void)
 {
-    Tool::set(new SelectionTool);
+    Tool::set(current_tool, new SelectionTool);
+}
+
+void button_obstacle_action(void)
+{
+    Tool::set(current_tool, new ObstacleTool);
 }
 
 void create_buttons_editor()
@@ -128,6 +136,8 @@ void create_buttons_editor()
     buttons[plus_button_id].change_state_ = false;
     int minus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -395, &button_scale_down_action, "     -");
     buttons[minus_button_id].change_state_ = false;
+    
+    Button::create(60, 30, -1.0, 1.0, 50, -40, &button_obstacle_action, "Obstacle");
 }
 
 void create_buttons_simulation()

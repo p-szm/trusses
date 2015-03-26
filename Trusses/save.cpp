@@ -18,11 +18,13 @@
 #include "particle.h"
 #include "bar.h"
 #include "wall.h"
+#include "obstacle.h"
 #include "physics.h"
 #include "graphics.h"
 #include "interface.h"
 #include "interpreter.h"
 #include "temporary_label.h"
+#include "bars_tool.h"
 
 // * * * * * * * * * * //
 template<typename T>
@@ -224,9 +226,10 @@ void reset_everything()
     reset_walls();
     reset_bars();
     reset_particles();
+    reset_obstacles();
     pause_simulation();
     simulation_time = 0;
-    Tool::set(new BarsTool);
+    Tool::set(current_tool, new BarsTool);
 }
 
 void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)

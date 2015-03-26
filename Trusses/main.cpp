@@ -26,8 +26,7 @@
 // TODO: Simplify the collision with walls
 // TODO: Clean up key_down_function
 // TODO: Particles can penetrate the corners of the walls
-// TODO: Check every SlotMap container if it's not being
-// iterated over without using iterators
+// TODO: Set idle to null when in the editor mode
 
 int main(int argc, char * argv[])
 {

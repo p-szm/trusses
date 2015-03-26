@@ -19,6 +19,7 @@
 #include "particle.h"
 #include "bar.h"
 #include "wall.h"
+#include "obstacle.h"
 #include "button.h"
 #include "physics.h"
 #include "interface.h"
@@ -598,6 +599,11 @@ void display()
     SlotMap<Wall>::iterator walls_it;
     for (walls_it = walls.begin(); walls_it != walls.end(); walls_it++)
         draw_wall(*walls_it);
+    
+    // Draw the obstacles
+    SlotMap<Obstacle>::iterator o_it;
+    for (o_it = obstacles.begin(); o_it != obstacles.end(); o_it++)
+        o_it->draw();
     
     // Draw the bars
     SlotMap<Bar>::iterator bars_it;

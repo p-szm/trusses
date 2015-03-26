@@ -10,7 +10,7 @@
 #define __Trusses__interface__
 
 #include "math.h"
-#include "tools.h"
+#include "tool.h"
 #include <vector>
 
 // * * * * * * * * * * //

@@ -31,10 +31,25 @@ public:
     friend Vector2d operator* (const double &a, const Vector2d &v) { return Vector2d(v.x*a, v.y*a); }
     Vector2d operator/ (const double &a) const { return Vector2d(x/a, y/a); }
     friend Vector2d operator/ (const double &a, const Vector2d &v) { return Vector2d(v.x/a, v.y/a); }
+    double cross(const Vector2d& v) { return x * v.y - y * v.x; }
     double abs2() const { return (x*x + y*y); }
     double abs() const { return std::sqrt(this->abs2()); }
     Vector2d norm() const { double s(this->abs()); if (s==0) return *this; else return Vector2d(x/s, y/s); }
     friend std::ostream& operator << (std::ostream &out, const Vector2d &v) { out << v.x << ' ' << v.y; return out; }
+    Vector2d reflect(const Vector2d& normal, const Vector2d& intersection_point);
+    static Vector2d bisect(const Vector2d& v1, const Vector2d& v2);
+};
+
+class Segment
+{
+public:
+    Segment() {}
+    Segment(Vector2d a, Vector2d b): p1(a), p2(b) {}
+    Vector2d p1;
+    Vector2d p2;
+    // Returns true if the segments intersect and false otherwise
+    bool intersect(const Segment& seg, Vector2d& point);
+    bool intersect(const Segment& seg, Vector2d& point, double& t, double& u);
 };
 
 struct vec3

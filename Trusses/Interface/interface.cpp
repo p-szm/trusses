@@ -23,6 +23,8 @@
 #include "interpreter.h"
 #include "temporary_label.h"
 #include "mouse.h"
+#include "bars_tool.h"
+#include "drag_tool.h"
 
 // * * * * * * * * * * //
 World world;
@@ -83,7 +85,7 @@ void key_down_function(unsigned char key, int x, int y)
             create_cloth(20, 0.5, Vector2d(0.0, 0.0), false);
         else if (key == 27)
         {
-            Tool::set(NULL);
+            Tool::set(current_tool, NULL);
             std::exit(0);
         }
         else if (key == 13)
@@ -219,7 +221,7 @@ void mouse_drag(int x, int y)
 
 void pause_simulation()
 {
-    Tool::set(new BarsTool);
+    Tool::set(current_tool, new BarsTool);
     simulation_paused = true;
     
     temp_labels.clear();
@@ -232,7 +234,7 @@ void pause_simulation()
 
 void resume_simulation()
 {
-    Tool::set(new DragTool);
+    Tool::set(current_tool, new DragTool);
     microsecond_time(t);
     simulation_paused = false;
     

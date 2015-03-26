@@ -11,6 +11,7 @@
 #include "particle.h"
 #include "wall.h"
 #include "bar.h"
+#include "obstacle.h"
 
 #include <sys/time.h>
 
@@ -44,6 +45,7 @@ void update_simulation()
 {
     SlotMap<Particle>::iterator particles_it;
     SlotMap<Bar>::iterator bars_it;
+    SlotMap<Obstacle>::iterator o_it;
     
     // Update each particle's position by Verlet integration
     for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
@@ -54,6 +56,10 @@ void update_simulation()
     for (int j = 0; j < RELAX_ITER; j++)
         for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
             bars_it->impose_constraint();
+    
+    // Collisions of particles with obstacles
+    for (o_it = obstacles.begin(); o_it != obstacles.end(); o_it++)
+        o_it->collide();
     
     // Collisions of particles with walls
     for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
