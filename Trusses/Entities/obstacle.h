@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <map> // temporary
 #include "polygon.h"
-#include "slot_map.h"
+#include "pointer_slot_map.h"
 
 class Obstacle: public Polygon
 {
@@ -30,6 +30,6 @@ private:
 
 void reset_obstacles();
 
-extern SlotMap<Obstacle> obstacles;
+extern PSlotMap<Obstacle*> obstacles;
 
 #endif /* defined(__Trusses__obstacle__) */

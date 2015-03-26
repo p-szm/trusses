@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD200BBB1AC4625C001C8720 /* pin_joint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD200BB91AC4625C001C8720 /* pin_joint.cpp */; };
 		CD74D2181A52F51A000B6F31 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2171A52F51A000B6F31 /* OpenGL.framework */; };
 		CD74D21A1A52F520000B6F31 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2191A52F520000B6F31 /* GLUT.framework */; };
 		CD9875231AA75D980035DCC2 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD98750C1AA75D980035DCC2 /* graphics.cpp */; };
@@ -45,6 +46,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CD200BB81AC451DE001C8720 /* pointer_slot_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pointer_slot_map.h; path = Trusses/External/pointer_slot_map.h; sourceTree = SOURCE_ROOT; };
+		CD200BB91AC4625C001C8720 /* pin_joint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pin_joint.cpp; path = Trusses/Entities/pin_joint.cpp; sourceTree = SOURCE_ROOT; };
+		CD200BBA1AC4625C001C8720 /* pin_joint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pin_joint.h; path = Trusses/Entities/pin_joint.h; sourceTree = SOURCE_ROOT; };
 		CD74D20D1A5214CC000B6F31 /* Trusses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Trusses; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD74D2171A52F51A000B6F31 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		CD74D2191A52F520000B6F31 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
@@ -58,7 +62,6 @@
 		CD98751A1AA75D980035DCC2 /* save.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = save.cpp; path = Trusses/save.cpp; sourceTree = SOURCE_ROOT; };
 		CD98751B1AA75D980035DCC2 /* save.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = save.h; path = Trusses/save.h; sourceTree = SOURCE_ROOT; };
 		CDC345EC1AC1A09B00F0E8C2 /* fixed_size.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fixed_size.h; path = Trusses/External/fixed_size.h; sourceTree = SOURCE_ROOT; };
-		CDC345ED1AC1A09B00F0E8C2 /* slot_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = slot_map.h; path = Trusses/External/slot_map.h; sourceTree = SOURCE_ROOT; };
 		CDC345EE1AC1A0B100F0E8C2 /* button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = button.cpp; path = Trusses/Interface/button.cpp; sourceTree = SOURCE_ROOT; };
 		CDC345EF1AC1A0B100F0E8C2 /* button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = button.h; path = Trusses/Interface/button.h; sourceTree = SOURCE_ROOT; };
 		CDC345F01AC1A0B100F0E8C2 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interface.cpp; path = Trusses/Interface/interface.cpp; sourceTree = SOURCE_ROOT; };
@@ -176,6 +179,8 @@
 				CDC346031AC1A0DE00F0E8C2 /* particle.h */,
 				CDC346041AC1A0DE00F0E8C2 /* wall.cpp */,
 				CDC346051AC1A0DE00F0E8C2 /* wall.h */,
+				CD200BB91AC4625C001C8720 /* pin_joint.cpp */,
+				CD200BBA1AC4625C001C8720 /* pin_joint.h */,
 			);
 			name = Entities;
 			sourceTree = "<group>";
@@ -209,8 +214,8 @@
 		CDC345E81AC1745F00F0E8C2 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				CD200BB81AC451DE001C8720 /* pointer_slot_map.h */,
 				CDC345EC1AC1A09B00F0E8C2 /* fixed_size.h */,
-				CDC345ED1AC1A09B00F0E8C2 /* slot_map.h */,
 			);
 			name = External;
 			sourceTree = "<group>";
@@ -275,6 +280,7 @@
 				CD98752B1AA75D980035DCC2 /* save.cpp in Sources */,
 				CDC346091AC1A0DE00F0E8C2 /* wall.cpp in Sources */,
 				CDC3461A1AC1A0ED00F0E8C2 /* tool.cpp in Sources */,
+				CD200BBB1AC4625C001C8720 /* pin_joint.cpp in Sources */,
 				CDC345F71AC1A0B100F0E8C2 /* interface.cpp in Sources */,
 				CDC346161AC1A0ED00F0E8C2 /* bars_tool.cpp in Sources */,
 				CD9875261AA75D980035DCC2 /* main.cpp in Sources */,

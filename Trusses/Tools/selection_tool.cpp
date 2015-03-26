@@ -42,15 +42,18 @@ void SelectionTool::drag()
     
     // For each particle decide if it lies inside or outside the polygon.
     // Use a map to record results (so it's easy to avoid adding the same particle multiple times)
-    SlotMap<Particle>::iterator p_it;
-    for (p_it = particles.begin(); p_it != particles.end(); p_it++)
+    for (int i = 0; i < particles.size(); i++)
     {
+        if (poly.no_sides() < 3)
+            return;
+        
+        Particle* p = particles.at(i);
         // TODO: Only particles that are lose to the selection
         // should be checked.
-        if (poly.point_inside(p_it->position_))
-            selection_map[p_it->id_] = true;
+        if (poly.point_inside(p->position_))
+            selection_map[p->id_] = true;
         else
-            selection_map[p_it->id_] = false;
+            selection_map[p->id_] = false;
     }
 }
 
@@ -71,7 +74,7 @@ void SelectionTool::display()
     {
         if (selection_map[i])
         {
-            Vector2d pos = particles[i].position_;
+            Vector2d pos = particles[i]->position_;
             glVertex2d(pos.x, pos.y);
         }
     }

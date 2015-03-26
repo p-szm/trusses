@@ -12,101 +12,7 @@
 #include "wall.h"
 #include "temporary_label.h"
 
-SlotMap<Particle> particles;
-
-int Particle::create(double a, double b, bool fixed)
-{
-    Particle new_particle(a, b);
-    
-    new_particle.velocity_ = Vector2d(0.0, 0.0);
-    new_particle.prev_position_ = new_particle.position_ - delta_t * new_particle.velocity_;
-    new_particle.prev_position_verlet_ = new_particle.position_ - delta_t * new_particle.velocity_;
-    new_particle.acceleration_ = Vector2d(0.0, 0.0);
-    new_particle.external_acceleration_ = Vector2d(0.0, 0.0);
-    new_particle.mass_ = 1.0;
-    
-    new_particle.fixed_ = (fixed) ? true : false;
-    new_particle.dragged_ = false;
-    
-    // Trace
-    new_particle.trace_on = false;
-    
-    int new_id = particles.add(new_particle);
-    
-    return new_id;
-}
-
-int Particle::destroy(int obj_id)
-{
-    if (!particles.exists(obj_id))
-    {
-        issue_label("This particle does not exist", WARNING_LABEL_TIME);
-        return 1;
-    }
-    
-    // Remove all the bars that this particle was connected to
-    Particle* this_p = &particles[obj_id];
-    size_t no_bars_connected = this_p->bars_connected.size();
-    for (int i = 0; i < no_bars_connected; i++)
-        Bar::destroy(this_p->bars_connected.back());
-    
-    int result = particles.remove(obj_id);
-    return result;
-}
-
-void Particle::impose_boundaries()
-{
-    double eng_regained_perp = 1 - ENERGY_ABSORPTION;
-    double eng_regained_par = 1 - 0.1 * ENERGY_ABSORPTION; // Determines friction between a particle and a walls
-    
-    SlotMap<Wall>::iterator walls_it;
-    for (walls_it = walls.begin(); walls_it != walls.end(); walls_it++)
-    {
-        // TODO: Think about fixed particles: they shouldn't be checked all the time, just when they are dragged
-        // For now:
-        if (fixed_)
-            continue;
-        
-        double wall_top = walls_it->y_max();
-        double wall_bottom = walls_it->y_min();
-        double wall_left = walls_it->x_min();
-        double wall_right = walls_it->x_max();
-        
-        // Particle penetrated the bottom wall
-        if (prev_position_.y <= wall_bottom && position_.y >= wall_bottom && prev_position_.x >= wall_left && prev_position_.x <= wall_right)
-        {
-            position_.y = wall_bottom - SMALL_NUM;
-            velocity_ = Vector2d(eng_regained_par * velocity_.x, -eng_regained_perp * velocity_.y);
-            
-            // So it doesn't break the Verlet integrator
-            prev_position_verlet_ = position_ - delta_t * velocity_;
-        }
-        
-        // Particle penetrated the left wall
-        else if (prev_position_.x <= wall_left && position_.x >= wall_left && prev_position_.y <= wall_top && prev_position_.y >= wall_bottom)
-        {
-            position_.x = wall_left - SMALL_NUM;
-            velocity_ = Vector2d(-eng_regained_perp * velocity_.x, eng_regained_par * velocity_.y);
-            prev_position_verlet_ = position_ - delta_t * velocity_;
-        }
-        
-        // Particle penetrated the right wall
-        else if (prev_position_.x >= wall_right && position_.x <= wall_right && prev_position_.y <= wall_top && prev_position_.y >= wall_bottom)
-        {
-            position_.x = wall_right + SMALL_NUM;
-            velocity_ = Vector2d(-eng_regained_perp * velocity_.x, eng_regained_par * velocity_.y);
-            prev_position_verlet_ = position_ - delta_t * velocity_;
-        }
-        
-        // Particle penetrated the top wall
-        else if (prev_position_.y >= wall_top && position_.y <= wall_top && prev_position_.x >= wall_left && prev_position_.x <= wall_right)
-        {
-            position_.y = wall_top + SMALL_NUM;
-            velocity_ = Vector2d(eng_regained_par * velocity_.x, -eng_regained_perp * velocity_.y);
-            prev_position_verlet_ = position_ - delta_t * velocity_;
-        }
-    }
-}
+PSlotMap<Particle*> particles;
 
 void Particle::update()
 {
@@ -135,13 +41,13 @@ void Particle::update()
 
 void print_particles()
 {
-    SlotMap<Particle>::iterator particles_it;
-    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
+    for (int i = 0; i < particles.size(); i++)
     {
-        std::cout << "Particle " << particles_it->id_ << ": ";
-        for (int j = 0; j < particles_it->bars_connected.size(); j++)
+        Particle* p = particles.at(i);
+        std::cout << "Particle " << p->id_ << ": ";
+        for (int j = 0; j < p->bars_connected.size(); j++)
         {
-            std::cout << particles_it->bars_connected[j] << " ";
+            std::cout << p->bars_connected[j] << " ";
         }
         std::cout << std::endl;
     }
@@ -150,4 +56,22 @@ void print_particles()
 void reset_particles()
 {
     particles.clear();
+}
+
+int Particle::destroy(int obj_id)
+{
+    if (!particles.exists(obj_id))
+    {
+        issue_label("This particle does not exist", WARNING_LABEL_TIME);
+        return 1;
+    }
+    
+    // Remove all the bars that this particle was connected to
+    Particle* this_p = particles[obj_id];
+    size_t no_bars_connected = this_p->bars_connected.size();
+    for (int i = 0; i < no_bars_connected; i++)
+        Bar::destroy(this_p->bars_connected.back());
+    
+    int result = particles.remove(obj_id);
+    return result;
 }

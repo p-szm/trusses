@@ -208,9 +208,9 @@ void draw_bar(const Bar& b)
         glColor3f(color.x, color.y, color.z);
     }
     
-    Vector2d start = particles[b.p1_id].position_;
-    Vector2d end = particles[b.p2_id].position_;
-    Vector2d m_mid = 0.5 * (particles[b.p1_id].position_ + particles[b.p2_id].position_);
+    Vector2d start = particles[b.p1_id]->position_;
+    Vector2d end = particles[b.p2_id]->position_;
+    Vector2d m_mid = 0.5 * (start + end);
     
     if (!fancy_bars)
     {
@@ -226,8 +226,8 @@ void draw_bar(const Bar& b)
     {
         glLineWidth(1.0);
         
-        Vector2d p1_pos = particles[b.p1_id].position_;
-        Vector2d p2_pos = particles[b.p2_id].position_;
+        Vector2d p1_pos = particles[b.p1_id]->position_;
+        Vector2d p2_pos = particles[b.p2_id]->position_;
         
         // Draw circles at the ends
         double b_radius = 0.02;
@@ -596,36 +596,42 @@ void display()
         draw_coords();
     
     // Draw the walls
-    SlotMap<Wall>::iterator walls_it;
-    for (walls_it = walls.begin(); walls_it != walls.end(); walls_it++)
-        draw_wall(*walls_it);
+    for (int i = 0; i < walls.size(); i++)
+        draw_wall(*walls.at(i));
     
     // Draw the obstacles
-    SlotMap<Obstacle>::iterator o_it;
-    for (o_it = obstacles.begin(); o_it != obstacles.end(); o_it++)
-        o_it->draw();
+    for (int i = 0; i < obstacles.size(); i++)
+        obstacles.at(i)->draw();
     
     // Draw the bars
-    SlotMap<Bar>::iterator bars_it;
-    for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
-        draw_bar(*bars_it);
+    for (int i = 0; i < bars.size(); i++)
+        draw_bar(*bars.at(i));
     
     // Draw the particles
-    SlotMap<Particle>::iterator particles_it;
-    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
-        draw_particle(*particles_it);
+    for (int i = 0; i < particles.size(); i++)
+        draw_particle(*particles.at(i));
     
     // Draw the velocity vectors
     if (velocities)
-        for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
-            if (!particles_it->fixed_)
-                draw_vector(particles_it->velocity_, particles_it->position_, 0.0, 0.5, 0.0);
+    {
+        for (int i = 0; i < particles.size(); i++)
+        {
+            Particle* p = particles.at(i);
+            if (!p->fixed_)
+                draw_vector(p->velocity_, p->position_, 0.0, 0.5, 0.0);
+        }
+    }
     
     // Draw the acceleration vectors
     if (accelerations)
-        for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
-            if (!particles_it->fixed_)
-                draw_vector(particles_it->acceleration_, particles_it->position_, 0.0, 0.5, 0.0);
+    {
+        for (int i = 0; i < particles.size(); i++)
+        {
+            Particle* p = particles.at(i);
+            if (!p->fixed_)
+                draw_vector(p->acceleration_, p->position_, 0.0, 0.5, 0.0);
+        }
+    }
     
     // Draw the tool-specific things
     current_tool->display();
@@ -636,9 +642,8 @@ void display()
     gluOrtho2D(UI_VIEW);
     
     // Draw temporary labels
-    SlotMap<TempLabel>::iterator label_it;
-    for (label_it = temp_labels.begin(); label_it != temp_labels.end(); label_it++)
-        draw_label(*label_it);
+    for (int i = 0; i < temp_labels.size(); i++)
+        draw_label(*temp_labels.at(i));
     
     // Draw buttons
     for (int i = 0; i < buttons.size(); i++)

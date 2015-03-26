@@ -17,7 +17,7 @@
 #endif
 #include <limits>
 
-SlotMap<Obstacle> obstacles;
+PSlotMap<Obstacle*> obstacles;
 bool draw_bounding_boxes = false;
 
 Obstacle::Obstacle(const Polygon& poly)
@@ -52,15 +52,16 @@ void Obstacle::update_bounding_box()
 
 void Obstacle::collide()
 {
-    SlotMap<Particle>::iterator p_it;
-    for (p_it = particles.begin(); p_it != particles.end(); p_it++)
+    for (int i = 0; i < particles.size(); i++)
     {
+        Particle* p = particles.at(i);
+        
         // Continue if the particle is fixed
-        if (p_it->fixed_)
+        if (p->fixed_)
             continue;
         
         // Continue if the particle is away from the obstacle
-        Vector2d p_pos = p_it->position_;
+        Vector2d p_pos = p->position_;
         if (p_pos.x < box_min.x || p_pos.x > box_max.x ||
             p_pos.y < box_min.y || p_pos.y > box_max.y)
             continue;
@@ -73,7 +74,7 @@ void Obstacle::collide()
         // This is done by looping through all the edges of the polygon and computing
         // the intersection of this edge with the segment representing the change in
         // the particle's position (delta_p). The first intersection found is used.
-        Segment delta_p = Segment(p_it->prev_position_verlet_, p_it->position_);
+        Segment delta_p = Segment(p->prev_position_verlet_, p->position_);
         bool intersected = false;
         for (int i = 0; i < points.size() && !intersected; i++)
         {
@@ -90,8 +91,8 @@ void Obstacle::collide()
                 Vector2d edge_normal = Vector2d(-edge_vect.y, edge_vect.x).norm();
                 
                 // Reflect the particle over the edge
-                Vector2d new_pos = p_it->position_.reflect(edge_normal, intersection);
-                Vector2d new_prev_pos = p_it->prev_position_verlet_.reflect(edge_normal, intersection);
+                Vector2d new_pos = p->position_.reflect(edge_normal, intersection);
+                Vector2d new_prev_pos = p->prev_position_verlet_.reflect(edge_normal, intersection);
                 
                 // If the particle is still inside the polygon after the reflection,
                 // it means that it probably bounced off the corner. In this case
@@ -101,11 +102,11 @@ void Obstacle::collide()
                 // near edges
                 if (point_inside(new_pos))
                 {
-                    new_pos = 2 * intersection - p_it->position_;
-                    new_prev_pos = 2 * intersection - p_it->prev_position_verlet_;
+                    new_pos = 2 * intersection - p->position_;
+                    new_prev_pos = 2 * intersection - p->prev_position_verlet_;
                 }
-                p_it->position_ = new_pos;
-                p_it->prev_position_verlet_ = new_prev_pos;
+                p->position_ = new_pos;
+                p->prev_position_verlet_ = new_prev_pos;
             }
         }
     }

@@ -43,33 +43,32 @@ void update_time()
 
 void update_simulation()
 {
-    SlotMap<Particle>::iterator particles_it;
-    SlotMap<Bar>::iterator bars_it;
-    SlotMap<Obstacle>::iterator o_it;
-    
     // Update each particle's position by Verlet integration
-    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
-        particles_it->update();
+    for (int i = 0; i < particles.size(); i++)
+        particles.at(i)->update();
     
     // Use relaxation to satisfy the constraints imposed by bars
     // Large RELAX_ITER means accurate simulation, and hence stiff bars
     for (int j = 0; j < RELAX_ITER; j++)
-        for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
-            bars_it->impose_constraint();
+        for (int i = 0; i < bars.size(); i++)
+            bars.at(i)->impose_constraint();
     
     // Collisions of particles with obstacles
-    for (o_it = obstacles.begin(); o_it != obstacles.end(); o_it++)
-        o_it->collide();
+    for (int i = 0; i < obstacles.size(); i++)
+        obstacles.at(i)->collide();
     
     // Collisions of particles with walls
-    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
-        particles_it->impose_boundaries();
+    for (int i = 0; i < walls.size(); i++)
+        walls.at(i)->collide();
     
     // Update each bar and add see if it will be destroyed
     std::vector<int> bars_to_destroy;
-    for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
-        if (bars_it->update())
-            bars_to_destroy.push_back(bars_it->id_);
+    for (int i = 0; i < bars.size(); i++)
+    {
+        Bar* b = bars.at(i);
+        if (b->update())
+            bars_to_destroy.push_back(b->id_);
+    }
     
     // Destroy each bar that was previously added to the list
     for (int i = 0; i < bars_to_destroy.size(); i++)
@@ -77,10 +76,11 @@ void update_simulation()
     
     // Destroy particles which are very far away
     std::vector<int> particles_to_destroy;
-    for (particles_it = particles.begin(); particles_it != particles.end(); particles_it++)
+    for (int i = 0; i < particles.size(); i++)
     {
-        if (abs_d(particles_it->position_.x) > HORIZON || abs_d(particles_it->position_.y) > HORIZON)
-            particles_to_destroy.push_back(particles_it->id_);
+        Particle* p = particles.at(i);
+        if (abs_d(p->position_.x) > HORIZON || abs_d(p->position_.y) > HORIZON)
+            particles_to_destroy.push_back(p->id_);
     }
     for (int i = 0; i < particles_to_destroy.size(); i++)
         Particle::destroy(particles_to_destroy[i]);

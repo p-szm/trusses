@@ -7,12 +7,12 @@
 //
 
 #include "bar.h"
-#include "particle.h"
+#include "pin_joint.h"
 #include "physics.h"
 #include "graphics.h"
 #include "temporary_label.h"
 
-SlotMap<Bar> bars;
+PSlotMap<Bar*> bars;
 
 int Bar::create(int id1, int id2, double e, double temp)
 {
@@ -30,29 +30,29 @@ int Bar::create(int id1, int id2, double e, double temp)
     
     // TODO
     // Write a method that searches contents of a vector (or use an existing one)
-    int no_bars = (int)particles[id1].bars_connected.size();
+    int no_bars = (int)particles[id1]->bars_connected.size();
     for (int i = 0; i < no_bars; i++)
     {
-        int bar_id = particles[id1].bars_connected[i];
-        if ( bars[bar_id].p1_id == id2 || bars[bar_id].p2_id == id2)
+        int bar_id = particles[id1]->bars_connected[i];
+        if ( bars[bar_id]->p1_id == id2 || bars[bar_id]->p2_id == id2)
         {
             issue_label("Bar between these particles already exists", WARNING_LABEL_TIME);
             return -1;
         }
     }
     
-    Bar new_bar(id1, id2);
+    Bar* new_bar = new Bar(id1, id2);
     
     // This sets temperature, r0 and stiffness
-    new_bar.temperature = temp; // Load every bar at room temperature (for now)
-    new_bar.set_strain(e);
-    new_bar.stiffness = -(1.0 - STIFFNESS_AT_TM) * new_bar.temperature / MELTING_POINT + 1.0; // Stiffness is 1 at 0K
+    new_bar->temperature = temp; // Load every bar at room temperature (for now)
+    new_bar->set_strain(e);
+    new_bar->stiffness = -(1.0 - STIFFNESS_AT_TM) * new_bar->temperature / MELTING_POINT + 1.0; // Stiffness is 1 at 0K
     
     int new_id = bars.add(new_bar);
     
     // Particles have to know which bars are connected to them
-    particles[id1].bars_connected.push_back(new_id);
-    particles[id2].bars_connected.push_back(new_id);
+    particles[id1]->bars_connected.push_back(new_id);
+    particles[id2]->bars_connected.push_back(new_id);
 
     return new_id;
 }
@@ -88,8 +88,8 @@ int Bar::destroy(int obj_id)
         return 1;
     }
     
-    Particle* p1 = &particles[bars[obj_id].p1_id];
-    Particle* p2 = &particles[bars[obj_id].p2_id];
+    Particle* p1 = particles[bars[obj_id]->p1_id];
+    Particle* p2 = particles[bars[obj_id]->p2_id];
     
     for (int i = 0; i < p1->bars_connected.size(); i++)
     {
@@ -115,15 +115,15 @@ int Bar::destroy(int obj_id)
 
 double Bar::length() const
 {
-    Vector2d pos1 = particles[p1_id].position_;
-    Vector2d pos2 = particles[p2_id].position_;
+    Vector2d pos1 = particles[p1_id]->position_;
+    Vector2d pos2 = particles[p2_id]->position_;
     double ans = (pos1 - pos2).abs();
     return ans;
 }
 
 Vector2d Bar::unit12() const
 {
-    return (particles[p1_id].position_ - particles[p2_id].position_).norm();
+    return (particles[p1_id]->position_ - particles[p2_id]->position_).norm();
 }
 
 Vector2d Bar::unit21() const
@@ -139,8 +139,8 @@ double Bar::extension() const
 void Bar::impose_constraint()
 {
     int particle_location(int id);
-    Particle* p1 = &particles[p1_id];
-    Particle* p2 = &particles[p2_id];
+    Particle* p1 = particles[p1_id];
+    Particle* p2 = particles[p2_id];
     
     double ext = extension();
     
@@ -189,12 +189,12 @@ void Bar::split(int bar_id, unsigned int n_parts)
         return;
     }
     
-    Bar* this_bar = &bars[bar_id];
+    Bar* this_bar = bars[bar_id];
     
     int id_start = this_bar->p1_id;
     int id_end = this_bar->p2_id;
-    Vector2d pos_start = particles[id_start].position_;
-    Vector2d pos_end = particles[id_end].position_;
+    Vector2d pos_start = particles[id_start]->position_;
+    Vector2d pos_end = particles[id_end]->position_;
     
     double temp = this_bar->temperature;
     double new_r0 = this_bar->r0 / n_parts;
@@ -205,7 +205,7 @@ void Bar::split(int bar_id, unsigned int n_parts)
     std::vector<int> new_ids;
     for (int i = 1; i < n_parts; i++)
     {
-         new_ids.push_back( Particle::create(pos_start.x + i * Dr.x, pos_start.y + i * Dr.y, false) );
+         new_ids.push_back( PinJoint::create(pos_start.x + i * Dr.x, pos_start.y + i * Dr.y, false) );
     }
     
     // Remove the first bar
@@ -224,9 +224,9 @@ void Bar::split(int bar_id, unsigned int n_parts)
         else
             new_bar_id = Bar::create(new_ids[i-1], new_ids[i], 0.0, ROOM_TEMPERATURE);
         
-        bars[new_bar_id].r0 = new_r0;
-        bars[new_bar_id].r_0K = new_r_0K;
-        bars[new_bar_id].temperature = temp;
+        bars[new_bar_id]->r0 = new_r0;
+        bars[new_bar_id]->r_0K = new_r_0K;
+        bars[new_bar_id]->temperature = temp;
     }
     
 }
@@ -238,9 +238,8 @@ void reset_bars()
 
 void print_bars()
 {
-    SlotMap<Bar>::iterator bars_it;
-    for (bars_it = bars.begin(); bars_it != bars.end(); bars_it++)
+    for (int i = 0; i < bars.size(); i++)
     {
-        std::cout << "Bar " << bars_it->id_ << std::endl;
+        std::cout << "Bar " << bars.at(i)->id_ << std::endl;
     }
 }

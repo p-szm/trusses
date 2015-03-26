@@ -9,7 +9,7 @@
 #ifndef __Trusses__bar__
 #define __Trusses__bar__
 
-#include "slot_map.h"
+#include "pointer_slot_map.h"
 
 #include "math.h"
 
@@ -56,6 +56,6 @@ private:
 void reset_bars();
 void print_bars();
 
-extern SlotMap<Bar> bars;
+extern PSlotMap<Bar*> bars;
 
 #endif /* defined(__Trusses__bar__) */

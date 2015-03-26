@@ -86,6 +86,7 @@ void key_down_function(unsigned char key, int x, int y)
         else if (key == 27)
         {
             Tool::set(current_tool, NULL);
+            reset_everything();
             std::exit(0);
         }
         else if (key == 13)

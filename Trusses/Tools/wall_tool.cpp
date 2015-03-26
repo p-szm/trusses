@@ -54,7 +54,7 @@ void WallTool::display()
     
     // Snap the position vector
     if (mouse.particle_in_range())
-        tool_pos = particles[mouse.closest_particle].position_;
+        tool_pos = particles[mouse.closest_particle]->position_;
     else if (mouse.grid_in_range())
         tool_pos = mouse.closest_grid;
     
