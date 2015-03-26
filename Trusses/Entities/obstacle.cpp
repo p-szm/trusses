@@ -16,7 +16,6 @@
 #include <GL/glut.h>
 #endif
 #include <limits>
-#include <chrono> // temporary
 
 SlotMap<Obstacle> obstacles;
 bool draw_bounding_boxes = false;

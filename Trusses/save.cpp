@@ -170,6 +170,21 @@ int load(std::string filename)
             if (v.size() == 4)
                 Wall::create(Vector2d(v[0], v[1]), Vector2d(v[2], v[3]));
         }
+        
+        // An obstacle
+        else if (line.substr(0, 1) == "o")
+        {
+            std::vector<double> v;
+            read_numbers(line, v);
+            
+            Polygon poly;
+            if (v.size() % 2 == 0)
+            {
+                for (size_t i = 0; i < v.size(); i+=2)
+                    poly.add_point(Vector2d(v[i], v[i+1]));
+                obstacles.add(Obstacle(poly));
+            }
+        }
     }
     
     // Close the file
@@ -213,6 +228,16 @@ void save(std::string filename)
     for (walls_it = walls.begin(); walls_it != walls.end(); walls_it++)
         file << 'w' << walls_it->id_ << ' ' << walls_it->p1_ << ' ' << walls_it->p2_ << std::endl;
     file << std::endl;
+    
+    // Print the obstacles
+    SlotMap<Obstacle>::iterator o_it;
+    for (o_it = obstacles.begin(); o_it != obstacles.end(); o_it++)
+    {
+        file << "o" << o_it->id_;
+        for (size_t i = 0; i < o_it->points.size(); i++)
+            file << " " << o_it->points[i];
+        file << std::endl << std::endl;
+    }
     
     // Close the file
     file.close();
