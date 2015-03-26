@@ -29,11 +29,6 @@ int Wall::destroy(int obj_id)
     return result;
 }
 
-void reset_walls()
-{
-    walls.clear();
-}
-
 double Wall::x_min() const
 {
     return min(p1_.x, p2_.x);

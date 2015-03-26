@@ -76,10 +76,6 @@ void WallTool::key_down(unsigned char key)
 WallTool::WallTool()
 {
     TempLabel::create("Create a wall by defining two corner points", 0, 1, 0, -TOP_MARGIN, TOOL_LABEL_TIME);
-    std::cout << "WallTool " << this << " created" << std::endl;
 }
 
-WallTool::~WallTool()
-{
-    std::cout << "WallTool " << this << " destroyed" << std::endl;
-}
+WallTool::~WallTool() {}

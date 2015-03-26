@@ -114,12 +114,6 @@ void BarsTool::key_down(unsigned char key)
     return;
 }
 
-BarsTool::BarsTool()
-{
-    std::cout << "BarsTool " << this << " created" << std::endl;
-}
+BarsTool::BarsTool() {}
 
-BarsTool::~BarsTool()
-{
-    std::cout << "BarsTool " << this << " destroyed" << std::endl;
-}
+BarsTool::~BarsTool() {}

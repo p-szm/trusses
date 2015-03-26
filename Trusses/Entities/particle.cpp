@@ -53,11 +53,6 @@ void print_particles()
     }
 }
 
-void reset_particles()
-{
-    particles.clear();
-}
-
 int Particle::destroy(int obj_id)
 {
     if (!particles.exists(obj_id))

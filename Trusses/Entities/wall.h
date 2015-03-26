@@ -34,7 +34,6 @@ private:
     Wall(Vector2d p1, Vector2d p2) {p1_ = p1; p2_ = p2;}
 };
 
-void reset_walls();
 void print_walls();
 
 extern PSlotMap<Wall*> walls;

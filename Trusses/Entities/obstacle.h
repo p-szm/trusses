@@ -28,8 +28,6 @@ private:
     void update_bounding_box();
 };
 
-void reset_obstacles();
-
 extern PSlotMap<Obstacle*> obstacles;
 
 #endif /* defined(__Trusses__obstacle__) */

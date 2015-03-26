@@ -111,8 +111,3 @@ void Obstacle::collide()
         }
     }
 }
-
-void reset_obstacles()
-{
-    obstacles.clear();
-}

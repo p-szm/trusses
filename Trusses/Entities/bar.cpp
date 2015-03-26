@@ -231,11 +231,6 @@ void Bar::split(int bar_id, unsigned int n_parts)
     
 }
 
-void reset_bars()
-{
-    bars.clear();
-}
-
 void print_bars()
 {
     for (int i = 0; i < bars.size(); i++)

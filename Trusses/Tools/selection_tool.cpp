@@ -103,10 +103,6 @@ void SelectionTool::key_down(unsigned char key)
 SelectionTool::SelectionTool()
 {
     TempLabel::create("Create a selection by dragging", 0, 1, 0, -TOP_MARGIN, TOOL_LABEL_TIME);
-    std::cout << "BarsTool " << this << " created" << std::endl;
 }
 
-SelectionTool::~SelectionTool()
-{
-    std::cout << "BarsTool " << this << " destroyed" << std::endl;
-}
+SelectionTool::~SelectionTool() {}

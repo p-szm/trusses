@@ -252,10 +252,10 @@ void save(std::string filename)
 
 void reset_everything()
 {
-    reset_walls();
-    reset_bars();
-    reset_particles();
-    reset_obstacles();
+    walls.clear();
+    bars.clear();
+    particles.clear();
+    obstacles.clear();
     pause_simulation();
     simulation_time = 0;
     Tool::set(current_tool, new BarsTool);

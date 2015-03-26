@@ -67,10 +67,6 @@ void ObstacleTool::key_down(unsigned char key)
 ObstacleTool::ObstacleTool()
 {
     TempLabel::create("Draw an obstacle", 0, 1, 0, -TOP_MARGIN, TOOL_LABEL_TIME);
-    std::cout << "ObstacleTool " << this << " created" << std::endl;
 }
 
-ObstacleTool::~ObstacleTool()
-{
-    std::cout << "ObstacleTool " << this << " destroyed" << std::endl;
-}
+ObstacleTool::~ObstacleTool() {}

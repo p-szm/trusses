@@ -53,7 +53,6 @@ private:
     Bar(int id1, int id2) {p1_id = id1; p2_id = id2;}
 };
 
-void reset_bars();
 void print_bars();
 
 extern PSlotMap<Bar*> bars;

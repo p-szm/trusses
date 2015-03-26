@@ -101,10 +101,6 @@ void DragTool::key_down(unsigned char key)
 DragTool::DragTool()
 {
     TempLabel::create("Drag the joints around", 0, 1, 0, -TOP_MARGIN, TOOL_LABEL_TIME);
-    std::cout << "DragTool " << this << " created" << std::endl;
 }
 
-DragTool::~DragTool()
-{
-    std::cout << "DragTool " << this << " destroyed" << std::endl;
-}
+DragTool::~DragTool() {}

@@ -56,7 +56,6 @@ public:
 };
 
 void print_particles();
-void reset_particles();
 
 extern PSlotMap<Particle*> particles;
 
