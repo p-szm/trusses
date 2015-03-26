@@ -58,7 +58,7 @@ struct vec3
     double y;
     double z;
     vec3(double a, double b, double c): x(a), y(b), z(c) {}
-    vec3() {}
+    vec3(): x(0), y(0), z(0) {}
 };
 
 // * * * * * * * * * * //

@@ -22,6 +22,8 @@ size_t Polygon::no_sides() const
 
 bool Polygon::point_inside(const Vector2d& p) const
 {
+    if (no_sides() < 3)
+        throw std::length_error("number of sides is less than 3");
     bool inside = false;
     for (int i = 0; i < no_sides(); i++)
     {
