@@ -12,12 +12,14 @@
 #include <stdio.h>
 #include "particle.h"
 
+class Renderer;
+
 class PinJoint: public Particle
 {
 public:
     static int create(double a, double b, bool fixed);
-    
     void impose_constraints() {}
+    void draw(const Renderer& rend) const;
     ~PinJoint() {}
 private:
     PinJoint(double a, double b): Particle(a, b) {}

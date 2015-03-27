@@ -25,6 +25,8 @@
 #include "interface.h"
 #include "interpreter.h"
 #include "temporary_label.h"
+#include "renderer.h"
+#include "tool.h"
 
 // * * * * * * * * * * //
 // Forward declarations
@@ -33,14 +35,9 @@ void glut_print (float x, float y, std::string s);
 void display_fps(double dt);
 void display_time();
 void display_temperature(double temp);
-void draw_particle(Particle& p);
-void draw_bar(const Bar& b);
-void draw_wall(const Wall& w);
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b);
 void draw_coords();
 void draw_command_line();
-void draw_button(const Button& b);
-void draw_label(const TempLabel& l);
 void draw_rectangle(Vector2d p1, Vector2d p2, bool filled);
 void draw_circle(Vector2d centre, double r, unsigned int n_points);
 void draw_cross(Vector2d pos, int size_px);
@@ -62,7 +59,7 @@ bool ids = false;
 bool fancy_bars = false;
 bool show_particles = true;
 bars_color_mode_t bars_color_mode = STRAIN_C;
-const int wall_lines_spacing = 12; // px
+Renderer renderer;
 
 // * * * * * * * * * * //
 // Return the coordinates of the visible world edges
@@ -116,212 +113,6 @@ void display_temperature(double temp)
     s.precision(5);
     s << "T = " << int(temp) << " K";
     glut_print(1 - px_to_ui_x(80), -1 + px_to_ui_y(BOTTOM_MARGIN), s.str());
-}
-
-void draw_particle(Particle& p)
-{
-    // Draw the trace if it is enabled
-    glColor3f(GOLD);
-    glLineWidth(1);
-    
-    glBegin(GL_LINE_STRIP);
-    for (int i = 0; i < p.trace.size(); i++)
-    {
-        Vector2d t = p.trace.get(i);
-        glVertex2f(t.x, t.y);
-    }
-    glEnd();
-    
-    // Particle's position
-    Vector2d pos = p.position_;
-    
-    // If fixed
-    if (p.fixed_)
-    {
-        glColor3f(RED);
-        glPointSize(8);
-        glBegin(GL_POINTS);
-        glVertex2f(pos.x, pos.y);
-        glEnd();
-    }
-    else if (show_particles)
-    {
-        glColor3f(WHITE);
-        glPointSize(6);
-        glBegin(GL_POINTS);
-        glVertex2f(pos.x, pos.y);
-        glEnd();
-    }
-    
-    if (ids)
-    {
-        std::stringstream s;
-        s << p.id_;
-        
-        // Add 5 pixels in eah direction
-        glColor3f(GOLD);
-        glut_print(pos.x + px_to_m(5.0), pos.y + px_to_m(5.0), s.str());
-    }
-}
-
-void draw_bar(const Bar& b)
-{
-    int mult = 5;
-    
-    // Color bars according to their strain
-    if (bars_color_mode == STRAIN_C)
-    {
-        // Relative extension
-        double strain = b.get_strain();
-        if (strain > 1.0)
-            strain = 1.0;
-        else if (strain < -1.0)
-            strain = -1.0;
-        
-        if (strain > 0.0)
-            glColor3f(1.0, 1.0 - mult * strain / MAX_STRAIN, 1.0 - mult * strain / MAX_STRAIN);
-        else
-            glColor3f(1.0 + mult * strain / MAX_STRAIN, 1.0, 1.0);
-    }
-    // Color bars according to their temperature
-    // TODO: Color it appropriately: black-red-yellow-white
-    else if (bars_color_mode == TEMP_C)
-    {
-        double temp_fraction = (b.get_temperature() - ROOM_TEMPERATURE) / (MELTING_POINT - ROOM_TEMPERATURE);
-        if (temp_fraction > 0.0)
-            glColor3f(1.0, 1.0 - temp_fraction, 1.0 - temp_fraction); // red
-        else
-            glColor3f(1.0 + temp_fraction, 1.0, 1.0); // cyan
-        
-        // TODO
-        vec3 color;
-        double temp_chunk = MELTING_POINT / 3.0;
-        double temp = b.get_temperature();
-        if (temp <= temp_chunk)
-            color = vec3(temp / temp_chunk, 0, 0);
-        else if (temp <= 2 * temp_chunk)
-            color = vec3(1.0, (temp - temp_chunk) / temp_chunk, 0.0);
-        else if (temp <= 3 * temp_chunk)
-            color = vec3(1.0, 1.0, (temp - 2 * temp_chunk) / temp_chunk);
-        else
-            color = vec3(1.0, 1.0, 1.0);
-        glColor3f(color.x, color.y, color.z);
-    }
-    
-    Vector2d start = particles[b.p1_id]->position_;
-    Vector2d end = particles[b.p2_id]->position_;
-    Vector2d m_mid = 0.5 * (start + end);
-    
-    if (!fancy_bars)
-    {
-        glLineWidth(2.0);
-        
-        glBegin(GL_LINES);
-        glVertex2f(start.x, start.y);
-        glVertex2f(end.x, end.y);
-        glEnd();
-    }
-    
-    else
-    {
-        glLineWidth(1.0);
-        
-        Vector2d p1_pos = particles[b.p1_id]->position_;
-        Vector2d p2_pos = particles[b.p2_id]->position_;
-        
-        // Draw circles at the ends
-        double b_radius = 0.02;
-        draw_circle(p1_pos, b_radius, 20); // 0.2m
-        draw_circle(p2_pos, b_radius, 20);
-        
-        Vector2d unit = (p2_pos - p1_pos).norm();
-        Vector2d normal = Vector2d(-unit.y, unit.x);
-        
-        Vector2d p1 = p1_pos + b_radius * normal;
-        Vector2d p2 = p2_pos + b_radius * normal;
-        Vector2d p3 = p1_pos - b_radius * normal;
-        Vector2d p4 = p2_pos - b_radius * normal;
-        
-        glBegin(GL_LINES);
-        glVertex2f(p1.x, p1.y);
-        glVertex2f(p2.x, p2.y);
-        glVertex2f(p3.x, p3.y);
-        glVertex2f(p4.x, p4.y);
-        glEnd();
-    }
-    
-    std::stringstream s;
-    s.precision(3);
-    
-    if (ids)
-    {
-        glColor3f(FUCHSIA);
-        s << b.id_;
-        glut_print(m_mid.x, m_mid.y, s.str());
-    }
-    if (lengths)
-    {
-        s << b.length();
-        glut_print(m_mid.x, m_mid.y, s.str());
-    }
-    if (extensions)
-    {
-        s.str("");
-        s << b.get_strain();
-        glut_print(m_mid.x, m_mid.y - px_to_m(12.0), s.str());
-    }
-}
-
-void draw_wall(const Wall& w)
-{
-    glColor3f(WHITE);
-    glLineWidth(2.0);
-    
-    draw_rectangle(w.p1_, w.p2_, false);
-    
-    double x_min = w.x_min();
-    double x_max = w.x_max();
-    double y_min = w.y_min();
-    double y_max = w.y_max();
-    
-    double width = x_max - x_min;
-    double height = y_max - y_min;
-    
-    // Spacing between the lines, metres
-    double d = px_to_m(wall_lines_spacing);
-    
-    glBegin(GL_LINES);
-    for (int i = 0; i * d <= width + height; i++)
-    {
-        double x1 = x_min + i * d - height;
-        double y1 = y_min;
-        double x2 = x_min + i * d;
-        double y2 = y_max;
-        
-        if (x1 < x_min)
-        {
-            x1 = x_min;
-            y1 = y_max - i * d;
-        }
-        if (x2 > x_max)
-        {
-            x2 = x_max;
-            y2 = y_min + width + height - i * d;
-        }
-        
-        glVertex2f(x1, y1);
-        glVertex2f(x2, y2);
-        
-    }
-    glEnd();
-    
-    if (ids)
-    {
-        std::ostringstream s;
-        s << w.id_;
-        glColor3f(AQUA);
-        glut_print(w.p2_.x, w.p2_.y, s.str());
-    }
 }
 
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b)
@@ -455,46 +246,6 @@ void draw_command_line()
     glut_print(-1 + px_to_ui_x(20), -1 + px_to_ui_y(10), commands[commands.size() - current_cmd - 1]);
 }
 
-void draw_button(const Button& b)
-{
-    Vector2d centre = b.position + px_to_ui(b.offset);
-    Vector2d size = px_to_ui(Vector2d(b.width_/2.0, b.height_/2.0));
-    glColor3f(DARK_GREY);
-    draw_rectangle(centre - size, centre + size, true);
-    
-    if (b.active_)
-    {
-        glColor3f(YELLOW);
-        glLineWidth(2.0);
-    }
-    else if (b.highlighted_)
-    {
-        glColor3f(GOLD);
-        glLineWidth(2.0);
-    }
-    else
-    {
-        glColor3f(WHITE);
-        glLineWidth(2.0);
-    }
-    draw_rectangle(centre - size, centre + size, false);
-    
-    glut_print(b.position.x + px_to_ui_x(b.offset.x - b.width_/2.0 + 6), b.position.y + px_to_ui_y(b.offset.y - 5), b.text_);
-}
-
-void draw_label(const TempLabel& l)
-{
-    glColor4f(1.0, 1.0, 1.0, l.alpha());
-    if (l.centre)
-        glut_print(l.position.x + px_to_ui_x(l.offset.x - l.text.size() * 2.8),
-                   l.position.y + px_to_ui_y(l.offset.y - 6),
-                   l.text);
-    else
-        glut_print(l.position.x + px_to_ui_x(l.offset.x),
-                   l.position.y + px_to_ui_y(l.offset.y),
-                   l.text);
-}
-
 void draw_rectangle(Vector2d p1, Vector2d p2, bool filled)
 {
     if (!filled)
@@ -597,19 +348,19 @@ void display()
     
     // Draw the walls
     for (int i = 0; i < walls.size(); i++)
-        draw_wall(*walls.at(i));
+        walls.at(i)->draw(renderer);
     
     // Draw the obstacles
     for (int i = 0; i < obstacles.size(); i++)
-        obstacles.at(i)->draw();
+        obstacles.at(i)->draw(renderer);
     
     // Draw the bars
     for (int i = 0; i < bars.size(); i++)
-        draw_bar(*bars.at(i));
+        bars.at(i)->draw(renderer);
     
     // Draw the particles
     for (int i = 0; i < particles.size(); i++)
-        draw_particle(*particles.at(i));
+        particles.at(i)->draw(renderer);
     
     // Draw the velocity vectors
     if (velocities)
@@ -643,11 +394,11 @@ void display()
     
     // Draw temporary labels
     for (int i = 0; i < temp_labels.size(); i++)
-        draw_label(*temp_labels.at(i));
+        temp_labels.at(i)->draw(renderer);
     
     // Draw buttons
     for (int i = 0; i < buttons.size(); i++)
-        draw_button(buttons[i]);
+        buttons[i].draw(renderer);
     
     display_temperature(environment_temp);
     display_time();

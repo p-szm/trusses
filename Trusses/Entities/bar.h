@@ -11,12 +11,13 @@
 
 #include "pointer_slot_map.h"
 
-#include "math.h"
-
 #define MAX_STRAIN 0.3
 #define MELTING_POINT 1800
 #define STIFFNESS_AT_TM 0.5
 #define THERMAL_COEFF 2e-5
+
+class Renderer;
+class Vector2d;
 
 struct Bar
 {
@@ -45,6 +46,8 @@ struct Bar
     
     void set_strain(double e);
     double get_strain() const;
+    
+    void draw(const Renderer& rend) const;
     
     static int create(int id1, int id2, double e, double temp);
     static int destroy(int obj_id);

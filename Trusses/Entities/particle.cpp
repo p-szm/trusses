@@ -11,8 +11,15 @@
 #include "bar.h"
 #include "wall.h"
 #include "temporary_label.h"
+#include "renderer.h"
 
 PSlotMap<Particle*> particles;
+
+void Particle::untrace()
+{
+    trace_on = false;
+    trace.clear();
+}
 
 void Particle::update()
 {

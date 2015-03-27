@@ -9,8 +9,8 @@
 #include "bar.h"
 #include "pin_joint.h"
 #include "physics.h"
-#include "graphics.h"
 #include "temporary_label.h"
+#include "renderer.h"
 
 PSlotMap<Bar*> bars;
 
@@ -237,4 +237,9 @@ void print_bars()
     {
         std::cout << "Bar " << bars.at(i)->id_ << std::endl;
     }
+}
+
+void Bar::draw(const Renderer& rend) const
+{
+    rend.render(this);
 }

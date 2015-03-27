@@ -10,9 +10,10 @@
 #define __Trusses__save__
 
 #include <iostream>
-#include "math.h"
 
 #define SAVE_PATH "/Users/patrick/workspace/saves/"
+
+class Vector2d;
 
 // * * * * * * * * * * //
 int load(std::string filename);

@@ -10,10 +10,13 @@
 #define __Trusses__button__
 
 #include <vector>
-#include "math.h" // for Vector2d
+#include "math.h"
+
+class Renderer;
 
 class Button
 {
+    friend class Renderer;
 public:
     int id_;
     std::string text_;
@@ -22,7 +25,7 @@ public:
     static int create(double w, double h, double pos_x, double pos_y, int off_x, int off_y, void (*a)(void), std::string t);
     bool is_hit(double x, double y);// Checks if x and y are inside the button's limits. x and y are in gl coords
     void execute_action(); // Executes the action and changes the button's state
-    friend void draw_button(const Button& rect); // It needs to access private width_ and height_ variables
+    void draw(const Renderer& rend) const;
     friend void create_buttons_editor(); // It needs to access the private change_state_ variable
     friend void create_buttons_simulation();
     

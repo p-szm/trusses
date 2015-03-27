@@ -9,7 +9,7 @@
 #ifndef __Trusses__tool__
 #define __Trusses__tool__
 
-#include <iostream>
+#include <stdio.h>
 
 // In world coordinates
 class Tool

@@ -18,28 +18,59 @@
 #define WARNING_LABEL_TIME 3000000
 #define INFO_LABEL_TIME 3000000
 
+class Renderer;
+
+// Displays text at given position for given amount of time.
+// The text starts fading away after 70% of its lifetime.
 class TempLabel
 {
+    friend class Renderer;
 public:
-    std::string text;
-    Vector2d position; // In gl coords, pinned to the centre of the label
-    Vector2d offset; // In pixels
-    unsigned long long int max_time; // In microseconds
-    unsigned long long int time;
     int id_;
-    float alpha() const;
-    bool centre;
+    
+    // In microseconds
+    unsigned long long int max_time;
+    
+    // Current time
+    unsigned long long int time = 0;
     
     // Anchored to the middle
-    static int create(std::string str, double pos_x, double pos_y, int off_x, int off_y, double t, bool centre_l = true);
+    static int create(std::string str, double pos_x, double pos_y,
+                      int off_x, int off_y, double t, bool centre_l = true);
+    
+    // Updates the label, returns 1 if it should be destroyed,
+    // 0 otherwise. This method shoudld be called every frame.
+    int update();
+    
+    void draw(const Renderer& rend) const;
+
+    // Removes the label with given id
     static int destroy(int obj_id);
-    static int update(int obj_id);
+    
+protected:
+    // Text to be displayed
+    std::string text;
+    
+    // In world coords. The anchor point is defined
+    // by the "centre" variable.
+    Vector2d position;
+    
+    // Offset in pixel from the oiginal position
+    Vector2d offset;
+    
+    // Returns the current opacity (1.0 means full opacity)
+    float alpha() const;
+    
+    // True if the label is anchored to the centre, false
+    // if it's anchored to the bottom left corner.
+    bool centre;
 private:
-    TempLabel(std::string str, double pos_x, double pos_y, int off_x, int off_y, double t, bool centre_l = true)
-        {text = str; position = Vector2d(pos_x, pos_y); offset = Vector2d(off_x, off_y); max_time = t; time = 0; centre = centre_l;};
+    // Constructor is private. TempLabel::create should be used instead.
+    TempLabel(std::string str, double pos_x, double pos_y, int off_x,
+              int off_y, double t, bool centre_l = true);
 };
 
-// Update's labels and removes ones that expired
+// Updates labels and removes the ones that expired
 void update_labels();
 
 // Creates a label with given text in the bottom left corner

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		CD200BBB1AC4625C001C8720 /* pin_joint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD200BB91AC4625C001C8720 /* pin_joint.cpp */; };
+		CD2870331AC4CDCA0002E593 /* renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD2870311AC4CDCA0002E593 /* renderer.cpp */; };
 		CD74D2181A52F51A000B6F31 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2171A52F51A000B6F31 /* OpenGL.framework */; };
 		CD74D21A1A52F520000B6F31 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2191A52F520000B6F31 /* GLUT.framework */; };
 		CD9875231AA75D980035DCC2 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD98750C1AA75D980035DCC2 /* graphics.cpp */; };
@@ -49,6 +50,8 @@
 		CD200BB81AC451DE001C8720 /* pointer_slot_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pointer_slot_map.h; path = Trusses/External/pointer_slot_map.h; sourceTree = SOURCE_ROOT; };
 		CD200BB91AC4625C001C8720 /* pin_joint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pin_joint.cpp; path = Trusses/Entities/pin_joint.cpp; sourceTree = SOURCE_ROOT; };
 		CD200BBA1AC4625C001C8720 /* pin_joint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pin_joint.h; path = Trusses/Entities/pin_joint.h; sourceTree = SOURCE_ROOT; };
+		CD2870311AC4CDCA0002E593 /* renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = renderer.cpp; path = Trusses/renderer.cpp; sourceTree = SOURCE_ROOT; };
+		CD2870321AC4CDCA0002E593 /* renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = renderer.h; path = Trusses/renderer.h; sourceTree = SOURCE_ROOT; };
 		CD74D20D1A5214CC000B6F31 /* Trusses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Trusses; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD74D2171A52F51A000B6F31 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		CD74D2191A52F520000B6F31 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
@@ -139,6 +142,8 @@
 				CD9875191AA75D980035DCC2 /* physics.h */,
 				CD98751A1AA75D980035DCC2 /* save.cpp */,
 				CD98751B1AA75D980035DCC2 /* save.h */,
+				CD2870311AC4CDCA0002E593 /* renderer.cpp */,
+				CD2870321AC4CDCA0002E593 /* renderer.h */,
 				CDC345E81AC1745F00F0E8C2 /* External */,
 				CDC345E71AC1741F00F0E8C2 /* Interface */,
 				CDC345E61AC1740600F0E8C2 /* Math */,
@@ -293,6 +298,7 @@
 				CDC3461B1AC1A0ED00F0E8C2 /* wall_tool.cpp in Sources */,
 				CD98752A1AA75D980035DCC2 /* physics.cpp in Sources */,
 				CDC346171AC1A0ED00F0E8C2 /* drag_tool.cpp in Sources */,
+				CD2870331AC4CDCA0002E593 /* renderer.cpp in Sources */,
 				CDC346311AC1DBD000F0E8C2 /* math.cpp in Sources */,
 				CD9875251AA75D980035DCC2 /* interpreter.cpp in Sources */,
 				CDC346081AC1A0DE00F0E8C2 /* particle.cpp in Sources */,

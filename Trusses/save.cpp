@@ -15,6 +15,7 @@
 #include <cmath>
 #include <map>
 
+#include "math.h"
 #include "pin_joint.h"
 #include "bar.h"
 #include "wall.h"

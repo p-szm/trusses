@@ -50,6 +50,7 @@ void draw_rectangle(Vector2d p1, Vector2d p2, bool filled);
 void draw_circle(Vector2d centre, double r, unsigned int n_points);
 void draw_cross(Vector2d pos, int size_px);
 void draw_point(Vector2d pos);
+void glut_print (float x, float y, std::string s);;
 
 // * * * * * * * * * * //
 void setup_graphics(int argc, char * argv[]);

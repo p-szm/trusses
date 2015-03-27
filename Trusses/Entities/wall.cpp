@@ -8,7 +8,8 @@
 
 #include "wall.h"
 #include "temporary_label.h"
-#include "physics.h"
+#include "physics.h" // For ENERGY_ABSORPTION
+#include "renderer.h"
 
 PSlotMap<Wall*> walls;
 
@@ -114,4 +115,9 @@ void Wall::collide()
             p->prev_position_verlet_ = p_pos - delta_t * p_vel;
         }
     }
+}
+
+void Wall::draw(const Renderer& rend) const
+{
+    rend.render(this);
 }

@@ -10,8 +10,9 @@
 #define __Trusses__interface__
 
 #include "math.h"
-#include "tool.h"
 #include <vector>
+
+class Tool;
 
 // * * * * * * * * * * //
 void key_down_function(unsigned char key, int x, int y);

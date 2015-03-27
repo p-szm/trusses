@@ -9,10 +9,11 @@
 #ifndef __Trusses__wall__
 #define __Trusses__wall__
 
-#include <iostream>
+#include <stdio.h>
 #include "pointer_slot_map.h"
-
 #include "math.h"
+
+class Renderer;
 
 struct Wall
 {
@@ -27,6 +28,8 @@ struct Wall
     
     // Handles the collisions with the particles
     void collide();
+    
+    void draw(const Renderer& rend) const;
     
     static int create(Vector2d p1, Vector2d p2);
     static int destroy(int wall_id);

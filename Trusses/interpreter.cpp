@@ -295,10 +295,7 @@ void interpret_command(std::string cmd)
                 if (n < 0)
                     n = 0;
                 if (particles.exists(n) && particles[n]->trace_on)
-                {
-                    particles[n]->trace_on = false;
-                    particles[n]->trace.clear();
-                }
+                    particles[n]->untrace();
             }
         }
     }

@@ -14,6 +14,7 @@
 #include "wall_tool.h"
 #include "selection_tool.h"
 #include "obstacle_tool.h"
+#include "renderer.h"
 
 std::vector<Button> buttons;
 
@@ -58,6 +59,11 @@ void Button::execute_action()
     action();
     if (change_state_)
         active_ = !active_;
+}
+
+void Button::draw(const Renderer& rend) const
+{
+    rend.render(this);
 }
 
 void button_ids_action(void)

@@ -10,21 +10,24 @@
 #define __Trusses__obstacle__
 
 #include <stdio.h>
-#include <map> // temporary
 #include "polygon.h"
 #include "pointer_slot_map.h"
 
+class Renderer;
+
 class Obstacle: public Polygon
 {
+    friend class Renderer;
 public:
     Obstacle(const Polygon& poly);
     int id_;
-    void draw();
+    void draw(const Renderer& rend);
     // Handle the collisions with the particles
     void collide();
-private:
+protected:
     Vector2d box_min;
     Vector2d box_max;
+private:
     void update_bounding_box();
 };
 

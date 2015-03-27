@@ -8,6 +8,7 @@
 
 #include "pin_joint.h"
 #include "physics.h"
+#include "renderer.h"
 
 int PinJoint::create(double a, double b, bool fixed)
 {
@@ -27,4 +28,9 @@ int PinJoint::create(double a, double b, bool fixed)
     
     int new_id = particles.add(new_pjoint);
     return new_id;
+}
+
+void PinJoint::draw(const Renderer& rend) const
+{
+    rend.render(this);
 }

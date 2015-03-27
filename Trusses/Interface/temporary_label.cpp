@@ -9,8 +9,19 @@
 #include "temporary_label.h"
 #include "physics.h"
 #include "graphics.h"
+#include "renderer.h"
 
 PSlotMap<TempLabel*> temp_labels;
+
+TempLabel::TempLabel(std::string str, double pos_x, double pos_y, int off_x,
+          int off_y, double t, bool centre_l)
+{
+    text = str;
+    position = Vector2d(pos_x, pos_y);
+    offset = Vector2d(off_x, off_y);
+    max_time = t;
+    centre = centre_l;
+}
 
 int TempLabel::create(std::string str, double pos_x, double pos_y, int off_x, int off_y, double t, bool centre_l)
 {
@@ -19,22 +30,12 @@ int TempLabel::create(std::string str, double pos_x, double pos_y, int off_x, in
     return new_id;
 }
 
-int TempLabel::destroy(int obj_id)
-{
-    int result = temp_labels.remove(obj_id);
-    return result;
-}
-
 // The return value of 1 means "remove me"
-int TempLabel::update(int obj_id)
+int TempLabel::update()
 {
-    if (temp_labels.exists(obj_id))
-    {
-        TempLabel* label = temp_labels[obj_id];
-        label->time += (t - prev_t);
-        if (label->time > label->max_time)
-            return 1;
-    }
+    time += (t - prev_t);
+    if (time > max_time)
+        return 1;
     return 0;
 }
 
@@ -46,6 +47,17 @@ float TempLabel::alpha() const
     return 1.0;
 }
 
+void TempLabel::draw(const Renderer& rend) const
+{
+    rend.render(this);
+}
+
+int TempLabel::destroy(int obj_id)
+{
+    int result = temp_labels.remove(obj_id);
+    return result;
+}
+
 void update_labels()
 {
     // Update labels
@@ -53,7 +65,7 @@ void update_labels()
     for (int i = 0; i < temp_labels.size(); i++)
     {
         TempLabel* tl = temp_labels.at(i);
-        if (TempLabel::update(tl->id_))
+        if (tl->update())
             labels_to_remove.push_back(tl->id_);
     }
     

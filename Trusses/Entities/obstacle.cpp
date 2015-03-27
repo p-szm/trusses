@@ -7,18 +7,11 @@
 //
 
 #include "obstacle.h"
-#include "graphics.h"
 #include "particle.h"
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#include <OpenGL/gl.h>
-#else
-#include <GL/glut.h>
-#endif
+#include "renderer.h"
 #include <limits>
 
 PSlotMap<Obstacle*> obstacles;
-bool draw_bounding_boxes = false;
 
 Obstacle::Obstacle(const Polygon& poly)
 {
@@ -27,21 +20,9 @@ Obstacle::Obstacle(const Polygon& poly)
     update_bounding_box();
 }
 
-void Obstacle::draw()
+void Obstacle::draw(const Renderer& rend)
 {
-    glColor3f(WHITE);
-    glLineWidth(2);
-    glBegin(GL_LINE_LOOP);
-    for (int i = 0; i < no_sides(); i++)
-        glVertex2f(points[i].x, points[i].y);
-    glEnd();
-    
-    if (draw_bounding_boxes)
-    {
-        glColor3f(RED);
-        glLineWidth(1.0);
-        draw_rectangle(box_min, box_max, false);
-    }
+    rend.render(this);
 }
 
 void Obstacle::update_bounding_box()
