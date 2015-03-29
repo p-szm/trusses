@@ -18,7 +18,7 @@
 #endif
 #include <sstream>
 
-#include "pin_joint.h"
+#include "particle.h"
 #include "bar.h"
 #include "wall.h"
 #include "obstacle.h"
@@ -28,25 +28,25 @@
 bool draw_bounding_boxes = false;
 const int wall_lines_spacing = 12; // px
 
-void Renderer::render(const PinJoint* const obj) const
+void Renderer::render(const Particle& obj) const
 {
     // Draw the trace if it is enabled
     glColor3f(GOLD);
     glLineWidth(1);
     
     glBegin(GL_LINE_STRIP);
-    for (int i = 0; i < obj->trace.size(); i++)
+    for (int i = 0; i < obj.trace.size(); i++)
     {
-        Vector2d t = obj->trace.get(i);
+        Vector2d t = obj.trace.get(i);
         glVertex2f(t.x, t.y);
     }
     glEnd();
     
     // Particle's position
-    Vector2d pos = obj->position_;
+    Vector2d pos = obj.position_;
     
     // If fixed
-    if (obj->fixed_)
+    if (obj.fixed_)
     {
         glColor3f(RED);
         glPointSize(8);
@@ -66,7 +66,7 @@ void Renderer::render(const PinJoint* const obj) const
     if (ids)
     {
         std::stringstream s;
-        s << obj->id_;
+        s << obj.id_;
         
         // Add 5 pixels in eah direction
         glColor3f(GOLD);
@@ -74,7 +74,7 @@ void Renderer::render(const PinJoint* const obj) const
     }
 }
 
-void Renderer::render(const Bar* const obj) const
+void Renderer::render(const Bar& obj) const
 {
     int mult = 5;
     
@@ -82,7 +82,7 @@ void Renderer::render(const Bar* const obj) const
     if (bars_color_mode == STRAIN_C)
     {
         // Relative extension
-        double strain = obj->get_strain();
+        double strain = obj.get_strain();
         if (strain > 1.0)
             strain = 1.0;
         else if (strain < -1.0)
@@ -97,7 +97,7 @@ void Renderer::render(const Bar* const obj) const
     // TODO: Color it appropriately: black-red-yellow-white
     else if (bars_color_mode == TEMP_C)
     {
-        double temp_fraction = (obj->get_temperature() - ROOM_TEMPERATURE) / (MELTING_POINT - ROOM_TEMPERATURE);
+        double temp_fraction = (obj.get_temperature() - ROOM_TEMPERATURE) / (MELTING_POINT - ROOM_TEMPERATURE);
         if (temp_fraction > 0.0)
             glColor3f(1.0, 1.0 - temp_fraction, 1.0 - temp_fraction); // red
         else
@@ -106,7 +106,7 @@ void Renderer::render(const Bar* const obj) const
         // TODO
         vec3 color;
         double temp_chunk = MELTING_POINT / 3.0;
-        double temp = obj->get_temperature();
+        double temp = obj.get_temperature();
         if (temp <= temp_chunk)
             color = vec3(temp / temp_chunk, 0, 0);
         else if (temp <= 2 * temp_chunk)
@@ -118,8 +118,8 @@ void Renderer::render(const Bar* const obj) const
         glColor3f(color.x, color.y, color.z);
     }
     
-    Vector2d start = particles[obj->p1_id]->position_;
-    Vector2d end = particles[obj->p2_id]->position_;
+    Vector2d start = particles[obj.p1_id].position_;
+    Vector2d end = particles[obj.p2_id].position_;
     Vector2d m_mid = 0.5 * (start + end);
     
     if (!fancy_bars)
@@ -136,8 +136,8 @@ void Renderer::render(const Bar* const obj) const
     {
         glLineWidth(1.0);
         
-        Vector2d p1_pos = particles[obj->p1_id]->position_;
-        Vector2d p2_pos = particles[obj->p2_id]->position_;
+        Vector2d p1_pos = particles[obj.p1_id].position_;
+        Vector2d p2_pos = particles[obj.p2_id].position_;
         
         // Draw circles at the ends
         double b_radius = 0.02;
@@ -166,33 +166,33 @@ void Renderer::render(const Bar* const obj) const
     if (ids)
     {
         glColor3f(FUCHSIA);
-        s << obj->id_;
+        s << obj.id_;
         glut_print(m_mid.x, m_mid.y, s.str());
     }
     if (lengths)
     {
-        s << obj->length();
+        s << obj.length();
         glut_print(m_mid.x, m_mid.y, s.str());
     }
     if (extensions)
     {
         s.str("");
-        s << obj->get_strain();
+        s << obj.get_strain();
         glut_print(m_mid.x, m_mid.y - px_to_m(12.0), s.str());
     }
 }
 
-void Renderer::render(const Wall* const obj) const
+void Renderer::render(const Wall& obj) const
 {
     glColor3f(WHITE);
     glLineWidth(2.0);
     
-    draw_rectangle(obj->p1_, obj->p2_, false);
+    draw_rectangle(obj.p1_, obj.p2_, false);
     
-    double xmin = obj->x_min();
-    double xmax = obj->x_max();
-    double ymin = obj->y_min();
-    double ymax = obj->y_max();
+    double xmin = obj.x_min();
+    double xmax = obj.x_max();
+    double ymin = obj.y_min();
+    double ymax = obj.y_max();
     
     double width = xmax - xmin;
     double height = ymax - ymin;
@@ -228,55 +228,55 @@ void Renderer::render(const Wall* const obj) const
     if (ids)
     {
         std::ostringstream s;
-        s << obj->id_;
+        s << obj.id_;
         glColor3f(AQUA);
-        glut_print(obj->p2_.x, obj->p2_.y, s.str());
+        glut_print(obj.p2_.x, obj.p2_.y, s.str());
     }
 }
 
-void Renderer::render(const Obstacle* const obj) const
+void Renderer::render(const Obstacle& obj) const
 {
     glColor3f(WHITE);
     glLineWidth(2);
     glBegin(GL_LINE_LOOP);
-    for (int i = 0; i < obj->no_sides(); i++)
-        glVertex2f(obj->points[i].x, obj->points[i].y);
+    for (int i = 0; i < obj.no_sides(); i++)
+        glVertex2f(obj.points[i].x, obj.points[i].y);
     glEnd();
     
     if (draw_bounding_boxes)
     {
         glColor3f(RED);
         glLineWidth(1.0);
-        draw_rectangle(obj->box_min, obj->box_max, false);
+        draw_rectangle(obj.box_min, obj.box_max, false);
     }
 }
 
-void Renderer::render(const TempLabel *const obj) const
+void Renderer::render(const TempLabel& obj) const
 {
-    glColor4f(1.0, 1.0, 1.0, obj->alpha());
-    if (obj->centre)
-        glut_print(obj->position.x + px_to_ui_x(obj->offset.x - obj->text.size() * 2.8),
-                   obj->position.y + px_to_ui_y(obj->offset.y - 6),
-                   obj->text);
+    glColor4f(1.0, 1.0, 1.0, obj.alpha());
+    if (obj.centre)
+        glut_print(obj.position.x + px_to_ui_x(obj.offset.x - obj.text.size() * 2.8),
+                   obj.position.y + px_to_ui_y(obj.offset.y - 6),
+                   obj.text);
     else
-        glut_print(obj->position.x + px_to_ui_x(obj->offset.x),
-                   obj->position.y + px_to_ui_y(obj->offset.y),
-                   obj->text);
+        glut_print(obj.position.x + px_to_ui_x(obj.offset.x),
+                   obj.position.y + px_to_ui_y(obj.offset.y),
+                   obj.text);
 }
 
-void Renderer::render(const Button *const obj) const
+void Renderer::render(const Button& obj) const
 {
-    Vector2d centre = obj->position + px_to_ui(obj->offset);
-    Vector2d size = px_to_ui(Vector2d(obj->width_/2.0, obj->height_/2.0));
+    Vector2d centre = obj.position + px_to_ui(obj.offset);
+    Vector2d size = px_to_ui(Vector2d(obj.width_/2.0, obj.height_/2.0));
     glColor3f(DARK_GREY);
     draw_rectangle(centre - size, centre + size, true);
     
-    if (obj->active_)
+    if (obj.active_)
     {
         glColor3f(YELLOW);
         glLineWidth(2.0);
     }
-    else if (obj->highlighted_)
+    else if (obj.highlighted_)
     {
         glColor3f(GOLD);
         glLineWidth(2.0);
@@ -288,6 +288,6 @@ void Renderer::render(const Button *const obj) const
     }
     draw_rectangle(centre - size, centre + size, false);
     
-    glut_print(obj->position.x + px_to_ui_x(obj->offset.x - obj->width_/2.0 + 6),
-               obj->position.y + px_to_ui_y(obj->offset.y - 5), obj->text_);
+    glut_print(obj.position.x + px_to_ui_x(obj.offset.x - obj.width_/2.0 + 6),
+               obj.position.y + px_to_ui_y(obj.offset.y - 5), obj.text_);
 }

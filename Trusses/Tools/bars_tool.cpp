@@ -8,7 +8,6 @@
 
 #include "bars_tool.h"
 #include "mouse.h"
-#include "pin_joint.h"
 #include "bar.h"
 #include "physics.h"
 #include "graphics.h"
@@ -42,9 +41,9 @@ void BarsTool::mouse_click(int button, int state)
         // Create a new particle and select it
         int new_p_id;
         if (button == GLUT_RIGHT_BUTTON)
-            new_p_id = PinJoint::create(mouse_pos.x, mouse_pos.y, true); // Fixed
+            new_p_id = Particle::create(mouse_pos.x, mouse_pos.y, true); // Fixed
         else
-            new_p_id = PinJoint::create(mouse_pos.x, mouse_pos.y, false); // Free
+            new_p_id = Particle::create(mouse_pos.x, mouse_pos.y, false); // Free
         
         selected_particles_ids.push_back(new_p_id);
     }
@@ -74,7 +73,7 @@ void BarsTool::display()
     // Snap the position vector
     bool snapped = true;
     if (mouse.particle_in_range())
-        tool_pos = particles[mouse.closest_particle]->position_;
+        tool_pos = particles[mouse.closest_particle].position_;
     else if (mouse.grid_in_range())
         tool_pos = mouse.closest_grid;
     else
@@ -92,7 +91,7 @@ void BarsTool::display()
         {
             if (particles.exists(selected_particles_ids[i])) // Make sure that this particle exists
             {
-                Vector2d selected_pos = particles[selected_particles_ids[i]]->position_;
+                Vector2d selected_pos = particles[selected_particles_ids[i]].position_;
                 glVertex2f(selected_pos.x, selected_pos.y);
                 glVertex2f(tool_pos.x, tool_pos.y);
             }

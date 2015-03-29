@@ -11,7 +11,7 @@
 #include "graphics.h"
 #include "renderer.h"
 
-PSlotMap<TempLabel*> temp_labels;
+SlotMap<TempLabel> temp_labels;
 
 TempLabel::TempLabel(std::string str, double pos_x, double pos_y, int off_x,
           int off_y, double t, bool centre_l)
@@ -25,7 +25,7 @@ TempLabel::TempLabel(std::string str, double pos_x, double pos_y, int off_x,
 
 int TempLabel::create(std::string str, double pos_x, double pos_y, int off_x, int off_y, double t, bool centre_l)
 {
-    TempLabel* new_label = new TempLabel(str, pos_x, pos_y, off_x, off_y, t, centre_l);
+    TempLabel new_label(str, pos_x, pos_y, off_x, off_y, t, centre_l);
     int new_id = temp_labels.add(new_label);
     return new_id;
 }
@@ -49,7 +49,7 @@ float TempLabel::alpha() const
 
 void TempLabel::draw(const Renderer& rend) const
 {
-    rend.render(this);
+    rend.render(*this);
 }
 
 int TempLabel::destroy(int obj_id)
@@ -64,9 +64,9 @@ void update_labels()
     std::vector<int> labels_to_remove;
     for (int i = 0; i < temp_labels.size(); i++)
     {
-        TempLabel* tl = temp_labels.at(i);
-        if (tl->update())
-            labels_to_remove.push_back(tl->id_);
+        TempLabel& tl = temp_labels.at(i);
+        if (tl.update())
+            labels_to_remove.push_back(tl.id_);
     }
     
     // Remove labels that expired

@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "polygon.h"
-#include "pointer_slot_map.h"
+#include "slot_map.h"
 
 class Renderer;
 
@@ -31,6 +31,6 @@ private:
     void update_bounding_box();
 };
 
-extern PSlotMap<Obstacle*> obstacles;
+extern SlotMap<Obstacle> obstacles;
 
 #endif /* defined(__Trusses__obstacle__) */

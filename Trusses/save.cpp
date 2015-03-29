@@ -16,7 +16,7 @@
 #include <map>
 
 #include "math.h"
-#include "pin_joint.h"
+#include "particle.h"
 #include "bar.h"
 #include "wall.h"
 #include "obstacle.h"
@@ -130,7 +130,7 @@ int load(std::string filename)
                 int p_id = number<int>(line.substr(1, line.find(" ")));
                 particles_map[p_id] = (int)particles_map.size();
                 
-                PinJoint::create(v[0], v[1], false);
+                Particle::create(v[0], v[1], false);
             }
         }
         
@@ -146,7 +146,7 @@ int load(std::string filename)
                 int p_id = number<int>(line.substr(1, line.find(" ")));
                 particles_map[p_id] = (int)particles_map.size();
              
-                PinJoint::create(v[0], v[1], true);
+                Particle::create(v[0], v[1], true);
             }
         }
         
@@ -183,7 +183,7 @@ int load(std::string filename)
             {
                 for (size_t i = 0; i < v.size(); i+=2)
                     poly.add_point(Vector2d(v[i], v[i+1]));
-                obstacles.add(new Obstacle(poly));
+                obstacles.add(Obstacle(poly));
             }
         }
     }
@@ -207,12 +207,12 @@ void save(std::string filename)
     // Print particles
     for (int i = 0; i < particles.size(); i++)
     {
-        Particle* p = particles.at(i);
-        if (p->fixed_)
+        Particle& p = particles.at(i);
+        if (p.fixed_)
             file << 'f';
         else
             file << 'p';
-        file << p->id_ << ' ' << p->position_;
+        file << p.id_ << ' ' << p.position_;
         file << std::endl;
     }
     file << std::endl;
@@ -221,26 +221,26 @@ void save(std::string filename)
     // b-bar_id particle1_id particle2_id strain temperature
     for (int i = 0; i < bars.size(); i++)
     {
-        Bar * b = bars.at(i);
-        file << 'b' << b->id_ << ' ' << b->p1_id << ' ' << b->p2_id << ' ' << b->get_strain() << ' ' << b->get_temperature() << std::endl;
+        Bar& b = bars.at(i);
+        file << 'b' << b.id_ << ' ' << b.p1_id << ' ' << b.p2_id << ' ' << b.get_strain() << ' ' << b.get_temperature() << std::endl;
     }
     file << std::endl;
     
     // Print walls
     for (int i = 0; i < walls.size(); i++)
     {
-        Wall* w = walls.at(i);
-        file << 'w' << w->id_ << ' ' << w->p1_ << ' ' << w->p2_ << std::endl;
+        Wall& w = walls.at(i);
+        file << 'w' << w.id_ << ' ' << w.p1_ << ' ' << w.p2_ << std::endl;
     }
     file << std::endl;
     
     // Print the obstacles
     for (int i = 0; i < obstacles.size(); i++)
     {
-        Obstacle* ob = obstacles.at(i);
-        file << "o" << ob->id_;
-        for (size_t i = 0; i < ob->points.size(); i++)
-            file << " " << ob->points[i];
+        Obstacle& ob = obstacles.at(i);
+        file << "o" << ob.id_;
+        for (size_t i = 0; i < ob.points.size(); i++)
+            file << " " << ob.points[i];
         file << std::endl << std::endl;
     }
     
@@ -279,9 +279,9 @@ void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)
         for (int i = 0; i < n; i++)
         {
             if (fixed)
-                PinJoint::create(x0 + i * d, y0 + j * d, true);
+                Particle::create(x0 + i * d, y0 + j * d, true);
             else
-                PinJoint::create(x0 + i * d, y0 + j * d, false);
+                Particle::create(x0 + i * d, y0 + j * d, false);
         }
     }
     

@@ -11,7 +11,7 @@
 
 #include <vector>
 #include "math.h"
-#include "pointer_slot_map.h"
+#include "slot_map.h"
 #include "fixed_size.h"
 
 class Renderer;
@@ -48,18 +48,16 @@ public:
     // Numerical simulation.
     void update();
     
-    // Impose constraints on other entities.
-    virtual void impose_constraints() = 0;
-    
-    virtual void draw(const Renderer& rend) const = 0;
+    virtual void draw(const Renderer& rend) const;
     
     // Remove a particle with this id
     static int destroy(int removed_id);
     
-    Particle(double a, double b): trace(500) {position_.x = a; position_.y = b;}
-    virtual ~Particle() {};
+    static int create(double a, double b, bool fixed);
     
 protected:
+    Particle(double a, double b): trace(500) {position_.x = a; position_.y = b;}
+    
     // id's of all the bars connected to this particle
     std::vector<int> bars_connected;
     
@@ -68,6 +66,6 @@ protected:
 
 void print_particles();
 
-extern PSlotMap<Particle*> particles;
+extern SlotMap<Particle> particles;
 
 #endif /* defined(__Trusses__particle__) */

@@ -25,7 +25,7 @@ void DragTool::mouse_click(int button, int state)
     if (state == GLUT_UP && particles.exists(dragged_particle))
     {
         // Zero its acceleration
-        particles[dragged_particle]->external_acceleration_ = Vector2d(0.0, 0.0);
+        particles[dragged_particle].external_acceleration_ = Vector2d(0.0, 0.0);
         dragged_particle = -1;
         return;
     }
@@ -47,14 +47,14 @@ void DragTool::drag()
     if (!particles.exists(dragged_particle))
         return;
     
-    Particle* p = particles[dragged_particle];
+    Particle& p = particles[dragged_particle];
     
     // Particle is fixed
-    if (p->fixed_)
-        p->position_ = mouse.pos_world;
+    if (p.fixed_)
+        p.position_ = mouse.pos_world;
     // Particle is not fixed
     else
-        p->external_acceleration_ = dragging_force * (mouse.pos_world - p->position_) / world.scale;
+        p.external_acceleration_ = dragging_force * (mouse.pos_world - p.position_) / world.scale;
 }
 
 void DragTool::display()
@@ -64,7 +64,7 @@ void DragTool::display()
     // Highlight a particle if it's close to the mouse
     if (mouse.particle_in_range())
     {
-        Vector2d closest_pos = particles[mouse.closest_particle]->position_;
+        Vector2d closest_pos = particles[mouse.closest_particle].position_;
         glColor3f(GOLD);
         glPointSize(10);
         glBegin(GL_POINTS);
@@ -76,8 +76,8 @@ void DragTool::display()
     // Draw the active particle
     if (!highlighted && particles.exists(dragged_particle))
     {
-        Particle* active_p = particles[dragged_particle];
-        Vector2d particle_pos_gl = active_p->position_ ;
+        Particle& active_p = particles[dragged_particle];
+        Vector2d particle_pos_gl = active_p.position_ ;
         
         glColor3f(GOLD);
         glPointSize(10);

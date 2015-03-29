@@ -47,13 +47,13 @@ void SelectionTool::drag()
         if (poly.no_sides() < 3)
             return;
         
-        Particle* p = particles.at(i);
+        Particle& p = particles.at(i);
         // TODO: Only particles that are lose to the selection
         // should be checked.
-        if (poly.point_inside(p->position_))
-            selection_map[p->id_] = true;
+        if (poly.point_inside(p.position_))
+            selection_map[p.id_] = true;
         else
-            selection_map[p->id_] = false;
+            selection_map[p.id_] = false;
     }
 }
 
@@ -74,7 +74,7 @@ void SelectionTool::display()
     {
         if (selection_map[i])
         {
-            Vector2d pos = particles[i]->position_;
+            Vector2d pos = particles[i].position_;
             glVertex2d(pos.x, pos.y);
         }
     }

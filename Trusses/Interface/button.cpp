@@ -63,7 +63,7 @@ void Button::execute_action()
 
 void Button::draw(const Renderer& rend) const
 {
-    rend.render(this);
+    rend.render(*this);
 }
 
 void button_ids_action(void)

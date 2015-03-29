@@ -23,11 +23,11 @@ void Mouse::update(int x, int y)
     double least_dist2 = std::numeric_limits<float>::max();
     for (int i = 0; i < particles.size(); i++)
     {
-        Particle* p = particles.at(i);
-        double dist2_m = (pos_world - p->position_).abs2();
+        Particle& p = particles.at(i);
+        double dist2_m = (pos_world - p.position_).abs2();
         if (dist2_m < least_dist2)
         {
-            closest_particle = p->id_;
+            closest_particle = p.id_;
             least_dist2 = dist2_m;
         }
     }
@@ -49,7 +49,7 @@ bool Mouse::in_range(Vector2d point)
 Vector2d Mouse::snap()
 {
     if (particle_in_range())
-        return particles[closest_particle]->position_;
+        return particles[closest_particle].position_;
     else if (grid_in_range())
         return closest_grid;
     return mouse.pos_world;
@@ -66,7 +66,7 @@ bool Mouse::particle_in_range()
 {
     if (!particles.exists(closest_particle))
         return false;
-    if (in_range(particles[closest_particle]->position_))
+    if (in_range(particles[closest_particle].position_))
         return true;
     return false;
 }

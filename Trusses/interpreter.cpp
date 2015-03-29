@@ -11,7 +11,7 @@
 #include <sstream>
 #include <vector>
 
-#include "pin_joint.h"
+#include "particle.h"
 #include "bar.h"
 #include "wall.h"
 #include "physics.h"
@@ -204,7 +204,7 @@ void interpret_command(std::string cmd)
         if (words_number == 1)
             print_particles();
         else if (words_number == 3 && is_number(words[1]) && is_number(words[2]))
-            PinJoint::create(get_number<double>(words[1]), get_number<double>(words[2]), false);
+            Particle::create(get_number<double>(words[1]), get_number<double>(words[2]), false);
         else
             issue_label("Usage: particle <double> <double>", INFO_LABEL_TIME);
     }
@@ -240,12 +240,12 @@ void interpret_command(std::string cmd)
                 if (bar_id < 0)
                     bar_id = 0;
                 if (bars.exists(bar_id))
-                    bars[bar_id]->stiffness = new_stiffness;
+                    bars[bar_id].stiffness = new_stiffness;
             }
             else if (words[1] == "*")
             {
                 for (int i = 0; i < bars.size(); i++)
-                    bars.at(i)->stiffness = new_stiffness;
+                    bars.at(i).stiffness = new_stiffness;
             }
         }
         else
@@ -263,7 +263,7 @@ void interpret_command(std::string cmd)
                 if (n < 0)
                     n = 0;
                 if (particles.exists(n))
-                    particles[n]->fixed_ = true;
+                    particles[n].fixed_ = true;
             }
         }
     }
@@ -279,7 +279,7 @@ void interpret_command(std::string cmd)
                 if (n < 0)
                     n = 0;
                 if (particles.exists(n))
-                    particles[n]->trace_on = true;
+                    particles[n].trace_on = true;
             }
         }
     }
@@ -294,8 +294,8 @@ void interpret_command(std::string cmd)
                 int n = get_number<int>(words[1]);
                 if (n < 0)
                     n = 0;
-                if (particles.exists(n) && particles[n]->trace_on)
-                    particles[n]->untrace();
+                if (particles.exists(n) && particles[n].trace_on)
+                    particles[n].untrace();
             }
         }
     }
@@ -359,7 +359,7 @@ void interpret_command(std::string cmd)
             if (n2 < 0)
                 n2 = 0;
             if (bars.exists(n1))
-                bars[n1]->split(n1, n2);
+                bars[n1].split(n1, n2);
             else
                 issue_label("This bar does not exist", WARNING_LABEL_TIME);
         }
@@ -376,7 +376,7 @@ void interpret_command(std::string cmd)
             if (n1 < 0)
                 n1 = 0;
             if (bars.exists(n1))
-                bars[n1]->set_strain(n2);
+                bars[n1].set_strain(n2);
         }
     }
     

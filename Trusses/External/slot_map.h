@@ -1,21 +1,40 @@
 //
-//  pointer_slot_map.h
+//  slot_map.h
+//  Trusses
 //
-//  Created by Patrick on 26/03/2015.
-//  Copyright (c) 2015 Patrick. All rights reserved.
+//  Created by Patrick Szmucer on 23/01/2015.
+//  Copyright (c) 2015 Patrick Szmucer. All rights reserved.
 //
 
-#ifndef pointer_slot_map_h
-#define pointer_slot_map_h
+#ifndef __Trusses__slot_map__
+#define __Trusses__slot_map__
 
 #include <iostream>
 #include <vector>
 #include <stdexcept>
 
 template <typename T>
-class PSlotMap
+class SlotMap
 {
 public:
+    class iterator
+    {
+    public:
+        void operator= (T* ptr) {pointer = ptr;}
+        T& operator* () {return *pointer;}
+        iterator operator++ (int dumy) {pointer ++; return *this;}
+        iterator operator-- (int dumy) {pointer --; return *this;}
+        bool operator!= (T* ptr) {if (pointer != ptr) return true; else return false;}
+        T* operator->() { return pointer; }
+    private:
+        T* pointer;
+    };
+    
+    T* begin();
+    const T* begin() const;
+    T* end();
+    const T* end() const;
+    
     const T& operator[] (unsigned int obj_id) const;// Returns the object of this id from the object container
     T& operator[] (unsigned int obj_id);
     T& at(unsigned int i);
@@ -28,11 +47,11 @@ public:
     bool exists(int obj_id) const; // True if the objects exists in the container, false otherwise
     unsigned int size() const {return (unsigned int)container.size();}
     template <class U>
-    friend std::ostream& operator<< (std::ostream& out, const PSlotMap<U>& map);
+    friend std::ostream& operator<< (std::ostream& out, const SlotMap<U>& map);
 private:
     std::vector<T> container; // Holds objects in unspecified order (not sorted by ids)
     std::vector<int> slots; // ith entry in this vector holds information about an object of id "i" in the container.
-    // If an object of id "i" doesn't exist anymore, it has slots[i] = -1
+                            // If an object of id "i" doesn't exist anymore, it has slots[i] = -1
     std::vector<unsigned int> free_ids; // Holds free ids that can be used when adding a new object to the container
     unsigned int locate(int obj_id) const; // Looks up the id if an object in slots and returns its position in the container
 };
@@ -43,7 +62,39 @@ private:
 // separating .h and .cpp files for template classes.
 
 template <typename T>
-int PSlotMap<T>::add(const T& new_object)
+T* SlotMap<T>::begin()
+{
+    if (container.size() == 0)
+        return NULL;
+    return &container[0];
+}
+
+template <typename T>
+const T* SlotMap<T>::begin() const
+{
+    if (container.size() == 0)
+        return NULL;
+    return &container[0];
+}
+
+template <typename T>
+T* SlotMap<T>::end()
+{
+    if (container.size() == 0)
+        return NULL;
+    return &container.back()+1;
+}
+
+template <typename T>
+const T* SlotMap<T>::end() const
+{
+    if (container.size() == 0)
+        return NULL;
+    return &container.back()+1;
+}
+
+template <typename T>
+int SlotMap<T>::add(const T& new_object)
 {
     // This will either be a completely new ID
     // or one that existed before but is unused
@@ -55,14 +106,14 @@ int PSlotMap<T>::add(const T& new_object)
         free_ids.pop_back();
         
         container.push_back(new_object);
-        container.back()->id_ = new_id;
+        container.back().id_ = new_id;
         slots[new_id] = (int)container.size() - 1;
     }
     else // No spare ids. Create a new one
     {
         new_id = (int)container.size();
         container.push_back(new_object);
-        container.back()->id_ = new_id;
+        container.back().id_ = new_id;
         
         slots.push_back(new_id);
     }
@@ -71,7 +122,7 @@ int PSlotMap<T>::add(const T& new_object)
 }
 
 template <typename T>
-int PSlotMap<T>::add()
+int SlotMap<T>::add()
 {
     T obj;
     int new_id = add(obj);
@@ -80,7 +131,7 @@ int PSlotMap<T>::add()
 }
 
 template <typename T>
-int PSlotMap<T>::remove(int obj_id)
+int SlotMap<T>::remove(int obj_id)
 {
     if (!exists(obj_id))
         throw std::out_of_range("object does not exist");
@@ -92,7 +143,7 @@ int PSlotMap<T>::remove(int obj_id)
     //             O O O O O L O O O O
     // Slot map has to be updatet to know the new position of the "last" element
     
-    int swapped_obj_id = container.back()->id_; // Remember the id of the last object
+    int swapped_obj_id = container.back().id_; // Remember the id of the last object
     int removed_object_pos = slots[obj_id]; // Position of the object in the container
     
     // Swap the object being destroyed with the last one
@@ -101,7 +152,6 @@ int PSlotMap<T>::remove(int obj_id)
     container[removed_object_pos] = last_copy;
     
     // Pop the last object
-    delete container.back();
     container.pop_back();
     
     // Update the slots
@@ -116,7 +166,7 @@ int PSlotMap<T>::remove(int obj_id)
 
 // Returns -1 if the object doesn't exist
 template <typename T>
-unsigned int PSlotMap<T>::locate(int obj_id) const
+unsigned int SlotMap<T>::locate(int obj_id) const
 {
     if (exists(obj_id))
         return slots[obj_id];
@@ -125,7 +175,7 @@ unsigned int PSlotMap<T>::locate(int obj_id) const
 }
 
 template <typename T>
-bool PSlotMap<T>::exists(int obj_id) const
+bool SlotMap<T>::exists(int obj_id) const
 {
     if (obj_id < 0)
         return false;
@@ -138,7 +188,7 @@ bool PSlotMap<T>::exists(int obj_id) const
 
 // Responsibility of the user to ensure that this object exists in the container
 template <typename T>
-const T& PSlotMap<T>::operator[] (unsigned int obj_id) const
+const T& SlotMap<T>::operator[] (unsigned int obj_id) const
 {
     int obj_location = locate(obj_id);
     if (obj_location == -1)
@@ -147,7 +197,7 @@ const T& PSlotMap<T>::operator[] (unsigned int obj_id) const
 }
 
 template <typename T>
-T& PSlotMap<T>::operator[] (unsigned int obj_id)
+T& SlotMap<T>::operator[] (unsigned int obj_id)
 {
     int obj_location = locate(obj_id);
     if (obj_location == -1)
@@ -156,7 +206,7 @@ T& PSlotMap<T>::operator[] (unsigned int obj_id)
 }
 
 template <typename T>
-T& PSlotMap<T>::at(unsigned int i)
+T& SlotMap<T>::at(unsigned int i)
 {
     if (i >= size())
         throw std::out_of_range("object does not exist");
@@ -164,7 +214,7 @@ T& PSlotMap<T>::at(unsigned int i)
 }
 
 template <typename T>
-const T& PSlotMap<T>::at(unsigned int i) const
+const T& SlotMap<T>::at(unsigned int i) const
 {
     if (i >= size())
         throw std::out_of_range("object does not exist");
@@ -174,7 +224,7 @@ const T& PSlotMap<T>::at(unsigned int i) const
 
 // It relies on the operator<< defined for T
 template <typename T>
-void PSlotMap<T>::print() const
+void SlotMap<T>::print() const
 {
     // Print the container
     std::cout << "Container: " << std::endl << " ";
@@ -182,7 +232,7 @@ void PSlotMap<T>::print() const
         std::cout << "none" << std::endl;
     else
         for (int i = 0; i < container.size(); i++)
-            std::cout << container[i] << "(" << container[i]->id_ << ")" << " ";
+            std::cout << container[i] << "(" << container[i].id_ << ")" << " ";
     std::cout << std::endl << std::endl;
     
     // Print the slots
@@ -205,7 +255,7 @@ void PSlotMap<T>::print() const
 }
 
 template <class T>
-std::ostream& operator<< (std::ostream& out, const PSlotMap<T>& map)
+std::ostream& operator<< (std::ostream& out, const SlotMap<T>& map)
 {
     // Print the container
     std::cout << "Container: " << std::endl << " ";
@@ -213,7 +263,7 @@ std::ostream& operator<< (std::ostream& out, const PSlotMap<T>& map)
         std::cout << "none" << std::endl;
     else
         for (int i = 0; i < map.container.size(); i++)
-            std::cout << map.container[i] << "(" << map.container[i]->id_ << ")" << " ";
+            std::cout << map.container[i] << "(" << map.container[i].id_ << ")" << " ";
     std::cout << std::endl << std::endl;
     
     // Print the slots
@@ -238,13 +288,11 @@ std::ostream& operator<< (std::ostream& out, const PSlotMap<T>& map)
 }
 
 template <typename T>
-void PSlotMap<T>::clear()
+void SlotMap<T>::clear()
 {
-    for (int i = 0; i < container.size(); i++)
-        delete container[i];
     container.clear();
     slots.clear();
     free_ids.clear();
 }
 
-#endif
+#endif /* defined(__Trusses__slot_map__) */

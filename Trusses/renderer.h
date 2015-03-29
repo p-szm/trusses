@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-class PinJoint;
+class Particle;
 class Bar;
 class Wall;
 class Obstacle;
@@ -21,12 +21,12 @@ class Button;
 class Renderer
 {
 public:
-    void render(const PinJoint* const obj) const;
-    void render(const Bar* const obj) const;
-    void render(const Wall* const obj) const;
-    void render(const Obstacle* const obj) const;
-    void render(const TempLabel* const obj) const;
-    void render(const Button* const obj) const;
+    void render(const Particle& obj) const;
+    void render(const Bar& obj) const;
+    void render(const Wall& obj) const;
+    void render(const Obstacle& obj) const;
+    void render(const TempLabel& obj) const;
+    void render(const Button& obj) const;
 };
 
 #endif /* defined(__Trusses__renderer__) */

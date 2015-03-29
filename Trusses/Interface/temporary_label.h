@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include "math.h"
-#include "pointer_slot_map.h"
+#include "slot_map.h"
 
 #define MODE_LABEL_TIME 4000000
 #define TOOL_LABEL_TIME 3000000
@@ -76,6 +76,6 @@ void update_labels();
 // Creates a label with given text in the bottom left corner
 void issue_label(std::string text, unsigned long long int text_time);
 
-extern PSlotMap<TempLabel*> temp_labels;
+extern SlotMap<TempLabel> temp_labels;
 
 #endif /* defined(__Trusses__temporary_label__) */

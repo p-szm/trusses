@@ -10,7 +10,7 @@
 #define __Trusses__wall__
 
 #include <stdio.h>
-#include "pointer_slot_map.h"
+#include "slot_map.h"
 #include "math.h"
 
 class Renderer;
@@ -27,7 +27,7 @@ struct Wall
     double y_max() const;
     
     // Handles the collisions with the particles
-    void collide();
+    void collide() const;
     
     void draw(const Renderer& rend) const;
     
@@ -39,6 +39,6 @@ private:
 
 void print_walls();
 
-extern PSlotMap<Wall*> walls;
+extern SlotMap<Wall> walls;
 
 #endif /* defined(__Trusses__wall__) */

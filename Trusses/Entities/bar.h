@@ -9,7 +9,7 @@
 #ifndef __Trusses__bar__
 #define __Trusses__bar__
 
-#include "pointer_slot_map.h"
+#include "slot_map.h"
 
 #define MAX_STRAIN 0.3
 #define MELTING_POINT 1800
@@ -58,6 +58,6 @@ private:
 
 void print_bars();
 
-extern PSlotMap<Bar*> bars;
+extern SlotMap<Bar> bars;
 
 #endif /* defined(__Trusses__bar__) */

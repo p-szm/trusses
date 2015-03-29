@@ -348,28 +348,28 @@ void display()
     
     // Draw the walls
     for (int i = 0; i < walls.size(); i++)
-        walls.at(i)->draw(renderer);
+        walls.at(i).draw(renderer);
     
     // Draw the obstacles
     for (int i = 0; i < obstacles.size(); i++)
-        obstacles.at(i)->draw(renderer);
+        obstacles.at(i).draw(renderer);
     
     // Draw the bars
     for (int i = 0; i < bars.size(); i++)
-        bars.at(i)->draw(renderer);
+        bars.at(i).draw(renderer);
     
     // Draw the particles
     for (int i = 0; i < particles.size(); i++)
-        particles.at(i)->draw(renderer);
+        particles.at(i).draw(renderer);
     
     // Draw the velocity vectors
     if (velocities)
     {
         for (int i = 0; i < particles.size(); i++)
         {
-            Particle* p = particles.at(i);
-            if (!p->fixed_)
-                draw_vector(p->velocity_, p->position_, 0.0, 0.5, 0.0);
+            Particle& p = particles.at(i);
+            if (!p.fixed_)
+                draw_vector(p.velocity_, p.position_, 0.0, 0.5, 0.0);
         }
     }
     
@@ -378,9 +378,9 @@ void display()
     {
         for (int i = 0; i < particles.size(); i++)
         {
-            Particle* p = particles.at(i);
-            if (!p->fixed_)
-                draw_vector(p->acceleration_, p->position_, 0.0, 0.5, 0.0);
+            Particle& p = particles.at(i);
+            if (!p.fixed_)
+                draw_vector(p.acceleration_, p.position_, 0.0, 0.5, 0.0);
         }
     }
     
@@ -394,7 +394,7 @@ void display()
     
     // Draw temporary labels
     for (int i = 0; i < temp_labels.size(); i++)
-        temp_labels.at(i)->draw(renderer);
+        temp_labels.at(i).draw(renderer);
     
     // Draw buttons
     for (int i = 0; i < buttons.size(); i++)
