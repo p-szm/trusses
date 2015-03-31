@@ -49,6 +49,7 @@ struct Bar
     
     void draw(const Renderer& rend) const;
     
+    static int create(int id1, int id2);
     static int create(int id1, int id2, double e, double temp);
     static int destroy(int obj_id);
 private:

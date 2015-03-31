@@ -14,14 +14,17 @@
 #include <vector>
 #include "math.h"
 
+class Renderer;
+
 // For drawing walls
 class WallTool: public Tool
 {
+    friend class Renderer;
 public:
     void mouse_click(int button, int state);
     void passive();
     void drag();
-    void display();
+    void display(const Renderer& rend);
     void key_down(unsigned char key);
     WallTool();
     ~WallTool();

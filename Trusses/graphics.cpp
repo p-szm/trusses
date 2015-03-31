@@ -385,7 +385,7 @@ void display()
     }
     
     // Draw the tool-specific things
-    current_tool->display();
+    current_tool->display(renderer);
     
     // Switch to the UI view
     glMatrixMode(GL_PROJECTION);

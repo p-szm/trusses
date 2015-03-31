@@ -12,14 +12,17 @@
 #include <stdio.h>
 #include "tool.h"
 
+class Renderer;
+
 // For dragging particles in the simulation mode
 class DragTool: public Tool
 {
+    friend class Renderer;
 public:
     void mouse_click(int button, int state);
     void passive();
     void drag();
-    void display();
+    void display(const Renderer& rend);
     void key_down(unsigned char key);
     DragTool();
     ~DragTool();

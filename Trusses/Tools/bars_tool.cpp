@@ -9,11 +9,10 @@
 #include "bars_tool.h"
 #include "mouse.h"
 #include "bar.h"
-#include "physics.h"
-#include "graphics.h"
+#include "particle.h"
+#include "renderer.h"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
-#include <OpenGL/gl.h>
 #else
 #include <GL/glut.h>
 #endif
@@ -51,7 +50,7 @@ void BarsTool::mouse_click(int button, int state)
     // If precisely two particles are selected, create a bar between them and clear the vector of selected particles
     if (selected_particles_ids.size() == 2)
     {
-        Bar::create(selected_particles_ids[0], selected_particles_ids[1], 0.0, ROOM_TEMPERATURE);
+        Bar::create(selected_particles_ids[0], selected_particles_ids[1]);
         selected_particles_ids.clear();
     }
 }
@@ -66,46 +65,9 @@ void BarsTool::drag()
     return;
 }
 
-void BarsTool::display()
+void BarsTool::display(const Renderer& rend)
 {
-    Vector2d tool_pos = mouse.pos_world;
-    
-    // Snap the position vector
-    bool snapped = true;
-    if (mouse.particle_in_range())
-        tool_pos = particles[mouse.closest_particle].position_;
-    else if (mouse.grid_in_range())
-        tool_pos = mouse.closest_grid;
-    else
-        snapped = false;
-    
-    // Draw dashed lines between the selected particles and the mouse
-    if (selected_particles_ids.size() != 0)
-    {
-        glEnable(GL_LINE_STIPPLE);
-        glLineStipple(1, 0x00FF);
-        glLineWidth(1.0);
-        glColor3f(GOLD);
-        glBegin(GL_LINES);
-        for (int i = 0; i < selected_particles_ids.size(); i++)
-        {
-            if (particles.exists(selected_particles_ids[i])) // Make sure that this particle exists
-            {
-                Vector2d selected_pos = particles[selected_particles_ids[i]].position_;
-                glVertex2f(selected_pos.x, selected_pos.y);
-                glVertex2f(tool_pos.x, tool_pos.y);
-            }
-        }
-        glEnd();
-        glDisable(GL_LINE_STIPPLE);
-    }
-    
-    if (snapped)
-    {
-        glColor3f(GOLD);
-        glPointSize(10);
-        draw_point(tool_pos);
-    }
+    rend.render(*this);
 }
 
 void BarsTool::key_down(unsigned char key)

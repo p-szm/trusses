@@ -17,6 +17,8 @@
 #define TOOL_LABEL_TIME 3000000
 #define WARNING_LABEL_TIME 3000000
 #define INFO_LABEL_TIME 3000000
+#define BOTTOM_MARGIN 20
+#define TOP_MARGIN 25
 
 class Renderer;
 

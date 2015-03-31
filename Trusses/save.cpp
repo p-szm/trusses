@@ -159,7 +159,7 @@ int load(std::string filename)
             if (v.size() == 4)
                 Bar::create(particles_map[v[0]], particles_map[v[1]], v[2], v[3]);
             else if (v.size() == 2)
-                Bar::create(particles_map[v[0]], particles_map[v[1]], 0.0, ROOM_TEMPERATURE);
+                Bar::create(particles_map[v[0]], particles_map[v[1]]);
         }
         
         // A wall
@@ -288,10 +288,10 @@ void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)
     // Create horizontal connections
     for (int j = 0; j < n; j++)
         for (int i = 0; i < n-1; i++)
-            Bar::create(id0 + j * n + i, id0 + j * n + i + 1, 0.0, ROOM_TEMPERATURE);
+            Bar::create(id0 + j * n + i, id0 + j * n + i + 1);
     
     // Create vertical connections
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n-1; j++)
-            Bar::create(id0 + i + n * j, id0 + i + n * (j + 1), 0.0, ROOM_TEMPERATURE);
+            Bar::create(id0 + i + n * j, id0 + i + n * (j + 1));
 }

@@ -224,7 +224,7 @@ void interpret_command(std::string cmd)
                 n1 = 0;
             if (n2 < 0)
                 n2 = 0;
-            Bar::create(n1, n2, 0.0, ROOM_TEMPERATURE);
+            Bar::create(n1, n2);
         }
         else if (words_number == 4 && words[2] == "stiffness" && is_number(words[3]))
         {

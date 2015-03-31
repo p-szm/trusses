@@ -11,11 +11,10 @@
 #include "interface.h"
 #include "temporary_label.h"
 #include "particle.h"
-#include "graphics.h"
 #include "bars_tool.h"
+#include "renderer.h"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
-#include <OpenGL/gl.h>
 #else
 #include <GL/glut.h>
 #endif
@@ -57,28 +56,9 @@ void SelectionTool::drag()
     }
 }
 
-void SelectionTool::display()
+void SelectionTool::display(const Renderer& rend)
 {
-    // Draw the polygon
-    glColor3f(GOLD);
-    glLineWidth(1);
-    glBegin(GL_LINE_LOOP);
-    for (int i = 0; i < poly.no_sides(); i++)
-        glVertex2f(poly.points[i].x, poly.points[i].y);
-    glEnd();
-    
-    // Highlight the selected points
-    glPointSize(10);
-    glBegin(GL_POINTS);
-    for (int i = 0; i < selection_map.size(); i++)
-    {
-        if (selection_map[i])
-        {
-            Vector2d pos = particles[i].position_;
-            glVertex2d(pos.x, pos.y);
-        }
-    }
-    glEnd();
+    rend.render(*this);
 }
 
 void SelectionTool::key_down(unsigned char key)

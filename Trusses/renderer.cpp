@@ -7,7 +7,8 @@
 //
 
 #include "renderer.h"
-#include "physics.h" // TODO: This doesn't belong here
+#include "physics.h"
+#include "mouse.h"
 #include "interface.h"
 #include "graphics.h"
 #ifdef __APPLE__
@@ -24,6 +25,11 @@
 #include "obstacle.h"
 #include "temporary_label.h"
 #include "button.h"
+#include "bars_tool.h"
+#include "drag_tool.h"
+#include "obstacle_tool.h"
+#include "selection_tool.h"
+#include "wall_tool.h"
 
 bool draw_bounding_boxes = false;
 const int wall_lines_spacing = 12; // px
@@ -290,4 +296,139 @@ void Renderer::render(const Button& obj) const
     
     glut_print(obj.position.x + px_to_ui_x(obj.offset.x - obj.width_/2.0 + 6),
                obj.position.y + px_to_ui_y(obj.offset.y - 5), obj.text_);
+}
+
+void Renderer::render(const BarsTool &obj) const
+{
+    Vector2d tool_pos = mouse.pos_world;
+    
+    // Snap the position vector
+    bool snapped = true;
+    if (mouse.particle_in_range())
+        tool_pos = particles[mouse.closest_particle].position_;
+    else if (mouse.grid_in_range())
+        tool_pos = mouse.closest_grid;
+    else
+        snapped = false;
+    
+    // Draw dashed lines between the selected particles and the mouse
+    if (obj.selected_particles_ids.size() != 0)
+    {
+        glEnable(GL_LINE_STIPPLE);
+        glLineStipple(1, 0x00FF);
+        glLineWidth(1.0);
+        glColor3f(GOLD);
+        glBegin(GL_LINES);
+        for (int i = 0; i < obj.selected_particles_ids.size(); i++)
+        {
+            // Make sure that this particle exists
+            int p_id = obj.selected_particles_ids[i];
+            if (particles.exists(p_id))
+            {
+                Vector2d selected_pos = particles[p_id].position_;
+                glVertex2f(selected_pos.x, selected_pos.y);
+                glVertex2f(tool_pos.x, tool_pos.y);
+            }
+        }
+        glEnd();
+        glDisable(GL_LINE_STIPPLE);
+    }
+    
+    if (snapped)
+    {
+        glColor3f(GOLD);
+        glPointSize(10);
+        draw_point(tool_pos);
+    }
+}
+
+void Renderer::render(const DragTool &obj) const
+{
+    bool highlighted = false;
+    
+    // Highlight a particle if it's close to the mouse
+    if (mouse.particle_in_range())
+    {
+        Vector2d closest_pos = particles[mouse.closest_particle].position_;
+        glColor3f(GOLD);
+        glPointSize(10);
+        glBegin(GL_POINTS);
+        glVertex2f(closest_pos.x, closest_pos.y);
+        glEnd();
+        highlighted = true;
+    }
+    
+    // Draw the active particle
+    if (!highlighted && particles.exists(obj.dragged_particle))
+    {
+        Particle& active_p = particles[obj.dragged_particle];
+        Vector2d particle_pos_gl = active_p.position_ ;
+        
+        glColor3f(GOLD);
+        glPointSize(10);
+        glBegin(GL_POINTS);
+        glVertex2f(particle_pos_gl.x, particle_pos_gl.y);
+        glEnd();
+        
+        glLineWidth(1.0);
+        glBegin(GL_LINES);
+        glVertex2f(particle_pos_gl.x, particle_pos_gl.y);
+        glVertex2f(mouse.pos_world.x, mouse.pos_world.y);
+        glEnd();
+    }
+}
+
+void Renderer::render(const ObstacleTool &obj) const
+{
+    // Draw the polygon
+    glColor3f(WHITE);
+    glLineWidth(1);
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i < obj.poly.no_sides(); i++)
+        glVertex2f(obj.poly.points[i].x, obj.poly.points[i].y);
+    glEnd();
+}
+
+void Renderer::render(const SelectionTool &obj) const
+{
+    // Draw the polygon
+    glColor3f(GOLD);
+    glLineWidth(1);
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i < obj.poly.no_sides(); i++)
+        glVertex2f(obj.poly.points[i].x, obj.poly.points[i].y);
+    glEnd();
+    
+    // Highlight the selected points
+    glPointSize(10);
+    glBegin(GL_POINTS);
+    for (int i = 0; i < obj.selection_map.size(); i++)
+    {
+        if (obj.selection_map.find(i)->second)
+        {
+            Vector2d pos = particles[i].position_;
+            glVertex2d(pos.x, pos.y);
+        }
+    }
+    glEnd();
+}
+
+void Renderer::render(const WallTool &obj) const
+{
+    Vector2d tool_pos = mouse.pos_world;
+    
+    // Snap the position vector
+    if (mouse.particle_in_range())
+        tool_pos = particles[mouse.closest_particle].position_;
+    else if (mouse.grid_in_range())
+        tool_pos = mouse.closest_grid;
+    
+    // Draw the current mouse position
+    glLineWidth(1);
+    glColor3f(WHITE);
+    draw_cross(tool_pos, 10);
+    
+    // Draw the wall points
+    for (int i = 0; i < obj.points.size(); i++)
+        draw_cross(obj.points[i], 10);
 }

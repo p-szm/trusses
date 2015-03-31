@@ -11,10 +11,9 @@
 #include "interface.h"
 #include "temporary_label.h"
 #include "particle.h"
-#include "graphics.h"
+#include "renderer.h"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
-#include <OpenGL/gl.h>
 #else
 #include <GL/glut.h>
 #endif
@@ -57,40 +56,9 @@ void DragTool::drag()
         p.external_acceleration_ = dragging_force * (mouse.pos_world - p.position_) / world.scale;
 }
 
-void DragTool::display()
+void DragTool::display(const Renderer& rend)
 {
-    bool highlighted = false;
-    
-    // Highlight a particle if it's close to the mouse
-    if (mouse.particle_in_range())
-    {
-        Vector2d closest_pos = particles[mouse.closest_particle].position_;
-        glColor3f(GOLD);
-        glPointSize(10);
-        glBegin(GL_POINTS);
-        glVertex2f(closest_pos.x, closest_pos.y);
-        glEnd();
-        highlighted = true;
-    }
-    
-    // Draw the active particle
-    if (!highlighted && particles.exists(dragged_particle))
-    {
-        Particle& active_p = particles[dragged_particle];
-        Vector2d particle_pos_gl = active_p.position_ ;
-        
-        glColor3f(GOLD);
-        glPointSize(10);
-        glBegin(GL_POINTS);
-        glVertex2f(particle_pos_gl.x, particle_pos_gl.y);
-        glEnd();
-        
-        glLineWidth(1.0);
-        glBegin(GL_LINES);
-        glVertex2f(particle_pos_gl.x, particle_pos_gl.y);
-        glVertex2f(mouse.pos_world.x, mouse.pos_world.y);
-        glEnd();
-    }
+    rend.render(*this);
 }
 
 void DragTool::key_down(unsigned char key)

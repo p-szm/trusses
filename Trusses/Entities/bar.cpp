@@ -57,6 +57,11 @@ int Bar::create(int id1, int id2, double e, double temp)
     return new_id;
 }
 
+int Bar::create(int id1, int id2)
+{
+    return Bar::create(id1, id2, 0.0, ROOM_TEMPERATURE);
+}
+
 void Bar::set_temperature(double t)
 {
     temperature = t;
@@ -217,11 +222,11 @@ void Bar::split(int bar_id, unsigned int n_parts)
         int new_bar_id;
         
         if (i == 0)
-            new_bar_id = Bar::create(id_start, new_ids[0], 0.0, ROOM_TEMPERATURE);
+            new_bar_id = Bar::create(id_start, new_ids[0]);
         else if (i == new_ids.size())
-            new_bar_id = Bar::create(new_ids.back(), id_end, 0.0, ROOM_TEMPERATURE);
+            new_bar_id = Bar::create(new_ids.back(), id_end);
         else
-            new_bar_id = Bar::create(new_ids[i-1], new_ids[i], 0.0, ROOM_TEMPERATURE);
+            new_bar_id = Bar::create(new_ids[i-1], new_ids[i]);
         
         bars[new_bar_id].r0 = new_r0;
         bars[new_bar_id].r_0K = new_r_0K;

@@ -13,14 +13,17 @@
 #include "tool.h"
 #include "polygon.h"
 
+class Renderer;
+
 // For drawing obstacles
 class ObstacleTool: public Tool
 {
+    friend class Renderer;
 public:
     void mouse_click(int button, int state);
     void passive();
     void drag();
-    void display();
+    void display(const Renderer& rend);
     void key_down(unsigned char key);
     ObstacleTool();
     ~ObstacleTool();

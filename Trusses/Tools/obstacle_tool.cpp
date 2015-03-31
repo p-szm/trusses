@@ -10,13 +10,11 @@
 #include "mouse.h"
 #include "interface.h"
 #include "temporary_label.h"
-#include "graphics.h"
 #include "bars_tool.h"
 #include "obstacle.h"
-#include "graphics.h"
+#include "renderer.h"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
-#include <OpenGL/gl.h>
 #else
 #include <GL/glut.h>
 #endif
@@ -48,15 +46,9 @@ void ObstacleTool::drag()
         poly.add_point(Vector2d(pos.x, pos.y));
 }
 
-void ObstacleTool::display()
+void ObstacleTool::display(const Renderer& rend)
 {
-    // Draw the polygon
-    glColor3f(WHITE);
-    glLineWidth(1);
-    glBegin(GL_LINE_LOOP);
-    for (int i = 0; i < poly.no_sides(); i++)
-        glVertex2f(poly.points[i].x, poly.points[i].y);
-    glEnd();
+    rend.render(*this);
 }
 
 void ObstacleTool::key_down(unsigned char key)

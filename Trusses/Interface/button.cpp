@@ -10,7 +10,6 @@
 #include "graphics.h"
 #include "interface.h"
 #include "save.h"
-#include "physics.h"
 #include "wall_tool.h"
 #include "selection_tool.h"
 #include "obstacle_tool.h"

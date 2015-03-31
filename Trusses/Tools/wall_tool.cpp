@@ -14,10 +14,9 @@
 #include "bars_tool.h"
 #include "particle.h"
 #include "wall.h"
-#include "graphics.h"
+#include "renderer.h"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
-#include <OpenGL/gl.h>
 #else
 #include <GL/glut.h>
 #endif
@@ -48,24 +47,9 @@ void WallTool::drag()
     return;
 }
 
-void WallTool::display()
+void WallTool::display(const Renderer& rend)
 {
-    Vector2d tool_pos = mouse.pos_world;
-    
-    // Snap the position vector
-    if (mouse.particle_in_range())
-        tool_pos = particles[mouse.closest_particle].position_;
-    else if (mouse.grid_in_range())
-        tool_pos = mouse.closest_grid;
-    
-    // Draw the current mouse position
-    glLineWidth(1);
-    glColor3f(WHITE);
-    draw_cross(tool_pos, 10);
-    
-    // Draw the wall points
-    for (int i = 0; i < points.size(); i++)
-        draw_cross(points[i], 10);
+    rend.render(*this);
 }
 
 void WallTool::key_down(unsigned char key)
