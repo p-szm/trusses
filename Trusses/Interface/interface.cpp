@@ -35,6 +35,7 @@ bool full_screen = false;
 bool simulation_paused = true;
 std::vector<bool> arrows(4); // left, right, up, down
 Tool* current_tool = new BarsTool;
+Interpreter interpreter;
 
 // * * * * * * * * * * //
 Vector2d px_to_m(const Vector2d& v) {return Vector2d(px_to_m(v.x), px_to_m(v.y));}
@@ -61,7 +62,7 @@ void key_down_function(unsigned char key, int x, int y)
             std::string cmd_to_execute = commands[commands.size() - current_cmd - 1];
             if (cmd_to_execute != "")
             {
-                interpret_command(cmd_to_execute);
+                interpreter.interpret(cmd_to_execute);
                 commands.back() = cmd_to_execute;
             }
             current_cmd = 0;

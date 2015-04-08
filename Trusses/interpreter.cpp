@@ -20,36 +20,47 @@
 #include "save.h"
 #include "temporary_label.h"
 
+using namespace std;
+
 // * * * * * * * * * * //
-std::vector<std::string> commands;
+vector<string> commands;
 unsigned int current_cmd = 0; // 0 means current command
 
 // * * * * * * * * * * //
-void extract_words(std::string str, std::vector<std::string> & target_v);
-bool is_number(std::string input);
-template <typename T> T get_number(std::string input);
-void interpret_command(std::string cmd);
-
-// * * * * * * * * * * //
-// Takes a string str and breaks it up into words which are put into target_v
-void extract_words(std::string str, std::vector<std::string> & target_v)
+template <typename T>
+void Interpreter::extract(const string& str, vector<T> & target_v) const
 {
     // Convert the string to the stringstream
-    std::istringstream s(str);
+    istringstream s(str);
     
     // Read every "word" of a stringstream
     while (s)
     {
         // If s is of type string
-        std::string n;
+        T n;
         if (s >> n)
             target_v.push_back(n);
     }
 }
 
-bool is_number(std::string input)
+std::string Interpreter::types_of_words(const std::vector<std::string>& words) const
 {
-    std::stringstream s(input);
+    string types = "";
+    for (int i = 0; i < words.size(); i++)
+    {
+        // Number
+        if (is_number(words[i]))
+            types += 'n';
+        // Word
+        else
+            types += 'w';
+    }
+    return types;
+}
+
+bool Interpreter::is_number(const string& input) const
+{
+    stringstream s(input);
     double n;
     if (s >> n)
         return true;
@@ -57,32 +68,29 @@ bool is_number(std::string input)
         return false;
 }
 
-// Takes a string and returns a number
-// It is up to a user to check if the string represents a valid number
 template <typename T>
-T get_number(std::string input)
+T Interpreter::get_number(const string& input) const
 {
-    std::stringstream s(input);
+    stringstream s(input);
     T n;
     if (s >> n)
         return n;
-    else
-        return 0;
+    return 0;
 }
 
-void interpret_command(std::string cmd)
+void Interpreter::interpret(const string& cmd) const
 {
     // Put all the words of this command into the "words" vector of strings
-    std::vector<std::string> words;
-    extract_words(cmd, words);
-    
+    vector<string> words;
+    extract<string>(cmd, words);
     size_t words_number = words.size();
+    string types = types_of_words(words);
     
     // If no command given, return
     if (words_number == 0)
         return;
     
-    std::string first_word = words[0];
+    string first_word = words[0];
     
     if (first_word == "ids")
     {
@@ -118,7 +126,7 @@ void interpret_command(std::string cmd)
     {
         if (words_number == 2)
         {
-            std::string filepath = words[1];
+            string filepath = words[1];
             
             // Check if the path is absolute or relative.
             // If it is relative, assume that it means the save directory.
@@ -137,13 +145,13 @@ void interpret_command(std::string cmd)
     {
         if (words_number == 1)
         {
-            std::string path = SAVE_PATH;
+            string path = SAVE_PATH;
             path += "save-" + date_str() + '-' + time_str();
             save(path);
         }
         else if (words_number == 2)
         {
-            std::string path = SAVE_PATH;
+            string path = SAVE_PATH;
             path += words[1]; // TODO: SECURITY: Check if the filaname is valid
             save(path);
         }
@@ -160,22 +168,12 @@ void interpret_command(std::string cmd)
             issue_label("Usage: reset", INFO_LABEL_TIME);
     }
     
-    else if (first_word == "zoom")
-    {
-        if (words_number == 2 && words[1] == "in")
-            world.scale *= 1.2;
-        else if (words_number == 2 && words[1] == "out")
-            world.scale /= 1.2;
-        else
-            issue_label("Usage: zoom <in/out>", INFO_LABEL_TIME);
-    }
-    
     // TODO: Maybe scale should be just an int?
     else if (first_word == "scale")
     {
         if (words_number == 1)
-            std::cout << "scale=" << world.scale << std::endl;
-        else if (words_number == 2 && is_number(words[1]))
+            cout << "scale=" << world.scale << endl;
+        else if (types == "wn")
         {
             double new_scale = get_number<double>(words[1]);
             if (new_scale <= 0.0)
@@ -191,10 +189,11 @@ void interpret_command(std::string cmd)
     {
         if (words_number == 1)
             print_walls();
-        else if (words_number == 5 && is_number(words[1]) && is_number(words[2])
-                 && is_number(words[3]) && is_number(words[4]))
+        else if (types == "wnnnn")
+        {
             Wall::create(Vector2d(get_number<double>(words[1]), get_number<double>(words[2])),
                          Vector2d(get_number<double>(words[3]), get_number<double>(words[4])));
+        }
         else
             issue_label("Usage: wall <double> <double> <double> <double>", INFO_LABEL_TIME);
     }
@@ -203,7 +202,7 @@ void interpret_command(std::string cmd)
     {
         if (words_number == 1)
             print_particles();
-        else if (words_number == 3 && is_number(words[1]) && is_number(words[2]))
+        else if (types == "wnn")
             Particle::create(get_number<double>(words[1]), get_number<double>(words[2]), false);
         else
             issue_label("Usage: particle <double> <double>", INFO_LABEL_TIME);
@@ -214,7 +213,7 @@ void interpret_command(std::string cmd)
     {
         if (words_number == 1)
             print_bars();
-        else if (words_number == 3 && is_number(words[1]) && is_number(words[2])) // TODO: Prevent it from taking doubles
+        else if (types == "wnn") // TODO: Prevent it from taking doubles
         {
             // Accept only positive integers
             // Interpret negative numbers as 0
@@ -226,7 +225,7 @@ void interpret_command(std::string cmd)
                 n2 = 0;
             Bar::create(n1, n2);
         }
-        else if (words_number == 4 && words[2] == "stiffness" && is_number(words[3]))
+        else if (types == "wnwn" && words[2] == "stiffness")
         {
             double new_stiffness = get_number<double>(words[3]);
             if (new_stiffness < 0.0)
@@ -254,101 +253,89 @@ void interpret_command(std::string cmd)
     
     else if (first_word == "fix")
     {
-        if (words_number == 2)
+        if (types == "wn")
         {
-            if (is_number(words[1]))
-            {
-                // Interpret negative numbers to 0
-                int n = get_number<int>(words[1]);
-                if (n < 0)
-                    n = 0;
-                if (particles.exists(n))
-                    particles[n].fixed_ = true;
-            }
+            // Interpret negative numbers to 0
+            int n = get_number<int>(words[1]);
+            if (n < 0)
+                n = 0;
+            if (particles.exists(n))
+                particles[n].fixed_ = true;
         }
+        else
+            issue_label("Usage: fix <particle id>", INFO_LABEL_TIME);
     }
     
     else if (first_word == "trace")
     {
-        if (words_number == 2)
+        if (types == "wn")
         {
-            if (is_number(words[1]))
-            {
-                // Interpret negative numbers to 0
-                int n = get_number<int>(words[1]);
-                if (n < 0)
-                    n = 0;
-                if (particles.exists(n))
-                    particles[n].trace_on = true;
-            }
+            // Interpret negative numbers to 0
+            int n = get_number<int>(words[1]);
+            if (n < 0)
+                n = 0;
+            if (particles.exists(n))
+                particles[n].trace_on = true;
         }
+        else
+            issue_label("Usage: trace <particle id>", INFO_LABEL_TIME);
     }
     
     else if (first_word == "untrace")
     {
-        if (words_number == 2)
+        if (types == "wn")
         {
-            if (is_number(words[1]))
-            {
-                // Interpret negative numbers to 0
-                int n = get_number<int>(words[1]);
-                if (n < 0)
-                    n = 0;
-                if (particles.exists(n) && particles[n].trace_on)
-                    particles[n].untrace();
-            }
+            // Interpret negative numbers to 0
+            int n = get_number<int>(words[1]);
+            if (n < 0)
+                n = 0;
+            if (particles.exists(n) && particles[n].trace_on)
+                particles[n].untrace();
         }
+        else
+            issue_label("Usage: untrace <particle id>", INFO_LABEL_TIME);
     }
     
     else if (first_word == "remove")
     {
-        if (words_number == 3)
+        if (types == "wwn" && words[1] == "bar")
         {
-            if (words[1] == "bar")
-            {
-                if (is_number(words[2]))
-                {
-                    // Interpret negative numbers as 0
-                    int n = get_number<int>(words[2]);
-                    if (n < 0)
-                        n = 0;
-                    Bar::destroy(n);
-                }
-            }
-            
-            if (words[1] == "particle")
-            {
-                if (is_number(words[2]))
-                {
-                    // Interpret negative numbers tas 0
-                    int n = get_number<int>(words[2]);
-                    if (n < 0)
-                        n = 0;
-                    Particle::destroy(n);
-                }
-            }
+            // Interpret negative numbers as 0
+            int n = get_number<int>(words[2]);
+            if (n < 0)
+                n = 0;
+            Bar::destroy(n);
         }
+        else if (types == "wwn" && words[1] == "particle")
+        {
+            // Interpret negative numbers tas 0
+            int n = get_number<int>(words[2]);
+            if (n < 0)
+                n = 0;
+            Particle::destroy(n);
+        }
+        else
+            issue_label("Usage: remove bar/particle <id>", INFO_LABEL_TIME);
     }
     
     else if (first_word == "temperature")
     {
-        if (words_number == 2)
+        if (types == "wn")
         {
-            if (is_number(words[1]))
-            {
-                // Interpret negative numbers to 0
-                int n = get_number<double>(words[1]);
-                if (n < 0.0)
-                    n = 0.0;
-                environment_temp = n;
-            }
+            // Interpret negative numbers to 0
+            int n = get_number<double>(words[1]);
+            if (n < 0.0)
+                n = 0.0;
+            environment_temp = n;
         }
+        else
+            issue_label("Usage: temperature <value>", INFO_LABEL_TIME);
     }
     
     // TODO: accept only positive integers
     else if (first_word == "split")
     {
-        if (words_number == 3 && is_number(words[1]) && is_number(words[2])) // TODO: Prevent it from taking doubles
+        if (types == "wnn") // TODO: Prevent it from taking doubles
         {
             // Accept only positive integers
             // Interpret negative numbers as 0
@@ -363,11 +350,13 @@ void interpret_command(std::string cmd)
             else
                 issue_label("This bar does not exist", WARNING_LABEL_TIME);
         }
+        else
+            issue_label("Usage: split <bar id> <number>", INFO_LABEL_TIME);
     }
     
     else if (first_word == "strain")
     {
-        if (words_number == 3 && is_number(words[1]) && is_number(words[2])) // TODO: Prevent it from taking doubles
+        if (types == "wnn") // TODO: Prevent it from taking doubles
         {
             // Accept only positive integers
             // Interpret negative numbers as 0
@@ -378,6 +367,8 @@ void interpret_command(std::string cmd)
             if (bars.exists(n1))
                 bars[n1].set_strain(n2);
         }
+        else
+            issue_label("Usage: strain <bar id> <value>", INFO_LABEL_TIME);
     }
     
     // The command was not recognised
