@@ -14,6 +14,7 @@
 #include "selection_tool.h"
 #include "obstacle_tool.h"
 #include "renderer.h"
+#include "world.h"
 
 std::vector<Button> buttons;
 

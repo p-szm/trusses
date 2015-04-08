@@ -16,7 +16,7 @@
 #include "wall.h"
 #include "physics.h"
 #include "graphics.h"
-#include "interface.h"
+#include "world.h"
 #include "save.h"
 #include "temporary_label.h"
 

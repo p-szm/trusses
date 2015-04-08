@@ -35,19 +35,16 @@ Vector2d px_to_ui(const Vector2d& v);
 double px_to_ui_x(double d);
 double px_to_ui_y(double d);
 
-// * * * * * * * * * * //
-class World
+struct Arrows
 {
-public:
-    // In px/metre
-    double scale = 50.0;
-    
-    // The position in world coordinates of the centre of the screen
-    Vector2d centre = Vector2d(0.0, 0.0);
+    bool left = false;
+    bool right = false;
+    bool up = false;
+    bool down = false;
 };
 
 // * * * * * * * * * * //
-extern World world;
+extern Arrows arrows;
 extern double grid_dist_px;
 extern bool command_mode;
 extern bool full_screen;

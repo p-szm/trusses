@@ -25,15 +25,14 @@
 #include "mouse.h"
 #include "bars_tool.h"
 #include "drag_tool.h"
+#include "world.h"
 
 // * * * * * * * * * * //
-World world;
+Arrows arrows;
 double grid_dist_px = 30.0; // In pixels
-const double scroll_speed = 10; // px/iteration
 bool command_mode = false;
 bool full_screen = false;
 bool simulation_paused = true;
-std::vector<bool> arrows(4); // left, right, up, down
 Tool* current_tool = new BarsTool;
 Interpreter interpreter;
 
@@ -140,33 +139,22 @@ void special_key_down(int key, int x, int y)
     
     // Remember which arrows were pressed
     if (key == GLUT_KEY_UP)
-        arrows[2] = true;
+        arrows.up = true;
     if (key == GLUT_KEY_DOWN)
-        arrows[3] = true;
+        arrows.down = true;
     if (key == GLUT_KEY_LEFT)
-        arrows[0] = true;
+        arrows.left = true;
     if (key == GLUT_KEY_RIGHT)
-        arrows[1] = true;
+        arrows.right = true;
     
     if (command_mode)
     {
         // If down arrow is pressed
-        if (!arrows[0] && !arrows[1] && !arrows[2] && arrows[3] && current_cmd > 0)
+        if (arrows.down && current_cmd > 0)
             current_cmd--;
         // If up arrow is pressed
-        else if (!arrows[0] && !arrows[1] && arrows[2] && !arrows[3] && current_cmd < commands.size() - 1)
+        else if (arrows.up && current_cmd < commands.size() - 1)
             current_cmd++;
-    }
-    else
-    {
-        if (arrows[0])
-            world.centre.x -= px_to_m(scroll_speed);
-        if (arrows[1])
-            world.centre.x += px_to_m(scroll_speed);
-        if (arrows[2])
-            world.centre.y += px_to_m(scroll_speed);
-        if (arrows[3])
-            world.centre.y -= px_to_m(scroll_speed);
     }
 }
 
@@ -176,13 +164,13 @@ void special_key_up(int key, int x, int y)
     
     // Remove the arrow from the list of pressed arrows
     if (key == GLUT_KEY_UP)
-        arrows[2] = false;
+        arrows.up = false;
     if (key == GLUT_KEY_DOWN)
-        arrows[3] = false;
+        arrows.down = false;
     if (key == GLUT_KEY_LEFT)
-        arrows[0] = false;
+        arrows.left = false;
     if (key == GLUT_KEY_RIGHT)
-        arrows[1] = false;
+        arrows.right = false;
 }
 
 void mouse_click(int button, int state, int x, int y)
@@ -270,6 +258,7 @@ void idle()
 {
     update_time();
     update_labels();
+    world.update_centre(arrows, delta_t);
     
     if (!simulation_is_paused())
     {
@@ -278,5 +267,6 @@ void idle()
         simulation_time += (t - prev_t);
         update_simulation();
     }
+    
     glutPostRedisplay();
 }

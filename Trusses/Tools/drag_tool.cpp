@@ -8,7 +8,7 @@
 
 #include "drag_tool.h"
 #include "mouse.h"
-#include "interface.h"
+#include "world.h"
 #include "temporary_label.h"
 #include "particle.h"
 #include "renderer.h"

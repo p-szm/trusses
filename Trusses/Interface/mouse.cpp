@@ -8,6 +8,7 @@
 
 #include "mouse.h"
 #include "graphics.h"
+#include "world.h"
 #include "interface.h"
 #include "particle.h"
 

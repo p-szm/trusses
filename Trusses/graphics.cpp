@@ -23,6 +23,7 @@
 #include "button.h"
 #include "physics.h"
 #include "interface.h"
+#include "world.h"
 #include "interpreter.h"
 #include "temporary_label.h"
 #include "renderer.h"
