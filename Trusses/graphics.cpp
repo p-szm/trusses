@@ -261,9 +261,17 @@ void draw_rectangle(Vector2d p1, Vector2d p2, bool filled)
 }
 
 // All in metres
-void draw_circle(Vector2d centre, double r, unsigned int n_points)
+void draw_circle(Vector2d centre, double r, unsigned int n_points, bool filled)
 {
-    glBegin(GL_LINE_LOOP);
+    if (filled)
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glBegin(GL_TRIANGLE_FAN);
+    }
+    else
+    {
+        glBegin(GL_LINE_LOOP);
+    }
     for (int i = 0; i < n_points; i++)
         glVertex2f(centre.x + r * cos(i * 2 * M_PI / n_points), centre.y + r * sin(i * 2 * M_PI / n_points));
     glEnd();

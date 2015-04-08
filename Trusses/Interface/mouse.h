@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <limits>
+#include <vector>
 #include "math.h"
 
 // Stores the position of the mouse in different coordinates
@@ -44,7 +45,7 @@ public:
     int min_click_dist = 10;
     
     // Checks the distance between the mouse and the point against min_click_dist
-    bool in_range(Vector2d point);
+    bool in_range(Vector2d point) const;
     
     // Snaps to both particles (first) and grid,
     // or returns the original mouse position if the mouse
@@ -52,10 +53,13 @@ public:
     Vector2d snap();
     
     // True if the closest grid-point is in range
-    bool grid_in_range();
+    bool grid_in_range() const;
     
     // True if the closest particle is in range
-    bool particle_in_range();
+    bool particle_in_range() const;
+    
+    // Finds all the particles within the given range
+    void particles_within(double dist, std::vector<int>& part) const;
 };
 
 extern Mouse mouse;

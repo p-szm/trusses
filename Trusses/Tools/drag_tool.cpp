@@ -8,6 +8,7 @@
 
 #include "drag_tool.h"
 #include "mouse.h"
+#include "interface.h"
 #include "world.h"
 #include "temporary_label.h"
 #include "particle.h"
@@ -20,20 +21,23 @@
 
 void DragTool::mouse_click(int button, int state)
 {
-    // Release a particle
-    if (state == GLUT_UP && particles.exists(dragged_particle))
+    if (state == GLUT_UP)
     {
-        // Zero its acceleration
-        particles[dragged_particle].external_acceleration_ = Vector2d(0.0, 0.0);
-        dragged_particle = -1;
-        return;
+        // Release dragged particles (zero their acceleration)
+        for (int i = 0; i < dragged_particles.size(); i++)
+        {
+            int p_id = dragged_particles[i];
+            if (particles.exists(p_id))
+                particles[p_id].external_acceleration_ = Vector2d(0.0, 0.0);
+        }
+        dragged_particles.clear();
     }
-    else if (state == GLUT_UP)
-        return;
-    
-    // A particle was clicked and can be dragged around by mouse
-    if (mouse.particle_in_range())
-        dragged_particle = mouse.closest_particle;
+    else
+    {
+        // A particle was clicked and can be dragged around by mouse
+        mouse.particles_within(px_to_m(mouse.min_click_dist), dragged_particles);
+        mouse_previous = mouse.pos_world;
+    }
 }
 
 void DragTool::passive()
@@ -43,17 +47,26 @@ void DragTool::passive()
 
 void DragTool::drag()
 {
-    if (!particles.exists(dragged_particle))
-        return;
-    
-    Particle& p = particles[dragged_particle];
-    
-    // Particle is fixed
-    if (p.fixed_)
-        p.position_ = mouse.pos_world;
-    // Particle is not fixed
-    else
-        p.external_acceleration_ = dragging_force * (mouse.pos_world - p.position_) / world.scale;
+    size_t no_part = dragged_particles.size();
+    for (int i = 0; i < no_part; i++)
+    {
+        // TODO: See if it sometimes happen that the particle doesn't exist.
+        int p_id = dragged_particles[i];
+        if (!particles.exists(p_id))
+            return;
+        
+        Particle& p = particles[p_id];
+        if (p.fixed_)
+        {
+            Vector2d delta_pos = mouse.pos_world - mouse_previous;
+            p.position_ += delta_pos;
+        }
+        else
+        {
+            p.external_acceleration_ = dragging_force * (mouse.pos_world - p.position_) / (world.scale * no_part);
+        }
+    }
+    mouse_previous = mouse.pos_world;
 }
 
 void DragTool::display(const Renderer& rend)
@@ -68,6 +81,7 @@ void DragTool::key_down(unsigned char key)
 
 DragTool::DragTool()
 {
+    dragging_force = 1000.0;
     TempLabel::create("Drag the joints around", 0, 1, 0, -TOP_MARGIN, TOOL_LABEL_TIME);
 }
 

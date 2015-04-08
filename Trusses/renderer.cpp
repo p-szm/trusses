@@ -347,9 +347,11 @@ void Renderer::render(const DragTool &obj) const
     bool highlighted = false;
     
     // Highlight a particle if it's close to the mouse
-    if (mouse.particle_in_range())
+    std::vector<int> close_particles;
+    mouse.particles_within(px_to_m(mouse.min_click_dist), close_particles);
+    for (int i = 0; i < close_particles.size(); i++)
     {
-        Vector2d closest_pos = particles[mouse.closest_particle].position_;
+        Vector2d closest_pos = particles[close_particles[i]].position_;
         glColor3f(GOLD);
         glPointSize(10);
         glBegin(GL_POINTS);
@@ -358,23 +360,38 @@ void Renderer::render(const DragTool &obj) const
         highlighted = true;
     }
     
-    // Draw the active particle
-    if (!highlighted && particles.exists(obj.dragged_particle))
+    // Draw the dragged particles
+    for (int i = 0; i < obj.dragged_particles.size(); i++)
     {
-        Particle& active_p = particles[obj.dragged_particle];
-        Vector2d particle_pos_gl = active_p.position_ ;
-        
-        glColor3f(GOLD);
-        glPointSize(10);
-        glBegin(GL_POINTS);
-        glVertex2f(particle_pos_gl.x, particle_pos_gl.y);
-        glEnd();
-        
-        glLineWidth(1.0);
-        glBegin(GL_LINES);
-        glVertex2f(particle_pos_gl.x, particle_pos_gl.y);
-        glVertex2f(mouse.pos_world.x, mouse.pos_world.y);
-        glEnd();
+        int p_id = obj.dragged_particles[i];
+        if (particles.exists(i))
+        {
+            Particle& active_p = particles[p_id];
+            Vector2d particle_pos_gl = active_p.position_ ;
+            
+            glColor3f(GOLD);
+            glPointSize(10);
+            glBegin(GL_POINTS);
+            glVertex2f(particle_pos_gl.x, particle_pos_gl.y);
+            glEnd();
+            
+            if (!active_p.fixed_)
+            {
+                glLineWidth(1.0);
+                glColor4f(GOLD, 0.6);
+                glBegin(GL_LINES);
+                glVertex2f(particle_pos_gl.x, particle_pos_gl.y);
+                glVertex2f(mouse.pos_world.x, mouse.pos_world.y);
+                glEnd();
+            }
+        }
+    }
+    
+    // Draw the dragging tool
+    if (obj.dragged_particles.size() == 0)
+    {
+        glColor4f(GOLD, 0.15);
+        draw_circle(mouse.pos_world, px_to_m(mouse.min_click_dist), 20, true);
     }
 }
 

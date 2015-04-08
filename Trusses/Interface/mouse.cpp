@@ -40,7 +40,7 @@ void Mouse::update(int x, int y)
     closest_grid = Vector2d(closest_x, closest_y);
 }
 
-bool Mouse::in_range(Vector2d point)
+bool Mouse::in_range(Vector2d point) const
 {
     if ((point - pos_world).abs2() * world.scale * world.scale < min_click_dist * min_click_dist)
         return true;
@@ -56,18 +56,30 @@ Vector2d Mouse::snap()
     return mouse.pos_world;
 }
 
-bool Mouse::grid_in_range()
+bool Mouse::grid_in_range() const
 {
     if (in_range(closest_grid))
         return true;
     return false;
 }
 
-bool Mouse::particle_in_range()
+bool Mouse::particle_in_range() const
 {
     if (!particles.exists(closest_particle))
         return false;
     if (in_range(particles[closest_particle].position_))
         return true;
     return false;
+}
+
+void Mouse::particles_within(double dist, std::vector<int>& part) const
+{
+    double dist2 = dist * dist;
+    for (int i = 0; i < particles.size(); i++)
+    {
+        Particle& p = particles.at(i);
+        double dist2_m = (pos_world - p.position_).abs2();
+        if (dist2_m < dist2)
+            part.push_back(p.id_);
+    }
 }

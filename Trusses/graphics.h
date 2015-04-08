@@ -45,7 +45,7 @@ void display();
 void reshape(int width, int height);
 void set_bars_color_mode(bars_color_mode_t mode);
 void draw_rectangle(Vector2d p1, Vector2d p2, bool filled);
-void draw_circle(Vector2d centre, double r, unsigned int n_points);
+void draw_circle(Vector2d centre, double r, unsigned int n_points, bool filled = false);
 void draw_cross(Vector2d pos, int size_px);
 void draw_point(Vector2d pos);
 void glut_print (float x, float y, std::string s);;

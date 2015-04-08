@@ -9,8 +9,9 @@
 #ifndef __Trusses__drag_tool__
 #define __Trusses__drag_tool__
 
-#include <stdio.h>
 #include "tool.h"
+#include "math.h"
+#include <vector>
 
 class Renderer;
 
@@ -27,8 +28,11 @@ public:
     DragTool();
     ~DragTool();
 private:
-    int dragged_particle = -1;
-    double dragging_force = 1000.0; // Newtons/px
+    std::vector<int> dragged_particles;
+    double dragging_force; // Newtons/px
+    
+    // Reference position used to move fixed particles
+    Vector2d mouse_previous;
 };
 
 #endif /* defined(__Trusses__drag_tool__) */
