@@ -8,6 +8,8 @@
 
 #include "polygon.h"
 
+Polygon::Polygon() {}
+
 void Polygon::add_point(const Vector2d &p)
 {
     points.push_back(p);
@@ -84,7 +86,7 @@ Vector2d Polygon::bounding_box_max() const
     return box_max;
 }
 
-Vector2d Polygon::vertex_nomal(size_t vertex)
+Vector2d Polygon::vertex_nomal(size_t vertex) const
 {
     if (no_sides() < 3)
         throw std::length_error("number of sides is less than 3");
@@ -98,4 +100,103 @@ Vector2d Polygon::vertex_nomal(size_t vertex)
     else
         edge2 = points[0] - points.back();
     return Vector2d::bisect(edge1, edge2);
+}
+
+double Polygon::area() const
+{
+    double ans = 0.0;
+    
+    int sides = (int)no_sides();
+    for (int i = 0; i < sides; i++)
+    {
+        int next = (i == sides-1) ? 0 : i+1;
+        
+        ans -= (points[next].x - points[i].x) * (points[next].y + points[i].y) * 0.5;
+        ans += (points[next].y - points[i].y) * (points[next].x + points[i].x) * 0.5;
+    }
+    ans /= 2.0;
+    return ans;
+}
+
+bool Polygon::clockwise_winding() const
+{
+    return area() < 0.0;
+}
+
+bool Polygon::is_convex(std::vector<int>& ids, int vertex, bool clockw_winding) const
+{
+    int sides = (int)ids.size();
+    if (vertex >= sides)
+        throw std::invalid_argument("This vertex does not exist");
+    
+    int prev = (vertex == 0) ? sides-1 : vertex-1;
+    int next = (vertex == sides-1) ? 0 : vertex+1;
+    
+    Vector2d v1 = points[ids[vertex]] - points[ids[prev]];
+    Vector2d v2 = points[ids[next]] - points[ids[vertex]];
+    if (clockw_winding)
+        return v1.cross(v2) < 0;
+    else
+        return v1.cross(v2) > 0;
+}
+
+void Polygon::find_ear(std::vector<int>& ids, bool clockw_winding)
+{
+    bool ear_not_found = true;
+    int sides = (int)ids.size();
+    for (int i = 0; i < sides && ear_not_found; i++)
+    {
+        if (is_convex(ids, i, clockw_winding))
+        {
+            int prev = (i == 0) ? sides-1 : i-1;
+            int next = (i == sides-1) ? 0 : i+1;
+            
+            Polygon triangle;
+            triangle.add_point(points[ids[prev]]);
+            triangle.add_point(points[ids[i]]);
+            triangle.add_point(points[ids[next]]);
+            
+            // Check if there is any concave point in this triangle
+            bool concave_inside = false;
+            for (int j = 0; j < sides && !concave_inside; j++)
+            {
+                if (j == prev || j == i || j == next)
+                    continue;
+                if (!is_convex(ids, j, clockw_winding) && triangle.point_inside(points[ids[j]]))
+                    concave_inside = true;
+            }
+            
+            // Ear found
+            if (!concave_inside)
+            {
+                ear_not_found = false;
+                
+                // Save the ear
+                triangulation.push_back(ids[prev]);
+                triangulation.push_back(ids[i]);
+                triangulation.push_back(ids[next]);
+                
+                // Remove this vertex
+                ids.erase(ids.begin()+i, ids.begin()+i+1);
+            }
+        }
+    }
+    
+    // Signal that tomething is wrong
+    if (ear_not_found)
+        std::cout << "Warning: ear not found (at " << ids.size() << " sides)" << std::endl;
+}
+
+void Polygon::triangulate()
+{
+    // Start with the whole polygon (ids 0 to size()-1)
+    std::vector<int> poly;
+    poly.reserve(no_sides());
+    for (int i = 0; i < no_sides(); i++)
+        poly.push_back(i);
+    
+    // Triangulate the polygon. Limit the loop to no_sides()
+    // iterations just in case.
+    for (int i = 0; poly.size() > 2 && i < no_sides(); i++)
+        find_ear(poly, clockwise_winding());
 }

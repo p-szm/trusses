@@ -31,7 +31,8 @@
 #include "selection_tool.h"
 #include "wall_tool.h"
 
-bool draw_bounding_boxes = false;
+const bool draw_bounding_boxes = false;
+const bool draw_triangulation = false;
 const int wall_lines_spacing = 12; // px
 
 void Renderer::render(const Particle& obj) const
@@ -242,6 +243,27 @@ void Renderer::render(const Wall& obj) const
 
 void Renderer::render(const Obstacle& obj) const
 {
+    // Draw the triangulated polygon
+    if (draw_triangulation)
+    {
+        glColor3f(RED);
+        glLineWidth(1);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    else
+    {
+        glColor3f(0, 0.15, 0.3);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+    glBegin(GL_TRIANGLES);
+    for (int i = 0; i < obj.triangulation.size(); i++)
+    {
+        Vector2d pos = obj.points[obj.triangulation[i]];
+        glVertex2f(pos.x, pos.y);
+    }
+    glEnd();
+    
+    // Draw the boundary
     glColor3f(WHITE);
     glLineWidth(2);
     glBegin(GL_LINE_LOOP);
@@ -249,6 +271,7 @@ void Renderer::render(const Obstacle& obj) const
         glVertex2f(obj.points[i].x, obj.points[i].y);
     glEnd();
     
+    // Draw the bounding boexs
     if (draw_bounding_boxes)
     {
         glColor3f(RED);

@@ -230,6 +230,7 @@ void draw_command_line()
     double cmd_size = px_to_ui_y(COMMAND_LINE_SIZE);
     
     glColor3f(DARK_GREY);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glBegin(GL_QUADS);
     glVertex2f(-1, -1);
     glVertex2f(1, -1);
@@ -461,7 +462,7 @@ void setup_graphics(int argc, char * argv[])
     
     glPointSize(5.0);
     glLineWidth(1.0);
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClearColor(BLACK, 1.0);
     glEnable(GL_LINE_SMOOTH);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glEnable(GL_POINT_SMOOTH);

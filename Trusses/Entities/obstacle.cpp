@@ -18,6 +18,9 @@ Obstacle::Obstacle(const Polygon& poly)
     // Copy the points
     points = poly.points;
     update_bounding_box();
+    
+    // Triangulate the polygon
+    triangulate();
 }
 
 void Obstacle::draw(const Renderer& rend)

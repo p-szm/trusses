@@ -18,6 +18,8 @@ class Polygon
 public:
     std::vector<Vector2d> points;
     
+    Polygon();
+    
     // Adds the point after the previous last point.
     void add_point(const Vector2d& p);
     
@@ -38,7 +40,28 @@ public:
     
     // Vertex normal pointing away from the polygon
     // for acute angles.
-    Vector2d vertex_nomal(size_t vertex);
+    Vector2d vertex_nomal(size_t vertex) const;
+    
+    // Positive for anti-clockwise winding, negative
+    // for clockwise winding. Uses Green's theorem.
+    double area() const;
+    
+    // True if the polygon winding is clockwise, false
+    // otherwise.
+    bool clockwise_winding() const;
+    
+    // Triangulates the polygon and puts the result in
+    // int the triangulation vector.
+    void triangulate();
+    
+    // Ids of the triangulated polygon
+    std::vector<int> triangulation;
+private:
+    // Returns the vertex which defines an ear
+    void find_ear(std::vector<int>& ids, bool clockw_winding);
+    
+    // Works on the sub-polygon of the polygon
+    bool is_convex(std::vector<int>& ids, int vertex, bool clockw_winding) const;
 };
 
 #endif /* defined(__Trusses__polygon__) */
