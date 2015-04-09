@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CD2870331AC4CDCA0002E593 /* renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD2870311AC4CDCA0002E593 /* renderer.cpp */; };
+		CD0253751AD680A70084D1CA /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD0253741AD680A70084D1CA /* math.cpp */; };
+		CD02537B1AD680D80084D1CA /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD0253771AD680D80084D1CA /* graphics.cpp */; };
+		CD02537C1AD680D80084D1CA /* renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD0253791AD680D80084D1CA /* renderer.cpp */; };
 		CD74D2181A52F51A000B6F31 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2171A52F51A000B6F31 /* OpenGL.framework */; };
 		CD74D21A1A52F520000B6F31 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2191A52F520000B6F31 /* GLUT.framework */; };
 		CD920ED31AD5B83A00CBA69C /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD920ED11AD5B83A00CBA69C /* world.cpp */; };
-		CD9875231AA75D980035DCC2 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD98750C1AA75D980035DCC2 /* graphics.cpp */; };
 		CD9875251AA75D980035DCC2 /* interpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9875101AA75D980035DCC2 /* interpreter.cpp */; };
 		CD9875261AA75D980035DCC2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9875121AA75D980035DCC2 /* main.cpp */; };
 		CD98752A1AA75D980035DCC2 /* physics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9875181AA75D980035DCC2 /* physics.cpp */; };
@@ -31,7 +32,6 @@
 		CDC346191AC1A0ED00F0E8C2 /* selection_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC346101AC1A0ED00F0E8C2 /* selection_tool.cpp */; };
 		CDC3461A1AC1A0ED00F0E8C2 /* tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC346121AC1A0ED00F0E8C2 /* tool.cpp */; };
 		CDC3461B1AC1A0ED00F0E8C2 /* wall_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC346141AC1A0ED00F0E8C2 /* wall_tool.cpp */; };
-		CDC346311AC1DBD000F0E8C2 /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC346301AC1DBD000F0E8C2 /* math.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,16 +47,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		CD2870311AC4CDCA0002E593 /* renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = renderer.cpp; path = Trusses/renderer.cpp; sourceTree = SOURCE_ROOT; };
-		CD2870321AC4CDCA0002E593 /* renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = renderer.h; path = Trusses/renderer.h; sourceTree = SOURCE_ROOT; };
+		CD0253741AD680A70084D1CA /* math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = math.cpp; path = Trusses/Math/math.cpp; sourceTree = SOURCE_ROOT; };
+		CD0253771AD680D80084D1CA /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = graphics.cpp; path = Trusses/Graphics/graphics.cpp; sourceTree = SOURCE_ROOT; };
+		CD0253781AD680D80084D1CA /* graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = graphics.h; path = Trusses/Graphics/graphics.h; sourceTree = SOURCE_ROOT; };
+		CD0253791AD680D80084D1CA /* renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = renderer.cpp; path = Trusses/Graphics/renderer.cpp; sourceTree = SOURCE_ROOT; };
+		CD02537A1AD680D80084D1CA /* renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = renderer.h; path = Trusses/Graphics/renderer.h; sourceTree = SOURCE_ROOT; };
 		CD31825F1AC779E600A6AA33 /* slot_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = slot_map.h; path = Trusses/External/slot_map.h; sourceTree = SOURCE_ROOT; };
 		CD74D20D1A5214CC000B6F31 /* Trusses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Trusses; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD74D2171A52F51A000B6F31 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		CD74D2191A52F520000B6F31 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		CD920ED11AD5B83A00CBA69C /* world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = world.cpp; path = Trusses/Interface/world.cpp; sourceTree = SOURCE_ROOT; };
 		CD920ED21AD5B83A00CBA69C /* world.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = world.h; path = Trusses/Interface/world.h; sourceTree = SOURCE_ROOT; };
-		CD98750C1AA75D980035DCC2 /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = graphics.cpp; path = Trusses/graphics.cpp; sourceTree = SOURCE_ROOT; };
-		CD98750D1AA75D980035DCC2 /* graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = graphics.h; path = Trusses/graphics.h; sourceTree = SOURCE_ROOT; };
 		CD9875101AA75D980035DCC2 /* interpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interpreter.cpp; path = Trusses/interpreter.cpp; sourceTree = SOURCE_ROOT; };
 		CD9875111AA75D980035DCC2 /* interpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = interpreter.h; path = Trusses/interpreter.h; sourceTree = SOURCE_ROOT; };
 		CD9875121AA75D980035DCC2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = Trusses/main.cpp; sourceTree = SOURCE_ROOT; };
@@ -96,7 +97,6 @@
 		CDC346131AC1A0ED00F0E8C2 /* tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tool.h; path = Trusses/Tools/tool.h; sourceTree = SOURCE_ROOT; };
 		CDC346141AC1A0ED00F0E8C2 /* wall_tool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wall_tool.cpp; path = Trusses/Tools/wall_tool.cpp; sourceTree = SOURCE_ROOT; };
 		CDC346151AC1A0ED00F0E8C2 /* wall_tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wall_tool.h; path = Trusses/Tools/wall_tool.h; sourceTree = SOURCE_ROOT; };
-		CDC346301AC1DBD000F0E8C2 /* math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = math.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +112,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CD0253761AD680C30084D1CA /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				CD0253771AD680D80084D1CA /* graphics.cpp */,
+				CD0253781AD680D80084D1CA /* graphics.h */,
+				CD0253791AD680D80084D1CA /* renderer.cpp */,
+				CD02537A1AD680D80084D1CA /* renderer.h */,
+			);
+			name = Graphics;
+			sourceTree = "<group>";
+		};
 		CD74D2041A5214CC000B6F31 = {
 			isa = PBXGroup;
 			children = (
@@ -133,8 +144,6 @@
 		CD74D20F1A5214CC000B6F31 /* Trusses */ = {
 			isa = PBXGroup;
 			children = (
-				CD98750C1AA75D980035DCC2 /* graphics.cpp */,
-				CD98750D1AA75D980035DCC2 /* graphics.h */,
 				CD9875101AA75D980035DCC2 /* interpreter.cpp */,
 				CD9875111AA75D980035DCC2 /* interpreter.h */,
 				CD9875121AA75D980035DCC2 /* main.cpp */,
@@ -142,8 +151,7 @@
 				CD9875191AA75D980035DCC2 /* physics.h */,
 				CD98751A1AA75D980035DCC2 /* save.cpp */,
 				CD98751B1AA75D980035DCC2 /* save.h */,
-				CD2870311AC4CDCA0002E593 /* renderer.cpp */,
-				CD2870321AC4CDCA0002E593 /* renderer.h */,
+				CD0253761AD680C30084D1CA /* Graphics */,
 				CDC345E81AC1745F00F0E8C2 /* External */,
 				CDC345E71AC1741F00F0E8C2 /* Interface */,
 				CDC345E61AC1740600F0E8C2 /* Math */,
@@ -191,8 +199,8 @@
 		CDC345E61AC1740600F0E8C2 /* Math */ = {
 			isa = PBXGroup;
 			children = (
+				CD0253741AD680A70084D1CA /* math.cpp */,
 				CDC345FA1AC1A0C800F0E8C2 /* math.h */,
-				CDC346301AC1DBD000F0E8C2 /* math.cpp */,
 				CDC345FB1AC1A0C800F0E8C2 /* polygon.cpp */,
 				CDC345FC1AC1A0C800F0E8C2 /* polygon.h */,
 			);
@@ -283,23 +291,23 @@
 			files = (
 				CDC346191AC1A0ED00F0E8C2 /* selection_tool.cpp in Sources */,
 				CD98752B1AA75D980035DCC2 /* save.cpp in Sources */,
+				CD02537B1AD680D80084D1CA /* graphics.cpp in Sources */,
 				CDC346091AC1A0DE00F0E8C2 /* wall.cpp in Sources */,
 				CDC3461A1AC1A0ED00F0E8C2 /* tool.cpp in Sources */,
 				CDC345F71AC1A0B100F0E8C2 /* interface.cpp in Sources */,
 				CDC346161AC1A0ED00F0E8C2 /* bars_tool.cpp in Sources */,
 				CD9875261AA75D980035DCC2 /* main.cpp in Sources */,
 				CDC345F61AC1A0B100F0E8C2 /* button.cpp in Sources */,
-				CD9875231AA75D980035DCC2 /* graphics.cpp in Sources */,
 				CDC346061AC1A0DE00F0E8C2 /* bar.cpp in Sources */,
 				CDC345FD1AC1A0C800F0E8C2 /* polygon.cpp in Sources */,
 				CDC345F91AC1A0B100F0E8C2 /* temporary_label.cpp in Sources */,
+				CD0253751AD680A70084D1CA /* math.cpp in Sources */,
 				CDC346071AC1A0DE00F0E8C2 /* obstacle.cpp in Sources */,
 				CDC3461B1AC1A0ED00F0E8C2 /* wall_tool.cpp in Sources */,
 				CD920ED31AD5B83A00CBA69C /* world.cpp in Sources */,
 				CD98752A1AA75D980035DCC2 /* physics.cpp in Sources */,
+				CD02537C1AD680D80084D1CA /* renderer.cpp in Sources */,
 				CDC346171AC1A0ED00F0E8C2 /* drag_tool.cpp in Sources */,
-				CD2870331AC4CDCA0002E593 /* renderer.cpp in Sources */,
-				CDC346311AC1DBD000F0E8C2 /* math.cpp in Sources */,
 				CD9875251AA75D980035DCC2 /* interpreter.cpp in Sources */,
 				CDC346081AC1A0DE00F0E8C2 /* particle.cpp in Sources */,
 				CDC346181AC1A0ED00F0E8C2 /* obstacle_tool.cpp in Sources */,

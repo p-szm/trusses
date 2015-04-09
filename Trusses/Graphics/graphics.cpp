@@ -461,7 +461,7 @@ void setup_graphics(int argc, char * argv[])
     
     glPointSize(5.0);
     glLineWidth(1.0);
-    glClearColor(0.12, 0.12, 0.12, 1.0);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
     glEnable(GL_LINE_SMOOTH);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glEnable(GL_POINT_SMOOTH);
