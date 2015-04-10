@@ -12,6 +12,7 @@
 #include "wall.h"
 #include "temporary_label.h"
 #include "renderer.h"
+#include "game.h"
 
 SlotMap<Particle> particles;
 
@@ -20,8 +21,8 @@ int Particle::create(double a, double b, bool fixed)
     Particle new_p(a, b);
     
     new_p.velocity_ = Vector2d(0.0, 0.0);
-    new_p.prev_position_ = new_p.position_ - delta_t * new_p.velocity_;
-    new_p.prev_position_verlet_ = new_p.position_ - delta_t * new_p.velocity_;
+    new_p.prev_position_ = new_p.position_ - game.delta_t * new_p.velocity_;
+    new_p.prev_position_verlet_ = new_p.position_ - game.delta_t * new_p.velocity_;
     new_p.acceleration_ = Vector2d(0.0, 0.0);
     new_p.external_acceleration_ = Vector2d(0.0, 0.0);
     new_p.mass_ = 1.0;
@@ -59,8 +60,8 @@ void Particle::update()
             acceleration_ += Vector2d(0.0, -GRAVITY);
         
         // Verlet integration
-        Vector2d next_position = 2 * position_ - prev_position_verlet_ + pow(delta_t, 2) * acceleration_;
-        velocity_ = (0.5 / delta_t) * (next_position - prev_position_);
+        Vector2d next_position = 2 * position_ - prev_position_verlet_ + pow(game.delta_t, 2) * acceleration_;
+        velocity_ = (0.5 / game.delta_t) * (next_position - prev_position_);
         prev_position_verlet_ = position_;
         position_ = next_position;
     }

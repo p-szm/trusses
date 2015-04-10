@@ -1,19 +1,23 @@
 //
-//  world.cpp
+//  window.cpp
 //  Trusses
 //
 //  Created by Patrick on 08/04/2015.
 //  Copyright (c) 2015 Patrick Szmucer. All rights reserved.
 //
 
-#include "world.h"
+#include "window.h"
 #include "interface.h"
 
-World world(50);
+Window window(50, 1000, 700);
 
-World::World(double s): scale(s), centre(Vector2d(0.0, 0.0)), scroll_speed(250) {}
+Window::Window(double s, double w, double h): scale(s), width(w), height(h)
+{
+    centre = Vector2d(0.0, 0.0);
+    scroll_speed = 250;
+}
 
-void World::update_centre(const Arrows& arr, const double dt)
+void Window::update_centre(const Arrows& arr, const double dt)
 {
     if (arr.left)
         centre.x -= px_to_m(scroll_speed) * dt;

@@ -25,7 +25,8 @@
 #include "mouse.h"
 #include "bars_tool.h"
 #include "drag_tool.h"
-#include "world.h"
+#include "window.h"
+#include "game.h"
 
 // * * * * * * * * * * //
 Arrows arrows;
@@ -38,10 +39,10 @@ Interpreter interpreter;
 
 // * * * * * * * * * * //
 Vector2d px_to_m(const Vector2d& v) {return Vector2d(px_to_m(v.x), px_to_m(v.y));}
-double px_to_m(double d) {return d / world.scale;}
+double px_to_m(double d) {return d / window.scale;}
 Vector2d px_to_ui(const Vector2d& v) {return Vector2d(px_to_ui_x(v.x), px_to_ui_y(v.y));}
-double px_to_ui_x(double d) {return d / (window_width/2.0);}
-double px_to_ui_y(double d) {return d / (window_height/2.0);}
+double px_to_ui_x(double d) {return d / (window.width/2.0);}
+double px_to_ui_y(double d) {return d / (window.height/2.0);}
 
 // * * * * * * * * * * //
 void key_down_function(unsigned char key, int x, int y)
@@ -231,7 +232,7 @@ void pause_simulation()
 void resume_simulation()
 {
     Tool::set(current_tool, new DragTool);
-    microsecond_time(t);
+    game.microsecond_time(game.t);
     simulation_paused = false;
     
     temp_labels.clear();
@@ -262,16 +263,16 @@ void register_callbacks()
 
 void idle()
 {
-    update_time();
+    game.update_time();
     update_labels();
-    world.update_centre(arrows, delta_t);
+    window.update_centre(arrows, game.delta_t);
     
     if (!simulation_is_paused())
     {
         // TODO: This is pretty accurate, but could be better
         // It was too fast by about 0.5s when I tested it on 8 minutes
-        simulation_time += (t - prev_t);
-        update_simulation();
+        game.simulation_time += (game.t - game.prev_t);
+        game.update_simulation();
     }
     
     glutPostRedisplay();

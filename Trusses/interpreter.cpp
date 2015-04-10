@@ -16,7 +16,7 @@
 #include "wall.h"
 #include "physics.h"
 #include "graphics.h"
-#include "world.h"
+#include "window.h"
 #include "save.h"
 #include "temporary_label.h"
 
@@ -172,14 +172,14 @@ void Interpreter::interpret(const string& cmd) const
     else if (first_word == "scale")
     {
         if (words_number == 1)
-            cout << "scale=" << world.scale << endl;
+            cout << "scale=" << window.scale << endl;
         else if (types == "wn")
         {
             double new_scale = get_number<double>(words[1]);
             if (new_scale <= 0.0)
                 issue_label("Scale has to be positive", WARNING_LABEL_TIME);
             else
-                world.scale = new_scale;
+                window.scale = new_scale;
         }
         else
             issue_label("Usage: scale <double>", INFO_LABEL_TIME);

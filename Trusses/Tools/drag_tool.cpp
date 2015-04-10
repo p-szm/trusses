@@ -9,7 +9,7 @@
 #include "drag_tool.h"
 #include "mouse.h"
 #include "interface.h"
-#include "world.h"
+#include "window.h"
 #include "temporary_label.h"
 #include "particle.h"
 #include "renderer.h"
@@ -63,7 +63,7 @@ void DragTool::drag()
         }
         else
         {
-            p.external_acceleration_ = dragging_force * (mouse.pos_world - p.position_) / (world.scale * no_part);
+            p.external_acceleration_ = dragging_force * (mouse.pos_world - p.position_) / (window.scale * no_part);
         }
     }
     mouse_previous = mouse.pos_world;

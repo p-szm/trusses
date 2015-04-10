@@ -8,7 +8,7 @@
 
 #include "mouse.h"
 #include "graphics.h"
-#include "world.h"
+#include "window.h"
 #include "interface.h"
 #include "particle.h"
 
@@ -16,9 +16,9 @@ Mouse mouse;
 
 void Mouse::update(int x, int y)
 {
-    pos_screen = Vector2d(x - window_width / 2.0, -y  + window_height / 2.0);
-    pos_world = Vector2d(px_to_m(pos_screen.x) + world.centre.x, px_to_m(pos_screen.y) + world.centre.y);
-    pos_ui = Vector2d(x * 2.0 / window_width - 1.0, 1.0 - y * 2.0 / window_height);
+    pos_screen = Vector2d(x - window.width / 2.0, -y  + window.height / 2.0);
+    pos_world = Vector2d(px_to_m(pos_screen.x) + window.centre.x, px_to_m(pos_screen.y) + window.centre.y);
+    pos_ui = Vector2d(x * 2.0 / window.width - 1.0, 1.0 - y * 2.0 / window.height);
     
     // Update the closest particle
     double least_dist2 = std::numeric_limits<float>::max();
@@ -34,7 +34,7 @@ void Mouse::update(int x, int y)
     }
     
     // Update the closest grid
-    double grid_dist_m = grid_dist_px / world.scale;
+    double grid_dist_m = grid_dist_px / window.scale;
     double closest_x = round(pos_world.x / grid_dist_m) * grid_dist_m;
     double closest_y = round(pos_world.y / grid_dist_m) * grid_dist_m;
     closest_grid = Vector2d(closest_x, closest_y);
@@ -42,7 +42,7 @@ void Mouse::update(int x, int y)
 
 bool Mouse::in_range(Vector2d point) const
 {
-    if ((point - pos_world).abs2() * world.scale * world.scale < min_click_dist * min_click_dist)
+    if ((point - pos_world).abs2() * window.scale * window.scale < min_click_dist * min_click_dist)
         return true;
     return false;
 }

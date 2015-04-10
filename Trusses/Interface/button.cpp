@@ -14,7 +14,7 @@
 #include "selection_tool.h"
 #include "obstacle_tool.h"
 #include "renderer.h"
-#include "world.h"
+#include "window.h"
 
 std::vector<Button> buttons;
 
@@ -105,12 +105,12 @@ void button_save_action(void)
 
 void button_scale_up_action(void)
 {
-    world.scale *= 1.1;
+    window.scale *= 1.1;
 }
 
 void button_scale_down_action(void)
 {
-    world.scale /= 1.1;
+    window.scale /= 1.1;
 }
 
 void button_draw_wall_action(void)

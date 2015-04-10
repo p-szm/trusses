@@ -23,11 +23,12 @@
 #include "button.h"
 #include "physics.h"
 #include "interface.h"
-#include "world.h"
+#include "window.h"
 #include "interpreter.h"
 #include "temporary_label.h"
 #include "renderer.h"
 #include "tool.h"
+#include "game.h"
 
 // * * * * * * * * * * //
 // Forward declarations
@@ -49,8 +50,6 @@ void draw_horizon();
 vec3 hsv_to_rgb(vec3 hsv);
 
 // * * * * * * * * * * //
-int window_width = 1200;
-int window_height = 800;
 bool accelerations = false;
 bool velocities = false;
 bool lengths = false;
@@ -66,16 +65,16 @@ Renderer renderer;
 // * * * * * * * * * * //
 // Return the coordinates of the visible world edges
 double window_left()
-{ return -window_width/(2.0*world.scale) + world.centre.x; }
+{ return -window.width/(2.0*window.scale) + window.centre.x; }
 
 double window_right()
-{ return window_width/(2.0*world.scale) + world.centre.x; }
+{ return window.width/(2.0*window.scale) + window.centre.x; }
 
 double window_bottom()
-{ return -window_height/(2.0*world.scale) + world.centre.y; }
+{ return -window.height/(2.0*window.scale) + window.centre.y; }
 
 double window_top()
-{ return window_height/(2.0*world.scale) + world.centre.y; }
+{ return window.height/(2.0*window.scale) + window.centre.y; }
 
 // * * * * * * * * * * //
 void glut_print (float x, float y, std::string s)
@@ -100,7 +99,7 @@ void display_time()
     
     std::ostringstream s;
     s.precision(1);
-    s << "Time: " << std::fixed << simulation_time/1000000.0 << " s";
+    s << "Time: " << std::fixed << game.simulation_time/1000000.0 << " s";
     glut_print(0, -1 + px_to_ui_y(BOTTOM_MARGIN), s.str());
 }
 
@@ -434,8 +433,8 @@ void reshape(int width, int height)
     glLoadIdentity();
     gluOrtho2D(WORLD_VIEW);
     
-    window_width = width;
-    window_height = height;
+    window.width = width;
+    window.height = height;
 }
 
 void set_bars_color_mode(bars_color_mode_t mode)
@@ -451,7 +450,7 @@ void setup_graphics(int argc, char * argv[])
     
     // Setup for the new window
     glutInitWindowPosition(160, 80);
-    glutInitWindowSize(window_width, window_height);
+    glutInitWindowSize(window.width, window.height);
     glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
     
     // Create a window

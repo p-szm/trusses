@@ -20,12 +20,12 @@
 #include "bar.h"
 #include "wall.h"
 #include "obstacle.h"
-#include "physics.h"
 #include "graphics.h"
 #include "interface.h"
 #include "interpreter.h"
 #include "temporary_label.h"
 #include "bars_tool.h"
+#include "game.h"
 
 // * * * * * * * * * * //
 template<typename T>
@@ -258,7 +258,7 @@ void reset_everything()
     particles.clear();
     obstacles.clear();
     pause_simulation();
-    simulation_time = 0;
+    game.simulation_time = 0;
     Tool::set(current_tool, new BarsTool);
 }
 

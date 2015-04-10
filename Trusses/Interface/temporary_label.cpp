@@ -7,9 +7,9 @@
 //
 
 #include "temporary_label.h"
-#include "physics.h"
 #include "graphics.h"
 #include "renderer.h"
+#include "game.h"
 
 SlotMap<TempLabel> temp_labels;
 
@@ -33,7 +33,7 @@ int TempLabel::create(std::string str, double pos_x, double pos_y, int off_x, in
 // The return value of 1 means "remove me"
 int TempLabel::update()
 {
-    time += (t - prev_t);
+    time += (game.t - game.prev_t);
     if (time > max_time)
         return 1;
     return 0;

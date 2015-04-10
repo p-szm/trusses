@@ -11,7 +11,7 @@
 #include "math.h"
 
 #define COMMAND_LINE_SIZE 30
-#define WORLD_VIEW -window_width/(2.0*world.scale) + world.centre.x, window_width/(2.0*world.scale) + world.centre.x, -window_height/(2.0*world.scale) + world.centre.y, window_height/(2.0*world.scale) + world.centre.y
+#define WORLD_VIEW -window.width/(2.0*window.scale) + window.centre.x, window.width/(2.0*window.scale) + window.centre.x, -window.height/(2.0*window.scale) + window.centre.y, window.height/(2.0*window.scale) + window.centre.y
 #define UI_VIEW -1, 1, -1, 1
 
 #define BLACK 0.0, 0.0, 0.0
@@ -54,8 +54,6 @@ void glut_print (float x, float y, std::string s);;
 void setup_graphics(int argc, char * argv[]);
 
 // * * * * * * * * * * //
-extern int window_width;
-extern int window_height;
 extern bool ids;
 extern bool velocities;
 extern bool accelerations;
