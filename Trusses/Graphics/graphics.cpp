@@ -57,8 +57,9 @@ bool lengths = false;
 bool extensions = false;
 bool coords = true;
 bool ids = false;
-bool fancy_bars = false;
 bool show_particles = true;
+bool draw_bounding_boxes = false;
+bool draw_triangulation = false;
 bars_color_mode_t bars_color_mode = STRAIN_C;
 Renderer renderer;
 
@@ -253,7 +254,10 @@ void draw_rectangle(Vector2d p1, Vector2d p2, bool filled)
     if (!filled)
         glBegin(GL_LINE_LOOP);
     else
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glBegin(GL_QUADS);
+    }
     glVertex2f(p1.x, p1.y);
     glVertex2f(p1.x, p2.y);
     glVertex2f(p2.x, p2.y);

@@ -9,7 +9,6 @@
 #include "obstacle.h"
 #include "particle.h"
 #include "renderer.h"
-#include <limits>
 
 SlotMap<Obstacle> obstacles;
 

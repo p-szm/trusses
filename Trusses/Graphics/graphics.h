@@ -62,8 +62,9 @@ extern bool accelerations;
 extern bool lengths;
 extern bool extensions;
 extern bool coords;
-extern bool fancy_bars;
 extern bool show_particles;
 extern bars_color_mode_t bars_color_mode;
+extern bool draw_bounding_boxes;
+extern bool draw_triangulation;
 
 #endif /* defined(__Trusses__graphics__) */

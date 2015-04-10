@@ -31,8 +31,6 @@
 #include "selection_tool.h"
 #include "wall_tool.h"
 
-const bool draw_bounding_boxes = false;
-const bool draw_triangulation = false;
 const int wall_lines_spacing = 12; // px
 
 void Renderer::render(const Particle& obj) const
@@ -129,47 +127,15 @@ void Renderer::render(const Bar& obj) const
     Vector2d end = particles[obj.p2_id].position_;
     Vector2d m_mid = 0.5 * (start + end);
     
-    if (!fancy_bars)
-    {
-        glLineWidth(2.0);
-        
-        glBegin(GL_LINES);
-        glVertex2f(start.x, start.y);
-        glVertex2f(end.x, end.y);
-        glEnd();
-    }
-    
-    else
-    {
-        glLineWidth(1.0);
-        
-        Vector2d p1_pos = particles[obj.p1_id].position_;
-        Vector2d p2_pos = particles[obj.p2_id].position_;
-        
-        // Draw circles at the ends
-        double b_radius = 0.02;
-        draw_circle(p1_pos, b_radius, 20); // 0.2m
-        draw_circle(p2_pos, b_radius, 20);
-        
-        Vector2d unit = (p2_pos - p1_pos).norm();
-        Vector2d normal = Vector2d(-unit.y, unit.x);
-        
-        Vector2d p1 = p1_pos + b_radius * normal;
-        Vector2d p2 = p2_pos + b_radius * normal;
-        Vector2d p3 = p1_pos - b_radius * normal;
-        Vector2d p4 = p2_pos - b_radius * normal;
-        
-        glBegin(GL_LINES);
-        glVertex2f(p1.x, p1.y);
-        glVertex2f(p2.x, p2.y);
-        glVertex2f(p3.x, p3.y);
-        glVertex2f(p4.x, p4.y);
-        glEnd();
-    }
+    // Draw the lines
+    glLineWidth(2.0);
+    glBegin(GL_LINES);
+    glVertex2f(start.x, start.y);
+    glVertex2f(end.x, end.y);
+    glEnd();
     
     std::stringstream s;
     s.precision(3);
-    
     if (ids)
     {
         glColor3f(FUCHSIA);

@@ -117,7 +117,13 @@ void key_down_function(unsigned char key, int x, int y)
             }
         }
         else if (key == 'b')
-            fancy_bars = !fancy_bars;
+        {
+            draw_bounding_boxes = !draw_bounding_boxes;
+        }
+        else if (key == 't')
+        {
+            draw_triangulation = !draw_triangulation;
+        }
         else if (key == 's')
             show_particles = !show_particles;
         else if (key == 'p')
