@@ -29,6 +29,7 @@
 #include "renderer.h"
 #include "tool.h"
 #include "game.h"
+#include "grid.h"
 
 // * * * * * * * * * * //
 // Forward declarations
@@ -38,7 +39,6 @@ void display_fps(double dt);
 void display_time();
 void display_temperature(double temp);
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b);
-void draw_coords();
 void draw_command_line();
 void draw_rectangle(Vector2d p1, Vector2d p2, bool filled);
 void draw_circle(Vector2d centre, double r, unsigned int n_points);
@@ -61,20 +61,6 @@ bool draw_bounding_boxes = false;
 bool draw_triangulation = false;
 bars_color_mode_t bars_color_mode = STRAIN_C;
 Renderer renderer;
-
-// * * * * * * * * * * //
-// Return the coordinates of the visible world edges
-double window_left()
-{ return -window.width/(2.0*window.scale) + window.centre.x; }
-
-double window_right()
-{ return window.width/(2.0*window.scale) + window.centre.x; }
-
-double window_bottom()
-{ return -window.height/(2.0*window.scale) + window.centre.y; }
-
-double window_top()
-{ return window.height/(2.0*window.scale) + window.centre.y; }
 
 // * * * * * * * * * * //
 void glut_print (float x, float y, std::string s)
@@ -133,96 +119,6 @@ void draw_vector(Vector2d v, Vector2d start, float r, float g, float b)
     glBegin(GL_POINTS);
     glVertex2f(end.x, end.y);
     glEnd();
-}
-
-void draw_coords()
-{
-    double left = window_left();
-    double right = window_right();
-    double bottom = window_bottom();
-    double top = window_top();
-    
-    // Draw the centre lines
-    glColor3f(DARK_GREY);
-    glLineWidth(2.0);
-    
-    glBegin(GL_LINES);
-    glVertex2f(0, window_bottom());
-    glVertex2f(0, window_top());
-    glVertex2f(window_left(), 0);
-    glVertex2f(window_right(), 0);
-    glEnd();
-    
-    glColor3f(DARK_GREY);
-    glLineWidth(1.0);
-    glBegin(GL_LINES);
-    
-    double m_dist = px_to_m(grid_dist_px); // Distance between lines in metres
-    
-    // TODO: Clean this up
-    
-    // For +ve y
-    for (int i = 0; i * m_dist < top; i++)
-    {
-        double y_pos = i * m_dist;
-        glVertex2f(left, y_pos);
-        glVertex2f(right, y_pos);
-    }
-    // For -ve y
-    for (int i = -1; i * m_dist > bottom; i--)
-    {
-        double y_pos = i * m_dist;
-        glVertex2f(left, y_pos);
-        glVertex2f(right, y_pos);
-    }
-    // For +ve x
-    for (int i = 0; i * m_dist < right; i++)
-    {
-        double x_pos = i * m_dist;
-        glVertex2f(x_pos, bottom);
-        glVertex2f(x_pos, top);
-    }
-    // For -ve x
-    for (int i = -1; i * m_dist > left; i--)
-    {
-        double x_pos = i * m_dist;
-        glVertex2f(x_pos, bottom);
-        glVertex2f(x_pos, top);
-    }
-    
-    glEnd();
-    
-    // Choose the right units to display
-    double si_dist = 0.0;
-    std::string unit;
-    
-    if (m_dist < 1e-3)
-    {
-        si_dist = m_dist * 1e6;
-        unit = "um";
-    }
-    else if (m_dist < 1e-2)
-    {
-        si_dist = m_dist * 1e3;
-        unit = "mm";
-    }
-    else if (m_dist < 1.0)
-    {
-        si_dist = m_dist * 1e2;
-        unit = "cm";
-    }
-    else
-    {
-        si_dist = m_dist;
-        unit = "m";
-    }
-    
-    // Draw the scale (as a number)
-    std::ostringstream s;
-    s.precision(2);
-    s << si_dist;
-    glColor3f(GREY);
-    glut_print(m_dist, 0.0, s.str() + unit);
 }
 
 void draw_command_line()
@@ -356,8 +252,8 @@ void display()
     glLoadIdentity();
     gluOrtho2D(WORLD_VIEW);
     
-    if (coords && simulation_is_paused())
-        draw_coords();
+    if (coords && game.simulation_is_paused())
+        renderer.render(grid);
     
     // Draw the walls
     for (int i = 0; i < walls.size(); i++)

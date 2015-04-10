@@ -15,6 +15,7 @@ Window::Window(double s, double w, double h): scale(s), width(w), height(h)
 {
     centre = Vector2d(0.0, 0.0);
     scroll_speed = 250;
+    full_screen = false;
 }
 
 void Window::update_centre(const Arrows& arr, const double dt)
@@ -27,4 +28,24 @@ void Window::update_centre(const Arrows& arr, const double dt)
         centre.y += px_to_m(scroll_speed) * dt;
     if (arr.down)
         centre.y -= px_to_m(scroll_speed) * dt;
+}
+
+double Window::left() const
+{
+    return -window.width/(2.0*window.scale) + window.centre.x;
+}
+
+double Window::right() const
+{
+    return window.width/(2.0*window.scale) + window.centre.x;
+}
+
+double Window::bottom() const
+{
+    return -window.height/(2.0*window.scale) + window.centre.y;
+}
+
+double Window::top() const
+{
+    return window.height/(2.0*window.scale) + window.centre.y;
 }

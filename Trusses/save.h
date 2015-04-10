@@ -18,7 +18,8 @@ class Vector2d;
 // * * * * * * * * * * //
 int load(std::string filename);
 void save(std::string filename);
-void reset_everything();
+
+// TODO: Move this out of here
 void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix);
 
 // * * * * * * * * * * //

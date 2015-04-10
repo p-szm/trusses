@@ -15,6 +15,7 @@
 #include "obstacle_tool.h"
 #include "renderer.h"
 #include "window.h"
+#include "game.h"
 
 std::vector<Button> buttons;
 
@@ -93,7 +94,7 @@ void button_rel_extensions_action(void)
 
 void button_reset_action(void)
 {
-    reset_everything();
+    game.reset();
 }
 
 void button_save_action(void)

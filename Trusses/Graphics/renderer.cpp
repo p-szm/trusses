@@ -30,6 +30,8 @@
 #include "obstacle_tool.h"
 #include "selection_tool.h"
 #include "wall_tool.h"
+#include "grid.h"
+#include "window.h"
 
 const int wall_lines_spacing = 12; // px
 
@@ -437,4 +439,94 @@ void Renderer::render(const WallTool &obj) const
     // Draw the wall points
     for (int i = 0; i < obj.points.size(); i++)
         draw_cross(obj.points[i], 10);
+}
+
+void Renderer::render(const Grid &obj) const
+{
+    double left = window.left();
+    double right = window.right();
+    double bottom = window.bottom();
+    double top = window.top();
+    
+    // Draw the centre lines
+    glColor3f(DARK_GREY);
+    glLineWidth(2.0);
+    
+    glBegin(GL_LINES);
+    glVertex2f(0, bottom);
+    glVertex2f(0, top);
+    glVertex2f(left, 0);
+    glVertex2f(right, 0);
+    glEnd();
+    
+    glColor3f(DARK_GREY);
+    glLineWidth(1.0);
+    glBegin(GL_LINES);
+    
+    // Distance between lines in metres
+    double m_dist = px_to_m(obj.grid_dist_px);
+    
+    // TODO: Clean this up
+    // For +ve y
+    for (int i = 0; i * m_dist < top; i++)
+    {
+        double y_pos = i * m_dist;
+        glVertex2f(left, y_pos);
+        glVertex2f(right, y_pos);
+    }
+    // For -ve y
+    for (int i = -1; i * m_dist > bottom; i--)
+    {
+        double y_pos = i * m_dist;
+        glVertex2f(left, y_pos);
+        glVertex2f(right, y_pos);
+    }
+    // For +ve x
+    for (int i = 0; i * m_dist < right; i++)
+    {
+        double x_pos = i * m_dist;
+        glVertex2f(x_pos, bottom);
+        glVertex2f(x_pos, top);
+    }
+    // For -ve x
+    for (int i = -1; i * m_dist > left; i--)
+    {
+        double x_pos = i * m_dist;
+        glVertex2f(x_pos, bottom);
+        glVertex2f(x_pos, top);
+    }
+    
+    glEnd();
+    
+    // Choose the right units to display
+    double si_dist = 0.0;
+    std::string unit;
+    
+    if (m_dist < 1e-3)
+    {
+        si_dist = m_dist * 1e6;
+        unit = "um";
+    }
+    else if (m_dist < 1e-2)
+    {
+        si_dist = m_dist * 1e3;
+        unit = "mm";
+    }
+    else if (m_dist < 1.0)
+    {
+        si_dist = m_dist * 1e2;
+        unit = "cm";
+    }
+    else
+    {
+        si_dist = m_dist;
+        unit = "m";
+    }
+    
+    // Draw the scale (as a number)
+    std::ostringstream s;
+    s.precision(2);
+    s << si_dist;
+    glColor3f(GREY);
+    glut_print(m_dist, 0.0, s.str() + unit);
 }

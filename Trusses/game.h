@@ -28,6 +28,7 @@ public:
     bool simulation_is_paused();
     void pause_simulation();
     void resume_simulation();
+    void reset();
 private:
     bool simulation_paused = true;
 };

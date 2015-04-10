@@ -22,12 +22,20 @@ public:
     double scale;
     int width;
     int height;
+    bool full_screen;
     
     // The position in world coordinates of the centre of the screen
     Vector2d centre;
     void update_centre(const Arrows& arr, const double dt);
     
+    // In px per second
     int scroll_speed;
+    
+    // Return the coordinates of the visible world edges
+    double left() const;
+    double right() const;
+    double bottom() const;
+    double top() const;
 };
 
 extern Window window;

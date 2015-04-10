@@ -21,9 +21,6 @@ void special_key_down(int key, int x, int y);
 void mouse_click(int button, int state, int x, int y);
 void mouse_passive(int x, int y);
 void mouse_drag(int x, int y);
-void pause_simulation();
-void resume_simulation();
-bool simulation_is_paused();
 void register_callbacks();
 void idle();
 
@@ -45,9 +42,7 @@ struct Arrows
 
 // * * * * * * * * * * //
 extern Arrows arrows;
-extern double grid_dist_px;
 extern bool command_mode;
-extern bool full_screen;
 extern Tool* current_tool;
 
 #endif /* defined(__Trusses__interface__) */

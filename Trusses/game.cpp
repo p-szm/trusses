@@ -30,6 +30,9 @@ Game::Game()
     prev_t = t;
     delta_t = 0.02; // Start with something
     simulation_time = 0;
+    
+    // Enter the editor mode
+    pause_simulation();
 }
 
 void Game::microsecond_time (unsigned long long &t)
@@ -122,4 +125,15 @@ void Game::resume_simulation()
     create_buttons_simulation();
     
     mouse.min_click_dist = 20;
+}
+
+void Game::reset()
+{
+    walls.clear();
+    bars.clear();
+    particles.clear();
+    obstacles.clear();
+    game.pause_simulation();
+    game.simulation_time = 0;
+    Tool::set(current_tool, new BarsTool);
 }

@@ -15,9 +15,7 @@
 #include <iostream>
 
 #include "graphics.h"
-#include "button.h"
 #include "interface.h"
-#include "temporary_label.h"
 
 // TODO: Velocities are wrong
 // TODO: Important! Check strain signs
@@ -35,9 +33,6 @@ int main(int argc, char * argv[])
     // Initialise the GLUT window and register the callbacks
     setup_graphics(argc, argv);
     register_callbacks();
-    
-    create_buttons_editor();
-    TempLabel::create("Editor mode - you can draw the structure. Press \"p\" when you are done", 0, 1.0, 0, -TOP_MARGIN, MODE_LABEL_TIME);
     
     glutMainLoop();
     

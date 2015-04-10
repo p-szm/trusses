@@ -97,7 +97,7 @@ int load(std::string filename)
     // --- Fixed
     // But check the function read_numbers
     
-    reset_everything();
+    game.reset();
     
     // Open the file
     std::ifstream file(filename.c_str());
@@ -249,17 +249,6 @@ void save(std::string filename)
     
     std::string text = "Saved as " + filename;
     issue_label(text, INFO_LABEL_TIME);
-}
-
-void reset_everything()
-{
-    walls.clear();
-    bars.clear();
-    particles.clear();
-    obstacles.clear();
-    pause_simulation();
-    game.simulation_time = 0;
-    Tool::set(current_tool, new BarsTool);
 }
 
 void create_cloth(int n, double d, Vector2d bottom_left_corner, bool fix)

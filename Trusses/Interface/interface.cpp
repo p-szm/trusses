@@ -30,11 +30,8 @@
 
 // * * * * * * * * * * //
 Arrows arrows;
-double grid_dist_px = 30.0; // In pixels
 bool command_mode = false;
-bool full_screen = false;
-bool simulation_paused = true;
-Tool* current_tool = new BarsTool;
+Tool* current_tool = 0;
 Interpreter interpreter;
 
 // * * * * * * * * * * //
@@ -87,7 +84,7 @@ void key_down_function(unsigned char key, int x, int y)
         else if (key == 27)
         {
             Tool::set(current_tool, NULL);
-            reset_everything();
+            game.reset();
             std::exit(0);
         }
         else if (key == 13)
@@ -105,11 +102,10 @@ void key_down_function(unsigned char key, int x, int y)
         }
         else if (key == 'f')
         {
-            full_screen = !full_screen;
-            if (full_screen)
+            window.full_screen = !window.full_screen;
+            if (window.full_screen)
             {
                 glutFullScreen();
-                // TODO: Labels have to update their position
             }
             else
             {
@@ -129,10 +125,10 @@ void key_down_function(unsigned char key, int x, int y)
             show_particles = !show_particles;
         else if (key == 'p')
         {
-            if (simulation_is_paused())
-                resume_simulation();
+            if (game.simulation_is_paused())
+                game.resume_simulation();
             else
-                pause_simulation();
+                game.pause_simulation();
         }
     }
     
@@ -216,39 +212,6 @@ void mouse_drag(int x, int y)
     current_tool->drag();
 }
 
-void pause_simulation()
-{
-    Tool::set(current_tool, new BarsTool);
-    simulation_paused = true;
-    
-    temp_labels.clear();
-    TempLabel::create("Editor mode - you can draw the structure. Press \"p\" when you are done", 0, 1.0, 0, -TOP_MARGIN, MODE_LABEL_TIME);
-    buttons.clear();
-    create_buttons_editor();
-    
-    mouse.min_click_dist = 10;
-}
-
-void resume_simulation()
-{
-    Tool::set(current_tool, new DragTool);
-    game.microsecond_time(game.t);
-    simulation_paused = false;
-    
-    temp_labels.clear();
-    TempLabel::create("Simulation mode - you can drag the joints", 0, 1.0, 0, -TOP_MARGIN, MODE_LABEL_TIME);
-    buttons.clear();
-    create_buttons_simulation();
-    
-    mouse.min_click_dist = 20;
-}
-
-// TODO: this function is useless, remove it
-bool simulation_is_paused()
-{
-    return simulation_paused;
-}
-
 // * * * * * * * * * * //
 void register_callbacks()
 {
@@ -267,7 +230,7 @@ void idle()
     update_labels();
     window.update_centre(arrows, game.delta_t);
     
-    if (!simulation_is_paused())
+    if (!game.simulation_is_paused())
     {
         // TODO: This is pretty accurate, but could be better
         // It was too fast by about 0.5s when I tested it on 8 minutes

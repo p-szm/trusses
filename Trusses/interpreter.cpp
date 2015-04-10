@@ -19,6 +19,7 @@
 #include "window.h"
 #include "save.h"
 #include "temporary_label.h"
+#include "game.h"
 
 using namespace std;
 
@@ -163,7 +164,7 @@ void Interpreter::interpret(const string& cmd) const
     else if (first_word == "reset")
     {
         if (words_number == 1)
-            reset_everything();
+            game.reset();
         else
             issue_label("Usage: reset", INFO_LABEL_TIME);
     }

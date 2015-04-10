@@ -22,6 +22,7 @@ class DragTool;
 class ObstacleTool;
 class SelectionTool;
 class WallTool;
+class Grid;
 
 class Renderer
 {
@@ -37,6 +38,7 @@ public:
     void render(const ObstacleTool& obj) const;
     void render(const SelectionTool& obj) const;
     void render(const WallTool& obj) const;
+    void render(const Grid& obj) const;
 };
 
 #endif /* defined(__Trusses__renderer__) */
