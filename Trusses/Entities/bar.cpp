@@ -172,7 +172,7 @@ int Bar::update()
 {
     // Temperature expansion
     if (abs_d(temperature - environment_temp) > SMALL_NUM)
-        set_temperature( temperature + game.delta_t/10.0 * (environment_temp - temperature) );
+        set_temperature( temperature + game.dt_s()/10.0 * (environment_temp - temperature) );
     
     // Destroy bars which are extended by too much
     double ext = extension() / r0;

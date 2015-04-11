@@ -226,17 +226,8 @@ void register_callbacks()
 
 void idle()
 {
-    game.update_time();
+    game.update();
     update_labels();
-    window.update_centre(arrows, game.delta_t);
-    
-    if (!game.simulation_is_paused())
-    {
-        // TODO: This is pretty accurate, but could be better
-        // It was too fast by about 0.5s when I tested it on 8 minutes
-        game.simulation_time += (game.t - game.prev_t);
-        game.update_simulation();
-    }
-    
+    window.update_centre(arrows, game.dt_s());
     glutPostRedisplay();
 }

@@ -34,7 +34,7 @@ void Mouse::update(int x, int y)
     }
     
     // Update the closest grid
-    double grid_dist_m = grid.grid_dist_px / window.scale;
+    double grid_dist_m = grid.spacing / window.scale;
     double closest_x = round(pos_world.x / grid_dist_m) * grid_dist_m;
     double closest_y = round(pos_world.y / grid_dist_m) * grid_dist_m;
     closest_grid = Vector2d(closest_x, closest_y);

@@ -18,19 +18,44 @@ class Game
 public:
     Game();
     
-    unsigned long long int simulation_time; // In us
-    unsigned long long int t; // In us
-    unsigned long long int prev_t; // In us
-    double delta_t; // In s
-    void microsecond_time (unsigned long long &t);
+    // Updates time and simulation. Should be called
+    // each frame.
+    void update();
+    
+    // Enters the editor mode
+    void pause_simulation();
+    
+    // Enters the simulations mode
+    void resume_simulation();
+    
+    // True if the editor mode, false otherwise
+    bool simulation_is_paused() const;
+    
+    // Resets everything
+    void reset();
+    
+    // Returns the time step in seconds
+    double dt_s() const;
+    
+    // Returns the time step in microseconds
+    double dt_us() const;
+    
+    // Returns the total simulated time in seconds
+    double simulation_time_s() const;
+    
+private:
+    bool simulation_paused;
+    
     void update_time();
     void update_simulation();
-    bool simulation_is_paused();
-    void pause_simulation();
-    void resume_simulation();
-    void reset();
-private:
-    bool simulation_paused = true;
+    
+    // In microseconds
+    unsigned long long int t;
+    unsigned long long int prev_t;
+    unsigned long long int simulation_time;
+    
+    // In seconds
+    double delta_t;
 };
 
 extern Game game;

@@ -10,7 +10,7 @@
 
 Grid grid(30);
 
-Grid::Grid(int dist_px)
+Grid::Grid(int spacing_px)
 {
-    grid_dist_px = dist_px;
+    spacing = spacing_px;
 }

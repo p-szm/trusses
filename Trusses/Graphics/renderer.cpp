@@ -335,8 +335,6 @@ void Renderer::render(const BarsTool &obj) const
 
 void Renderer::render(const DragTool &obj) const
 {
-    bool highlighted = false;
-    
     // Highlight a particle if it's close to the mouse
     std::vector<int> close_particles;
     mouse.particles_within(px_to_m(mouse.min_click_dist), close_particles);
@@ -348,7 +346,6 @@ void Renderer::render(const DragTool &obj) const
         glBegin(GL_POINTS);
         glVertex2f(closest_pos.x, closest_pos.y);
         glEnd();
-        highlighted = true;
     }
     
     // Draw the dragged particles
@@ -464,7 +461,7 @@ void Renderer::render(const Grid &obj) const
     glBegin(GL_LINES);
     
     // Distance between lines in metres
-    double m_dist = px_to_m(obj.grid_dist_px);
+    double m_dist = px_to_m(obj.spacing);
     
     // TODO: Clean this up
     // For +ve y

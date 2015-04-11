@@ -32,8 +32,6 @@
 #include "grid.h"
 
 // * * * * * * * * * * //
-// Forward declarations
-
 void glut_print (float x, float y, std::string s);
 void display_fps(double dt);
 void display_time();
@@ -85,7 +83,7 @@ void display_time()
     
     std::ostringstream s;
     s.precision(1);
-    s << "Time: " << std::fixed << game.simulation_time/1000000.0 << " s";
+    s << "Time: " << std::fixed << game.simulation_time_s() << " s";
     glut_print(0, -1 + px_to_ui_y(BOTTOM_MARGIN), s.str());
 }
 

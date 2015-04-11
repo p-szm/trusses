@@ -23,35 +23,44 @@
 
 Game game;
 
-Game::Game()
-{
-    // Initialises time
-    microsecond_time(t);
-    prev_t = t;
-    delta_t = 0.02; // Start with something
-    simulation_time = 0;
-    
-    // Enter the editor mode
-    pause_simulation();
-}
-
-void Game::microsecond_time (unsigned long long &t)
-// Returns system time in microseconds, used for introducing delays at low simulation speeds
+// Returns system time in microseconds
+void microsecond_time (unsigned long long &t)
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
     t = (unsigned long long)tv.tv_usec + 1000000 * (unsigned long long)tv.tv_sec;
 }
 
+Game::Game()
+{
+    // Initialises time
+    microsecond_time(t);
+    prev_t = t;
+    delta_t = 20000;
+    simulation_time = 0;
+    
+    // Enter the editor mode
+    pause_simulation();
+}
+
+void Game::update()
+{
+    update_time();
+    if (!simulation_is_paused())
+        update_simulation();
+}
+
 void Game::update_time()
 {
     prev_t = t;
     microsecond_time(t);
-    delta_t = (t - prev_t)/1000000.0;
+    delta_t = t - prev_t;
 }
 
 void Game::update_simulation()
 {
+    simulation_time += delta_t;
+    
     // Update each particle's position by Verlet integration
     for (int i = 0; i < particles.size(); i++)
         particles.at(i).update();
@@ -95,7 +104,7 @@ void Game::update_simulation()
         Particle::destroy(particles_to_destroy[i]);
 }
 
-bool Game::simulation_is_paused()
+bool Game::simulation_is_paused() const
 {
     return simulation_paused;
 }
@@ -116,7 +125,7 @@ void Game::pause_simulation()
 void Game::resume_simulation()
 {
     Tool::set(current_tool, new DragTool);
-    game.microsecond_time(game.t);
+    microsecond_time(game.t);
     simulation_paused = false;
     
     temp_labels.clear();
@@ -136,4 +145,19 @@ void Game::reset()
     game.pause_simulation();
     game.simulation_time = 0;
     Tool::set(current_tool, new BarsTool);
+}
+
+double Game::dt_s() const
+{
+    return delta_t/1000000.0;
+}
+
+double Game::dt_us() const
+{
+    return delta_t;
+}
+
+double Game::simulation_time_s() const
+{
+    return simulation_time/1000000.0;
 }

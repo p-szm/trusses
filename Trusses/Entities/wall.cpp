@@ -64,6 +64,7 @@ void Wall::collide() const
     double eng_regained_perp = 1 - ENERGY_ABSORPTION;
     double eng_regained_par = 1 - 0.1 * ENERGY_ABSORPTION; // Determines friction between a particle and a walls
     
+    double dt = game.dt_s();
     for (int i = 0; i < particles.size(); i++)
     {
         Particle& p = particles.at(i);
@@ -89,7 +90,7 @@ void Wall::collide() const
             p.velocity_ = Vector2d(eng_regained_par * p_vel.x, -eng_regained_perp * p_vel.y);
             
             // So it doesn't break the Verlet integrator
-            p.prev_position_verlet_ = p_pos - game.delta_t * p_vel;
+            p.prev_position_verlet_ = p_pos - dt * p_vel;
         }
         
         // Particle penetrated the left wall
@@ -97,7 +98,7 @@ void Wall::collide() const
         {
             p.position_.x = wall_left - SMALL_NUM;
             p.velocity_ = Vector2d(-eng_regained_perp * p_vel.x, eng_regained_par * p_vel.y);
-            p.prev_position_verlet_ = p_pos - game.delta_t * p_vel;
+            p.prev_position_verlet_ = p_pos - dt * p_vel;
         }
         
         // Particle penetrated the right wall
@@ -105,7 +106,7 @@ void Wall::collide() const
         {
             p.position_.x = wall_right + SMALL_NUM;
             p.velocity_ = Vector2d(-eng_regained_perp * p_vel.x, eng_regained_par * p_vel.y);
-            p.prev_position_verlet_ = p_pos - game.delta_t * p_vel;
+            p.prev_position_verlet_ = p_pos - dt * p_vel;
         }
         
         // Particle penetrated the top wall
@@ -113,7 +114,7 @@ void Wall::collide() const
         {
             p.position_.y = wall_top + SMALL_NUM;
             p.velocity_ = Vector2d(eng_regained_par * p_vel.x, -eng_regained_perp * p_vel.y);
-            p.prev_position_verlet_ = p_pos - game.delta_t * p_vel;
+            p.prev_position_verlet_ = p_pos - dt * p_vel;
         }
     }
 }

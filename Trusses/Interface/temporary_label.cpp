@@ -33,7 +33,7 @@ int TempLabel::create(std::string str, double pos_x, double pos_y, int off_x, in
 // The return value of 1 means "remove me"
 int TempLabel::update()
 {
-    time += (game.t - game.prev_t);
+    time += game.dt_us();
     if (time > max_time)
         return 1;
     return 0;

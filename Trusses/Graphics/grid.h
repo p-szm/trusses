@@ -14,10 +14,10 @@ struct Grid
     friend class Renderer;
     friend class Mouse;
 public:
-    Grid(int dist_px);
+    Grid(int spacing_px);
 private:
     // In px
-    int grid_dist_px;
+    int spacing;
 };
 
 extern Grid grid;
