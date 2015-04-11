@@ -21,7 +21,6 @@
 
 #include "particle.h"
 #include "bar.h"
-#include "wall.h"
 #include "obstacle.h"
 #include "temporary_label.h"
 #include "button.h"
@@ -29,11 +28,9 @@
 #include "drag_tool.h"
 #include "obstacle_tool.h"
 #include "selection_tool.h"
-#include "wall_tool.h"
 #include "grid.h"
 #include "window.h"
-
-const int wall_lines_spacing = 12; // px
+#include "settings.h"
 
 void Renderer::render(const Particle& obj) const
 {
@@ -61,7 +58,7 @@ void Renderer::render(const Particle& obj) const
         glVertex2f(pos.x, pos.y);
         glEnd();
     }
-    else if (show_particles)
+    else if (settings.get(PARTICLES))
     {
         glColor3f(WHITE);
         glPointSize(6);
@@ -70,7 +67,7 @@ void Renderer::render(const Particle& obj) const
         glEnd();
     }
     
-    if (ids)
+    if (settings.get(IDS))
     {
         std::stringstream s;
         s << obj.id_;
@@ -86,7 +83,7 @@ void Renderer::render(const Bar& obj) const
     int mult = 5;
     
     // Color bars according to their strain
-    if (bars_color_mode == STRAIN_C)
+    if (settings.bars_color_mode == STRAIN_C)
     {
         // Relative extension
         double strain = obj.get_strain();
@@ -102,7 +99,7 @@ void Renderer::render(const Bar& obj) const
     }
     // Color bars according to their temperature
     // TODO: Color it appropriately: black-red-yellow-white
-    else if (bars_color_mode == TEMP_C)
+    else if (settings.bars_color_mode == TEMP_C)
     {
         double temp_fraction = (obj.get_temperature() - ROOM_TEMPERATURE) / (MELTING_POINT - ROOM_TEMPERATURE);
         if (temp_fraction > 0.0)
@@ -138,81 +135,31 @@ void Renderer::render(const Bar& obj) const
     
     std::stringstream s;
     s.precision(3);
-    if (ids)
+    if (settings.get(IDS))
     {
         glColor3f(FUCHSIA);
         s << obj.id_;
         glut_print(m_mid.x, m_mid.y, s.str());
     }
-    if (lengths)
+    if (settings.get(LENGTHS))
     {
+        glColor3f(WHITE);
         s << obj.length();
         glut_print(m_mid.x, m_mid.y, s.str());
     }
-    if (extensions)
+    if (settings.get(EXTENSIONS))
     {
+        glColor3f(WHITE);
         s.str("");
         s << obj.get_strain();
         glut_print(m_mid.x, m_mid.y - px_to_m(12.0), s.str());
     }
 }
 
-void Renderer::render(const Wall& obj) const
-{
-    glColor3f(WHITE);
-    glLineWidth(2.0);
-    
-    draw_rectangle(obj.p1_, obj.p2_, false);
-    
-    double xmin = obj.x_min();
-    double xmax = obj.x_max();
-    double ymin = obj.y_min();
-    double ymax = obj.y_max();
-    
-    double width = xmax - xmin;
-    double height = ymax - ymin;
-    
-    // Spacing between the lines, metres
-    double d = px_to_m(wall_lines_spacing);
-    
-    glBegin(GL_LINES);
-    for (int i = 0; i * d <= width + height; i++)
-    {
-        double x1 = xmin + i * d - height;
-        double y1 = ymin;
-        double x2 = xmin + i * d;
-        double y2 = ymax;
-        
-        if (x1 < xmin)
-        {
-            x1 = xmin;
-            y1 = ymax - i * d;
-        }
-        if (x2 > xmax)
-        {
-            x2 = xmax;
-            y2 = ymin + width + height - i * d;
-        }
-        
-        glVertex2f(x1, y1);
-        glVertex2f(x2, y2);
-        
-    }
-    glEnd();
-    
-    if (ids)
-    {
-        std::ostringstream s;
-        s << obj.id_;
-        glColor3f(AQUA);
-        glut_print(obj.p2_.x, obj.p2_.y, s.str());
-    }
-}
-
 void Renderer::render(const Obstacle& obj) const
 {
     // Draw the triangulated polygon
-    if (draw_triangulation)
+    if (settings.get(TRIANGULATION))
     {
         glColor3f(RED);
         glLineWidth(1);
@@ -240,7 +187,7 @@ void Renderer::render(const Obstacle& obj) const
     glEnd();
     
     // Draw the bounding boexs
-    if (draw_bounding_boxes)
+    if (settings.get(BOUNDING_BOXES))
     {
         glColor3f(RED);
         glLineWidth(1.0);
@@ -418,28 +365,11 @@ void Renderer::render(const SelectionTool &obj) const
     glEnd();
 }
 
-void Renderer::render(const WallTool &obj) const
-{
-    Vector2d tool_pos = mouse.pos_world;
-    
-    // Snap the position vector
-    if (mouse.particle_in_range())
-        tool_pos = particles[mouse.closest_particle].position_;
-    else if (mouse.grid_in_range())
-        tool_pos = mouse.closest_grid;
-    
-    // Draw the current mouse position
-    glLineWidth(1);
-    glColor3f(WHITE);
-    draw_cross(tool_pos, 10);
-    
-    // Draw the wall points
-    for (int i = 0; i < obj.points.size(); i++)
-        draw_cross(obj.points[i], 10);
-}
-
 void Renderer::render(const Grid &obj) const
 {
+    if (!settings.get(GRID))
+        return;
+    
     double left = window.left();
     double right = window.right();
     double bottom = window.bottom();

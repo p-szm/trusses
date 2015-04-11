@@ -7,15 +7,14 @@
 //
 
 #include "button.h"
-#include "graphics.h"
 #include "interface.h"
 #include "save.h"
-#include "wall_tool.h"
 #include "selection_tool.h"
 #include "obstacle_tool.h"
 #include "renderer.h"
 #include "window.h"
 #include "game.h"
+#include "settings.h"
 
 std::vector<Button> buttons;
 
@@ -69,27 +68,27 @@ void Button::draw(const Renderer& rend) const
 
 void button_ids_action(void)
 {
-    ids = !ids;
+    settings.toggle(IDS);
 }
 
 void button_velocities_action(void)
 {
-    velocities = !velocities;
+    settings.toggle(VELOCITIES);
 }
 
 void button_accelerations_action(void)
 {
-    accelerations = !accelerations;
+    settings.toggle(ACCELERATIONS);
 }
 
 void button_lengths_action(void)
 {
-    lengths = !lengths;
+    settings.toggle(LENGTHS);
 }
 
 void button_rel_extensions_action(void)
 {
-    extensions = !extensions;
+    settings.toggle(EXTENSIONS);
 }
 
 void button_reset_action(void)
@@ -114,11 +113,6 @@ void button_scale_down_action(void)
     window.scale /= 1.1;
 }
 
-void button_draw_wall_action(void)
-{
-    Tool::set(current_tool, new WallTool);
-}
-
 void button_selection_action(void)
 {
     Tool::set(current_tool, new SelectionTool);
@@ -136,7 +130,6 @@ void create_buttons_editor()
     
     Button::create(60, 30, 1.0, 1.0, -50, -150, &button_lengths_action, "Lengths");
     Button::create(60, 30, 1.0, 1.0, -50, -195, &button_rel_extensions_action, "Rel ext");
-    Button::create(60, 30, 1.0, 1.0, -50, -240, &button_draw_wall_action, "Wall");
     Button::create(60, 30, 1.0, 1.0, -50, -285, &button_selection_action, "Select");
 
     int plus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -350, &button_scale_up_action, "     +");

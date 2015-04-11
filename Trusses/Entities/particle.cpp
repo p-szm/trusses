@@ -9,12 +9,13 @@
 #include "particle.h"
 #include "physics.h"
 #include "bar.h"
-#include "wall.h"
 #include "temporary_label.h"
 #include "renderer.h"
 #include "game.h"
+#include "settings.h"
 
 SlotMap<Particle> particles;
+const double g = 9.81;
 
 int Particle::create(double a, double b, bool fixed)
 {
@@ -57,8 +58,8 @@ void Particle::update()
         if (trace_on)
             trace.add(position_);
         
-        if (gravity)
-            acceleration_ += Vector2d(0.0, -GRAVITY);
+        if (settings.get(GRAVITY))
+            acceleration_ += Vector2d(0.0, -g);
         
         // Verlet integration
         double dt = game.dt_s();

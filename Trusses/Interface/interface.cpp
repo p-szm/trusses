@@ -17,7 +17,6 @@
 #include <cstdlib>
 
 #include "button.h"
-#include "graphics.h"
 #include "physics.h"
 #include "save.h"
 #include "interpreter.h"
@@ -27,6 +26,7 @@
 #include "drag_tool.h"
 #include "window.h"
 #include "game.h"
+#include "settings.h"
 
 // * * * * * * * * * * //
 Arrows arrows;
@@ -78,7 +78,7 @@ void key_down_function(unsigned char key, int x, int y)
     else
     {
         if (key == 'g')
-            gravity = !gravity;
+            settings.toggle(GRAVITY);
         else if (key == 'o')
             create_cloth(20, 0.5, Vector2d(0.0, 0.0), false);
         else if (key == 27)
@@ -95,10 +95,10 @@ void key_down_function(unsigned char key, int x, int y)
         }
         else if (key == 'c')
         {
-            if (bars_color_mode == STRAIN_C)
-                set_bars_color_mode(TEMP_C);
-            else if (bars_color_mode == TEMP_C)
-                set_bars_color_mode(STRAIN_C);
+            if (settings.bars_color_mode == STRAIN_C)
+                settings.bars_color_mode = TEMP_C;
+            else if (settings.bars_color_mode == TEMP_C)
+                settings.bars_color_mode = STRAIN_C;
         }
         else if (key == 'f')
         {
@@ -114,15 +114,11 @@ void key_down_function(unsigned char key, int x, int y)
             }
         }
         else if (key == 'b')
-        {
-            draw_bounding_boxes = !draw_bounding_boxes;
-        }
+            settings.toggle(BOUNDING_BOXES);
         else if (key == 't')
-        {
-            draw_triangulation = !draw_triangulation;
-        }
+            settings.toggle(TRIANGULATION);
         else if (key == 's')
-            show_particles = !show_particles;
+            settings.toggle(PARTICLES);
         else if (key == 'p')
         {
             if (game.simulation_is_paused())

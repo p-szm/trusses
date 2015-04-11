@@ -9,11 +9,8 @@
 #ifndef __Trusses__renderer__
 #define __Trusses__renderer__
 
-#include <stdio.h>
-
 class Particle;
 class Bar;
-class Wall;
 class Obstacle;
 class TempLabel;
 class Button;
@@ -21,7 +18,6 @@ class BarsTool;
 class DragTool;
 class ObstacleTool;
 class SelectionTool;
-class WallTool;
 class Grid;
 
 class Renderer
@@ -29,7 +25,6 @@ class Renderer
 public:
     void render(const Particle& obj) const;
     void render(const Bar& obj) const;
-    void render(const Wall& obj) const;
     void render(const Obstacle& obj) const;
     void render(const TempLabel& obj) const;
     void render(const Button& obj) const;
@@ -37,7 +32,6 @@ public:
     void render(const DragTool& obj) const;
     void render(const ObstacleTool& obj) const;
     void render(const SelectionTool& obj) const;
-    void render(const WallTool& obj) const;
     void render(const Grid& obj) const;
 };
 

@@ -20,9 +20,7 @@
 // TODO: Velocities are wrong
 // TODO: Important! Check strain signs
 // TODO: Mouse at the edge scrolls the world
-// TODO: Simplify the collision with walls
 // TODO: Clean up key_down_function
-// TODO: Particles can penetrate the corners of the walls
 // TODO: Set idle to null when in the editor mode
 
 int main(int argc, char * argv[])

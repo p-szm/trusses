@@ -11,7 +11,6 @@
 #include "particle.h"
 #include "bar.h"
 #include "obstacle.h"
-#include "wall.h"
 #include "interface.h"
 #include "bars_tool.h"
 #include "drag_tool.h"
@@ -75,10 +74,6 @@ void Game::update_simulation()
     for (int i = 0; i < obstacles.size(); i++)
         obstacles.at(i).collide();
     
-    // Collisions of particles with walls
-    for (int i = 0; i < walls.size(); i++)
-        walls.at(i).collide();
-    
     // Update each bar and add see if it will be destroyed
     std::vector<int> bars_to_destroy;
     for (int i = 0; i < bars.size(); i++)
@@ -138,7 +133,6 @@ void Game::resume_simulation()
 
 void Game::reset()
 {
-    walls.clear();
     bars.clear();
     particles.clear();
     obstacles.clear();

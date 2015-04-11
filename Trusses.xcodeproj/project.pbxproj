@@ -11,6 +11,7 @@
 		CD02537B1AD680D80084D1CA /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD0253771AD680D80084D1CA /* graphics.cpp */; };
 		CD02537C1AD680D80084D1CA /* renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD0253791AD680D80084D1CA /* renderer.cpp */; };
 		CD651DE51AD88BD30031DCED /* grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD651DE31AD88BD30031DCED /* grid.cpp */; };
+		CD651DE81AD92B5C0031DCED /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD651DE61AD92B5C0031DCED /* settings.cpp */; };
 		CD74D2181A52F51A000B6F31 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2171A52F51A000B6F31 /* OpenGL.framework */; };
 		CD74D21A1A52F520000B6F31 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2191A52F520000B6F31 /* GLUT.framework */; };
 		CD920ED31AD5B83A00CBA69C /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD920ED11AD5B83A00CBA69C /* window.cpp */; };
@@ -26,13 +27,11 @@
 		CDC346061AC1A0DE00F0E8C2 /* bar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC345FE1AC1A0DE00F0E8C2 /* bar.cpp */; };
 		CDC346071AC1A0DE00F0E8C2 /* obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC346001AC1A0DE00F0E8C2 /* obstacle.cpp */; };
 		CDC346081AC1A0DE00F0E8C2 /* particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC346021AC1A0DE00F0E8C2 /* particle.cpp */; };
-		CDC346091AC1A0DE00F0E8C2 /* wall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC346041AC1A0DE00F0E8C2 /* wall.cpp */; };
 		CDC346161AC1A0ED00F0E8C2 /* bars_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC3460A1AC1A0ED00F0E8C2 /* bars_tool.cpp */; };
 		CDC346171AC1A0ED00F0E8C2 /* drag_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC3460C1AC1A0ED00F0E8C2 /* drag_tool.cpp */; };
 		CDC346181AC1A0ED00F0E8C2 /* obstacle_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC3460E1AC1A0ED00F0E8C2 /* obstacle_tool.cpp */; };
 		CDC346191AC1A0ED00F0E8C2 /* selection_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC346101AC1A0ED00F0E8C2 /* selection_tool.cpp */; };
 		CDC3461A1AC1A0ED00F0E8C2 /* tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC346121AC1A0ED00F0E8C2 /* tool.cpp */; };
-		CDC3461B1AC1A0ED00F0E8C2 /* wall_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC346141AC1A0ED00F0E8C2 /* wall_tool.cpp */; };
 		CDFE4D381AD8617400B2BD9C /* game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDFE4D361AD8617400B2BD9C /* game.cpp */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +56,8 @@
 		CD31825F1AC779E600A6AA33 /* slot_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = slot_map.h; path = Trusses/External/slot_map.h; sourceTree = SOURCE_ROOT; };
 		CD651DE31AD88BD30031DCED /* grid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = grid.cpp; path = Trusses/Graphics/grid.cpp; sourceTree = SOURCE_ROOT; };
 		CD651DE41AD88BD30031DCED /* grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = grid.h; path = Trusses/Graphics/grid.h; sourceTree = SOURCE_ROOT; };
+		CD651DE61AD92B5C0031DCED /* settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = settings.cpp; path = Trusses/settings.cpp; sourceTree = SOURCE_ROOT; };
+		CD651DE71AD92B5C0031DCED /* settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = settings.h; path = Trusses/settings.h; sourceTree = SOURCE_ROOT; };
 		CD74D20D1A5214CC000B6F31 /* Trusses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Trusses; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD74D2171A52F51A000B6F31 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		CD74D2191A52F520000B6F31 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
@@ -87,8 +88,6 @@
 		CDC346011AC1A0DE00F0E8C2 /* obstacle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = obstacle.h; path = Trusses/Entities/obstacle.h; sourceTree = SOURCE_ROOT; };
 		CDC346021AC1A0DE00F0E8C2 /* particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = particle.cpp; path = Trusses/Entities/particle.cpp; sourceTree = SOURCE_ROOT; };
 		CDC346031AC1A0DE00F0E8C2 /* particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = particle.h; path = Trusses/Entities/particle.h; sourceTree = SOURCE_ROOT; };
-		CDC346041AC1A0DE00F0E8C2 /* wall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wall.cpp; path = Trusses/Entities/wall.cpp; sourceTree = SOURCE_ROOT; };
-		CDC346051AC1A0DE00F0E8C2 /* wall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wall.h; path = Trusses/Entities/wall.h; sourceTree = SOURCE_ROOT; };
 		CDC3460A1AC1A0ED00F0E8C2 /* bars_tool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bars_tool.cpp; path = Trusses/Tools/bars_tool.cpp; sourceTree = SOURCE_ROOT; };
 		CDC3460B1AC1A0ED00F0E8C2 /* bars_tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bars_tool.h; path = Trusses/Tools/bars_tool.h; sourceTree = SOURCE_ROOT; };
 		CDC3460C1AC1A0ED00F0E8C2 /* drag_tool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = drag_tool.cpp; path = Trusses/Tools/drag_tool.cpp; sourceTree = SOURCE_ROOT; };
@@ -99,8 +98,6 @@
 		CDC346111AC1A0ED00F0E8C2 /* selection_tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = selection_tool.h; path = Trusses/Tools/selection_tool.h; sourceTree = SOURCE_ROOT; };
 		CDC346121AC1A0ED00F0E8C2 /* tool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tool.cpp; path = Trusses/Tools/tool.cpp; sourceTree = SOURCE_ROOT; };
 		CDC346131AC1A0ED00F0E8C2 /* tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tool.h; path = Trusses/Tools/tool.h; sourceTree = SOURCE_ROOT; };
-		CDC346141AC1A0ED00F0E8C2 /* wall_tool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wall_tool.cpp; path = Trusses/Tools/wall_tool.cpp; sourceTree = SOURCE_ROOT; };
-		CDC346151AC1A0ED00F0E8C2 /* wall_tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wall_tool.h; path = Trusses/Tools/wall_tool.h; sourceTree = SOURCE_ROOT; };
 		CDFE4D361AD8617400B2BD9C /* game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = game.cpp; path = Trusses/game.cpp; sourceTree = SOURCE_ROOT; };
 		CDFE4D371AD8617400B2BD9C /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = game.h; path = Trusses/game.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -161,6 +158,8 @@
 				CD9875191AA75D980035DCC2 /* physics.h */,
 				CD98751A1AA75D980035DCC2 /* save.cpp */,
 				CD98751B1AA75D980035DCC2 /* save.h */,
+				CD651DE61AD92B5C0031DCED /* settings.cpp */,
+				CD651DE71AD92B5C0031DCED /* settings.h */,
 				CD0253761AD680C30084D1CA /* Graphics */,
 				CDC345E81AC1745F00F0E8C2 /* External */,
 				CDC345E71AC1741F00F0E8C2 /* Interface */,
@@ -185,8 +184,6 @@
 				CDC346111AC1A0ED00F0E8C2 /* selection_tool.h */,
 				CDC346121AC1A0ED00F0E8C2 /* tool.cpp */,
 				CDC346131AC1A0ED00F0E8C2 /* tool.h */,
-				CDC346141AC1A0ED00F0E8C2 /* wall_tool.cpp */,
-				CDC346151AC1A0ED00F0E8C2 /* wall_tool.h */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -200,8 +197,6 @@
 				CDC346011AC1A0DE00F0E8C2 /* obstacle.h */,
 				CDC346021AC1A0DE00F0E8C2 /* particle.cpp */,
 				CDC346031AC1A0DE00F0E8C2 /* particle.h */,
-				CDC346041AC1A0DE00F0E8C2 /* wall.cpp */,
-				CDC346051AC1A0DE00F0E8C2 /* wall.h */,
 			);
 			name = Entities;
 			sourceTree = "<group>";
@@ -302,7 +297,6 @@
 				CDC346191AC1A0ED00F0E8C2 /* selection_tool.cpp in Sources */,
 				CD98752B1AA75D980035DCC2 /* save.cpp in Sources */,
 				CD02537B1AD680D80084D1CA /* graphics.cpp in Sources */,
-				CDC346091AC1A0DE00F0E8C2 /* wall.cpp in Sources */,
 				CDC3461A1AC1A0ED00F0E8C2 /* tool.cpp in Sources */,
 				CDC345F71AC1A0B100F0E8C2 /* interface.cpp in Sources */,
 				CDC346161AC1A0ED00F0E8C2 /* bars_tool.cpp in Sources */,
@@ -314,7 +308,7 @@
 				CDC345F91AC1A0B100F0E8C2 /* temporary_label.cpp in Sources */,
 				CD0253751AD680A70084D1CA /* math.cpp in Sources */,
 				CDC346071AC1A0DE00F0E8C2 /* obstacle.cpp in Sources */,
-				CDC3461B1AC1A0ED00F0E8C2 /* wall_tool.cpp in Sources */,
+				CD651DE81AD92B5C0031DCED /* settings.cpp in Sources */,
 				CD920ED31AD5B83A00CBA69C /* window.cpp in Sources */,
 				CD98752A1AA75D980035DCC2 /* physics.cpp in Sources */,
 				CD651DE51AD88BD30031DCED /* grid.cpp in Sources */,

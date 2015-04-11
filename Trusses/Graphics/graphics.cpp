@@ -18,7 +18,6 @@
 
 #include "particle.h"
 #include "bar.h"
-#include "wall.h"
 #include "obstacle.h"
 #include "button.h"
 #include "physics.h"
@@ -30,6 +29,7 @@
 #include "tool.h"
 #include "game.h"
 #include "grid.h"
+#include "settings.h"
 
 // * * * * * * * * * * //
 void glut_print (float x, float y, std::string s);
@@ -48,16 +48,6 @@ void draw_horizon();
 vec3 hsv_to_rgb(vec3 hsv);
 
 // * * * * * * * * * * //
-bool accelerations = false;
-bool velocities = false;
-bool lengths = false;
-bool extensions = false;
-bool coords = true;
-bool ids = false;
-bool show_particles = true;
-bool draw_bounding_boxes = false;
-bool draw_triangulation = false;
-bars_color_mode_t bars_color_mode = STRAIN_C;
 Renderer renderer;
 
 // * * * * * * * * * * //
@@ -250,12 +240,8 @@ void display()
     glLoadIdentity();
     gluOrtho2D(WORLD_VIEW);
     
-    if (coords && game.simulation_is_paused())
+    if (game.simulation_is_paused())
         renderer.render(grid);
-    
-    // Draw the walls
-    for (int i = 0; i < walls.size(); i++)
-        walls.at(i).draw(renderer);
     
     // Draw the obstacles
     for (int i = 0; i < obstacles.size(); i++)
@@ -270,7 +256,7 @@ void display()
         particles.at(i).draw(renderer);
     
     // Draw the velocity vectors
-    if (velocities)
+    if (settings.get(VELOCITIES))
     {
         for (int i = 0; i < particles.size(); i++)
         {
@@ -281,7 +267,7 @@ void display()
     }
     
     // Draw the acceleration vectors
-    if (accelerations)
+    if (settings.get(ACCELERATIONS))
     {
         for (int i = 0; i < particles.size(); i++)
         {
@@ -329,11 +315,6 @@ void reshape(int width, int height)
     
     window.width = width;
     window.height = height;
-}
-
-void set_bars_color_mode(bars_color_mode_t mode)
-{
-    bars_color_mode = mode;
 }
 
 // * * * * * * * * * * //

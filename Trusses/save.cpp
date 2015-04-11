@@ -18,9 +18,7 @@
 #include "math.h"
 #include "particle.h"
 #include "bar.h"
-#include "wall.h"
 #include "obstacle.h"
-#include "graphics.h"
 #include "interface.h"
 #include "interpreter.h"
 #include "temporary_label.h"
@@ -93,9 +91,7 @@ int load(std::string filename)
     // Check if the file is valid
     
     // Important:
-    // App freezes when loading walls
-    // --- Fixed
-    // But check the function read_numbers
+    // Check the function read_numbers
     
     game.reset();
     
@@ -162,16 +158,6 @@ int load(std::string filename)
                 Bar::create(particles_map[v[0]], particles_map[v[1]]);
         }
         
-        // A wall
-        else if (line.substr(0, 1) == "w")
-        {
-            std::vector<double> v;
-            read_numbers(line, v);
-            
-            if (v.size() == 4)
-                Wall::create(Vector2d(v[0], v[1]), Vector2d(v[2], v[3]));
-        }
-        
         // An obstacle
         else if (line.substr(0, 1) == "o")
         {
@@ -223,14 +209,6 @@ void save(std::string filename)
     {
         Bar& b = bars.at(i);
         file << 'b' << b.id_ << ' ' << b.p1_id << ' ' << b.p2_id << ' ' << b.get_strain() << ' ' << b.get_temperature() << std::endl;
-    }
-    file << std::endl;
-    
-    // Print walls
-    for (int i = 0; i < walls.size(); i++)
-    {
-        Wall& w = walls.at(i);
-        file << 'w' << w.id_ << ' ' << w.p1_ << ' ' << w.p2_ << std::endl;
     }
     file << std::endl;
     

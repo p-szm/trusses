@@ -12,11 +12,8 @@
 #include "particle.h"
 
 #define ROOM_TEMPERATURE 288
-#define ENERGY_ABSORPTION 0.5
-#define GRAVITY 9.81
 
 // * * * * * * * * * * //
-extern bool gravity;
 extern double environment_temp;
 
 #endif /* defined(__Trusses__physics__) */

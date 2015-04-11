@@ -9,5 +9,4 @@
 #include "physics.h"
 
 // * * * * * * * * * * //
-bool gravity = true;
 double environment_temp = ROOM_TEMPERATURE;

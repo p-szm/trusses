@@ -38,31 +38,16 @@
 #define GOLD 1.0, 0.84, 0.0
 
 // * * * * * * * * * * //
-enum bars_color_mode_t {STRAIN_C = 0, TEMP_C};
-
-// * * * * * * * * * * //
 void display();
 void reshape(int width, int height);
-void set_bars_color_mode(bars_color_mode_t mode);
 void draw_rectangle(Vector2d p1, Vector2d p2, bool filled);
 void draw_circle(Vector2d centre, double r, unsigned int n_points, bool filled = false);
 void draw_cross(Vector2d pos, int size_px);
 void draw_point(Vector2d pos);
 void glut_print (float x, float y, std::string s);;
-
-// * * * * * * * * * * //
 void setup_graphics(int argc, char * argv[]);
 
-// * * * * * * * * * * //
-extern bool ids;
-extern bool velocities;
-extern bool accelerations;
-extern bool lengths;
-extern bool extensions;
-extern bool coords;
-extern bool show_particles;
-extern bars_color_mode_t bars_color_mode;
-extern bool draw_bounding_boxes;
-extern bool draw_triangulation;
+class Renderer;
+extern Renderer renderer;
 
 #endif /* defined(__Trusses__graphics__) */

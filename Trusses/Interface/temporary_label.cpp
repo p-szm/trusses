@@ -7,7 +7,6 @@
 //
 
 #include "temporary_label.h"
-#include "graphics.h"
 #include "renderer.h"
 #include "game.h"
 

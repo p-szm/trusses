@@ -13,12 +13,11 @@
 
 #include "particle.h"
 #include "bar.h"
-#include "wall.h"
 #include "physics.h"
-#include "graphics.h"
-#include "window.h"
 #include "save.h"
 #include "temporary_label.h"
+#include "window.h"
+#include "settings.h"
 #include "game.h"
 
 using namespace std;
@@ -96,9 +95,9 @@ void Interpreter::interpret(const string& cmd) const
     if (first_word == "ids")
     {
         if (words_number == 2 && words[1] == "on")
-            ids = true;
+            settings.set(IDS, true);
         else if (words_number == 2 && words[1] == "off")
-            ids = false;
+            settings.set(IDS, false);
         else
             issue_label("Usage: ids <on/off>", INFO_LABEL_TIME);
     }
@@ -106,21 +105,21 @@ void Interpreter::interpret(const string& cmd) const
     else if (first_word == "gravity")
     {
         if (words_number == 2 && words[1] == "on")
-            gravity = true;
+            settings.set(GRAVITY, true);
         else if (words_number == 2 && words[1] == "off")
-            gravity = false;
+            settings.set(GRAVITY, false);
         else
             issue_label("Usage: gravity <on/off>", INFO_LABEL_TIME);
     }
     
-    else if (first_word == "coords")
+    else if (first_word == "grid")
     {
         if (words_number == 2 && words[1] == "on")
-            coords = true;
+            settings.set(GRID, true);
         else if (words_number == 2 && words[1] == "off")
-            coords = false;
+            settings.set(GRID, false);
         else
-            issue_label("Usage: coords <on/off>", INFO_LABEL_TIME);
+            issue_label("Usage: grid <on/off>", INFO_LABEL_TIME);
     }
     
     else if (first_word == "load")
@@ -184,19 +183,6 @@ void Interpreter::interpret(const string& cmd) const
         }
         else
             issue_label("Usage: scale <double>", INFO_LABEL_TIME);
-    }
-    
-    else if (first_word == "wall")
-    {
-        if (words_number == 1)
-            print_walls();
-        else if (types == "wnnnn")
-        {
-            Wall::create(Vector2d(get_number<double>(words[1]), get_number<double>(words[2])),
-                         Vector2d(get_number<double>(words[3]), get_number<double>(words[4])));
-        }
-        else
-            issue_label("Usage: wall <double> <double> <double> <double>", INFO_LABEL_TIME);
     }
     
     else if (first_word == "particle")
