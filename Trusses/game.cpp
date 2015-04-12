@@ -37,15 +37,12 @@ Game::Game()
     prev_t = t;
     delta_t = 20000;
     simulation_time = 0;
-    
-    // Enter the editor mode
-    pause_simulation();
 }
 
 void Game::update()
 {
     update_time();
-    if (!simulation_is_paused())
+    if (simulation_running())
         update_simulation();
 }
 
@@ -99,15 +96,15 @@ void Game::update_simulation()
         Particle::destroy(particles_to_destroy[i]);
 }
 
-bool Game::simulation_is_paused() const
+bool Game::simulation_running() const
 {
-    return simulation_paused;
+    return simulation_is_running;
 }
 
-void Game::pause_simulation()
+void Game::enter_editor()
 {
     Tool::set(current_tool, new BarsTool);
-    simulation_paused = true;
+    simulation_is_running = false;
     
     temp_labels.clear();
     TempLabel::create("Editor mode - you can draw the structure. Press \"p\" when you are done", 0, 1.0, 0, -TOP_MARGIN, MODE_LABEL_TIME);
@@ -117,11 +114,11 @@ void Game::pause_simulation()
     mouse.min_click_dist = 10;
 }
 
-void Game::resume_simulation()
+void Game::enter_simulation()
 {
     Tool::set(current_tool, new DragTool);
     microsecond_time(game.t);
-    simulation_paused = false;
+    simulation_is_running = true;
     
     temp_labels.clear();
     TempLabel::create("Simulation mode - you can drag the joints", 0, 1.0, 0, -TOP_MARGIN, MODE_LABEL_TIME);
@@ -136,7 +133,7 @@ void Game::reset()
     bars.clear();
     particles.clear();
     obstacles.clear();
-    game.pause_simulation();
+    game.enter_editor();
     game.simulation_time = 0;
     Tool::set(current_tool, new BarsTool);
 }

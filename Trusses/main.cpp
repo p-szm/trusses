@@ -16,6 +16,7 @@
 
 #include "graphics.h"
 #include "interface.h"
+#include "game.h"
 
 // TODO: Velocities are wrong
 // TODO: Important! Check strain signs
@@ -31,6 +32,7 @@ int main(int argc, char * argv[])
     // Initialise the GLUT window and register the callbacks
     setup_graphics(argc, argv);
     register_callbacks();
+    game.enter_editor();
     
     glutMainLoop();
     

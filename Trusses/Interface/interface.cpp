@@ -121,10 +121,10 @@ void key_down_function(unsigned char key, int x, int y)
             settings.toggle(PARTICLES);
         else if (key == 'p')
         {
-            if (game.simulation_is_paused())
-                game.resume_simulation();
+            if (game.simulation_running())
+                game.enter_editor();
             else
-                game.pause_simulation();
+                game.enter_simulation();
         }
     }
     

@@ -23,13 +23,13 @@ public:
     void update();
     
     // Enters the editor mode
-    void pause_simulation();
+    void enter_editor();
     
     // Enters the simulations mode
-    void resume_simulation();
+    void enter_simulation();
     
-    // True if the editor mode, false otherwise
-    bool simulation_is_paused() const;
+    // True if the simulation mode, false otherwise
+    bool simulation_running() const;
     
     // Resets everything
     void reset();
@@ -44,7 +44,7 @@ public:
     double simulation_time_s() const;
     
 private:
-    bool simulation_paused;
+    bool simulation_is_running;
     
     void update_time();
     void update_simulation();

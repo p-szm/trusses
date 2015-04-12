@@ -240,7 +240,7 @@ void display()
     glLoadIdentity();
     gluOrtho2D(WORLD_VIEW);
     
-    if (game.simulation_is_paused())
+    if (!game.simulation_running())
         renderer.render(grid);
     
     // Draw the obstacles

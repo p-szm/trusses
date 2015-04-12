@@ -35,16 +35,18 @@
 void Renderer::render(const Particle& obj) const
 {
     // Draw the trace if it is enabled
-    glColor3f(GOLD);
-    glLineWidth(1);
-    
-    glBegin(GL_LINE_STRIP);
-    for (int i = 0; i < obj.trace.size(); i++)
+    if (obj.trace_on)
     {
-        Vector2d t = obj.trace.get(i);
-        glVertex2f(t.x, t.y);
+        glColor3f(GOLD);
+        glLineWidth(1);
+        glBegin(GL_LINE_STRIP);
+        for (int i = 0; i < obj.trace.size(); i++)
+        {
+            Vector2d t = obj.trace.get(i);
+            glVertex2f(t.x, t.y);
+        }
+        glEnd();
     }
-    glEnd();
     
     // Particle's position
     Vector2d pos = obj.position_;
@@ -58,15 +60,18 @@ void Renderer::render(const Particle& obj) const
         glVertex2f(pos.x, pos.y);
         glEnd();
     }
+    // If show particles
     else if (settings.get(PARTICLES))
     {
         glColor3f(WHITE);
         glPointSize(6);
         glBegin(GL_POINTS);
+        glBegin(GL_POINTS);
         glVertex2f(pos.x, pos.y);
         glEnd();
     }
     
+    // If show ids
     if (settings.get(IDS))
     {
         std::stringstream s;
