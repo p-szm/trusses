@@ -19,15 +19,18 @@ class Obstacle: public Polygon
 {
     friend class Renderer;
 public:
-    Obstacle(const Polygon& poly);
+    static int create(const Polygon& poly);
     int id_;
     void draw(const Renderer& rend);
     // Handle the collisions with the particles
     void collide();
+    
 protected:
     Vector2d box_min;
     Vector2d box_max;
+    
 private:
+    Obstacle(const Polygon& poly);
     void update_bounding_box();
 };
 

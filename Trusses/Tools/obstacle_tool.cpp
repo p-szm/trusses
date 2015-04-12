@@ -27,7 +27,7 @@ void ObstacleTool::mouse_click(int button, int state)
     {
         // Add a copy to the obstacles container
         // TODO: Copying this might be slow
-        obstacles.add(Obstacle(poly));
+        Obstacle::create(poly);
         Tool::set(current_tool, new BarsTool);
     }
 }

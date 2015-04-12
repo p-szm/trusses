@@ -19,23 +19,21 @@ const double g = 9.81;
 
 int Particle::create(double a, double b, bool fixed)
 {
-    Particle new_p(a, b);
-    
+    return particles.add(Particle(a, b, fixed));
+}
+
+Particle::Particle(double a, double b, bool fixed): trace(500)
+{
+    position_ = Vector2d(a, b);
+    velocity_ = Vector2d(0.0, 0.0);
     double dt = game.dt_s();
-    new_p.velocity_ = Vector2d(0.0, 0.0);
-    new_p.prev_position_ = new_p.position_ - dt * new_p.velocity_;
-    new_p.prev_position_verlet_ = new_p.position_ - dt * new_p.velocity_;
-    new_p.acceleration_ = Vector2d(0.0, 0.0);
-    new_p.external_acceleration_ = Vector2d(0.0, 0.0);
-    new_p.mass_ = 1.0;
-    
-    new_p.fixed_ = (fixed) ? true : false;
-    
-    // Trace
-    new_p.trace_on = false;
-    
-    int new_id = particles.add(new_p);
-    return new_id;
+    prev_position_ = position_ - dt * velocity_;
+    prev_position_verlet_ = position_ - dt * velocity_;
+    acceleration_ = Vector2d(0.0, 0.0);
+    external_acceleration_ = Vector2d(0.0, 0.0);
+    mass_ = 1.0;
+    fixed_ = (fixed) ? true : false;
+    trace_on = false;
 }
 
 void Particle::untrace()

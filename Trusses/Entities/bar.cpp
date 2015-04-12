@@ -210,7 +210,9 @@ void Bar::split(int bar_id, unsigned int n_parts)
     std::vector<int> new_ids;
     for (int i = 1; i < n_parts; i++)
     {
-         new_ids.push_back( Particle::create(pos_start.x + i * Dr.x, pos_start.y + i * Dr.y, false) );
+        int new_id = particles.add(Particle(pos_start.x + i * Dr.x,
+                                            pos_start.y + i * Dr.y, false));
+        new_ids.push_back(new_id);
     }
     
     // Remove the first bar

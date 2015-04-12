@@ -169,7 +169,7 @@ int load(std::string filename)
             {
                 for (size_t i = 0; i < v.size(); i+=2)
                     poly.add_point(Vector2d(v[i], v[i+1]));
-                obstacles.add(Obstacle(poly));
+                Obstacle::create(poly);
             }
         }
     }

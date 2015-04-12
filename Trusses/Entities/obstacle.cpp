@@ -9,8 +9,20 @@
 #include "obstacle.h"
 #include "particle.h"
 #include "renderer.h"
+#include "temporary_label.h"
 
 SlotMap<Obstacle> obstacles;
+
+int Obstacle::create(const Polygon &poly)
+{
+    if (poly.self_intersects())
+    {
+        issue_label("Self-intersection found", WARNING_LABEL_TIME);
+        return -1;
+    }
+    
+    return obstacles.add(Obstacle(poly));
+}
 
 Obstacle::Obstacle(const Polygon& poly)
 {

@@ -55,8 +55,8 @@ public:
     
     static int create(double a, double b, bool fixed);
     
-protected:
-    Particle(double a, double b): trace(500) {position_.x = a; position_.y = b;}
+private:
+    Particle(double a, double b, bool fixed);
     
     // id's of all the bars connected to this particle
     std::vector<int> bars_connected;

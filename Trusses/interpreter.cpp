@@ -190,7 +190,8 @@ void Interpreter::interpret(const string& cmd) const
         if (words_number == 1)
             print_particles();
         else if (types == "wnn")
-            Particle::create(get_number<double>(words[1]), get_number<double>(words[2]), false);
+            Particle::create(get_number<double>(words[1]),
+                            get_number<double>(words[2]), false);
         else
             issue_label("Usage: particle <double> <double>", INFO_LABEL_TIME);
     }

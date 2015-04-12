@@ -50,6 +50,9 @@ public:
     // otherwise.
     bool clockwise_winding() const;
     
+    // Checks for self-intersection. Complexity O(n2).
+    bool self_intersects() const;
+    
     // Triangulates the polygon and puts the result in
     // int the triangulation vector.
     void triangulate();

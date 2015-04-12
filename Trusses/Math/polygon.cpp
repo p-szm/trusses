@@ -140,6 +140,37 @@ bool Polygon::is_convex(std::vector<int>& ids, int vertex, bool clockw_winding) 
         return v1.cross(v2) > 0;
 }
 
+bool Polygon::self_intersects() const
+{
+    // Check every pair of edges for intersection
+    int sides = (int)no_sides();
+    for (int i = 0; i < sides; i++)
+    {
+        int next_to_i = (i == sides-1) ? 0 : i+1;
+        Segment seg_i(points[i], points[next_to_i]);
+        
+        for (int j = 0; j < sides; j++)
+        {
+            // Edge does not intersect with itself
+            if (i == j)
+                continue;
+            
+            int next_to_j = (j == sides-1) ? 0 : j+1;
+            
+            // Skip adjacent edges
+            if (j == next_to_i | next_to_j == i)
+                continue;
+            
+            Segment seg_j(points[j], points[next_to_j]);
+            
+            Vector2d p;
+            if (seg_i.intersect(seg_j, p))
+                return true;
+        }
+    }
+    return false;
+}
+
 void Polygon::find_ear(std::vector<int>& ids, bool clockw_winding)
 {
     bool ear_not_found = true;
