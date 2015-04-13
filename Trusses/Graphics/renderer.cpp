@@ -304,7 +304,7 @@ void Renderer::render(const DragTool &obj) const
     for (int i = 0; i < obj.dragged_particles.size(); i++)
     {
         int p_id = obj.dragged_particles[i];
-        if (particles.exists(i))
+        if (particles.exists(p_id))
         {
             Particle& active_p = particles[p_id];
             Vector2d particle_pos_gl = active_p.position_ ;
