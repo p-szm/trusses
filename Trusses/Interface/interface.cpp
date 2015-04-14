@@ -14,19 +14,14 @@
 #else
 #include <GL/glut.h>
 #endif
-#include <cstdlib>
 
 #include "button.h"
-#include "physics.h"
 #include "save.h"
 #include "interpreter.h"
-#include "temporary_label.h"
 #include "mouse.h"
-#include "bars_tool.h"
-#include "drag_tool.h"
-#include "window.h"
 #include "game.h"
 #include "settings.h"
+#include "tool.h"
 
 // * * * * * * * * * * //
 Arrows arrows;
@@ -42,65 +37,80 @@ double px_to_ui_x(double d) {return d / (window.width/2.0);}
 double px_to_ui_y(double d) {return d / (window.height/2.0);}
 
 // * * * * * * * * * * //
-void key_down_function(unsigned char key, int x, int y)
+void command_key_down(unsigned char key, int x, int y)
 {
     mouse.update(x, y);
     
-    if (command_mode)
+    switch (key)
     {
-        if (key == 27)
+        case 27:
         {
+            interpreter.command = "";
             command_mode = false;
-            commands.back() = "";
+            glutKeyboardFunc(key_down);
+            break;
         }
-        else if (key == 13)
+        case 13:
         {
+            interpreter.interpret();
+            interpreter.command = "";
             command_mode = false;
-            std::string cmd_to_execute = commands[commands.size() - current_cmd - 1];
-            if (cmd_to_execute != "")
-            {
-                interpreter.interpret(cmd_to_execute);
-                commands.back() = cmd_to_execute;
-            }
-            current_cmd = 0;
+            glutKeyboardFunc(key_down);
+            break;
         }
-        else if (key == 127 || key == 8)
+        case 127: case 8:
         {
-            if (commands.back().size() > 0 && current_cmd == 0)
-                commands.back() = commands.back().substr(0, commands.back().size()-1);
+            if (interpreter.command.size() > 0)
+                interpreter.command.pop_back();
+            break;
         }
-        else
+        default:
         {
-            if (current_cmd == 0)
-                commands.back() += key;
+            interpreter.command += key;
+            break;
         }
     }
-    else
+    glutPostRedisplay();
+}
+
+void key_down(unsigned char key, int x, int y)
+{
+    mouse.update(x, y);
+
+    switch (key)
     {
-        if (key == 'g')
+        case 'g':
+        {
             settings.toggle(GRAVITY);
-        else if (key == 'o')
+            break;
+        }
+        case 'o':
+        {
             create_cloth(20, 0.5, Vector2d(0.0, 0.0), false);
-        else if (key == 27)
+            break;
+        }
+        case 27:
         {
             Tool::set(current_tool, NULL);
             game.reset();
             std::exit(0);
+            break;
         }
-        else if (key == 13)
+        case 13:
         {
             command_mode = true;
-            if (commands.size() == 0 || commands.back() != "")
-                commands.push_back("");
+            glutKeyboardFunc(command_key_down);
+            break;
         }
-        else if (key == 'c')
+        case 'c':
         {
             if (settings.bars_color_mode == STRAIN_C)
                 settings.bars_color_mode = TEMP_C;
             else if (settings.bars_color_mode == TEMP_C)
                 settings.bars_color_mode = STRAIN_C;
+            break;
         }
-        else if (key == 'f')
+        case 'f':
         {
             window.full_screen = !window.full_screen;
             if (window.full_screen)
@@ -112,19 +122,30 @@ void key_down_function(unsigned char key, int x, int y)
                 glutReshapeWindow(1100, 750);
                 glutPositionWindow(100, 80);
             }
+            break;
         }
-        else if (key == 'b')
+        case 'b':
+        {
             settings.toggle(BOUNDING_BOXES);
-        else if (key == 't')
+            break;
+        }
+        case 't':
+        {
             settings.toggle(TRIANGULATION);
-        else if (key == 's')
+            break;
+        }
+        case 's':
+        {
             settings.toggle(PARTICLES);
-        else if (key == 'p')
+            break;
+        }
+        case 'p':
         {
             if (game.simulation_running())
                 game.enter_editor();
             else
                 game.enter_simulation();
+            break;
         }
     }
     
@@ -145,16 +166,6 @@ void special_key_down(int key, int x, int y)
         arrows.left = true;
     if (key == GLUT_KEY_RIGHT)
         arrows.right = true;
-    
-    if (command_mode)
-    {
-        // If down arrow is pressed
-        if (arrows.down && current_cmd > 0)
-            current_cmd--;
-        // If up arrow is pressed
-        else if (arrows.up && current_cmd < commands.size() - 1)
-            current_cmd++;
-    }
 }
 
 void special_key_up(int key, int x, int y)
@@ -212,7 +223,7 @@ void mouse_drag(int x, int y)
 void register_callbacks()
 {
     glutMouseFunc(mouse_click);
-    glutKeyboardFunc(key_down_function);
+    glutKeyboardFunc(key_down);
     glutIdleFunc(idle);
     glutPassiveMotionFunc(mouse_passive);
     glutMotionFunc(mouse_drag);
@@ -223,7 +234,6 @@ void register_callbacks()
 void idle()
 {
     game.update();
-    update_labels();
     window.update_centre(arrows, game.dt_s());
     glutPostRedisplay();
 }

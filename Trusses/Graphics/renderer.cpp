@@ -7,10 +7,7 @@
 //
 
 #include "renderer.h"
-#include "physics.h"
-#include "mouse.h"
-#include "interface.h"
-#include "graphics.h"
+
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #include <OpenGL/gl.h>
@@ -19,6 +16,7 @@
 #endif
 #include <sstream>
 
+#include "graphics.h"
 #include "particle.h"
 #include "bar.h"
 #include "obstacle.h"
@@ -31,6 +29,8 @@
 #include "grid.h"
 #include "window.h"
 #include "settings.h"
+#include "mouse.h"
+#include "interface.h"
 
 void Renderer::render(const Particle& obj) const
 {
@@ -106,7 +106,7 @@ void Renderer::render(const Bar& obj) const
     // TODO: Color it appropriately: black-red-yellow-white
     else if (settings.bars_color_mode == TEMP_C)
     {
-        double temp_fraction = (obj.get_temperature() - ROOM_TEMPERATURE) / (MELTING_POINT - ROOM_TEMPERATURE);
+        double temp_fraction = (obj.get_temperature() - ROOM_TEMP) / (MELTING_POINT - ROOM_TEMP);
         if (temp_fraction > 0.0)
             glColor3f(1.0, 1.0 - temp_fraction, 1.0 - temp_fraction); // red
         else
@@ -149,14 +149,14 @@ void Renderer::render(const Bar& obj) const
     if (settings.get(LENGTHS))
     {
         glColor3f(WHITE);
-        s << obj.length();
+        s << std::fixed << obj.length();
         glut_print(m_mid.x, m_mid.y, s.str());
     }
     if (settings.get(EXTENSIONS))
     {
         glColor3f(WHITE);
         s.str("");
-        s << obj.get_strain();
+        s << std::fixed << obj.get_strain();
         glut_print(m_mid.x, m_mid.y - px_to_m(12.0), s.str());
     }
 }
@@ -185,7 +185,7 @@ void Renderer::render(const Obstacle& obj) const
     
     // Draw the boundary
     glColor3f(WHITE);
-    glLineWidth(2);
+    glLineWidth(1);
     glBegin(GL_LINE_LOOP);
     for (int i = 0; i < obj.no_sides(); i++)
         glVertex2f(obj.points[i].x, obj.points[i].y);
@@ -217,7 +217,7 @@ void Renderer::render(const Button& obj) const
 {
     Vector2d centre = obj.position + px_to_ui(obj.offset);
     Vector2d size = px_to_ui(Vector2d(obj.width_/2.0, obj.height_/2.0));
-    glColor3f(DARK_GREY);
+    glColor3f(0.3, 0.3, 0.4);
     draw_rectangle(centre - size, centre + size, true);
     
     if (obj.active_)
@@ -228,13 +228,14 @@ void Renderer::render(const Button& obj) const
     else if (obj.highlighted_)
     {
         glColor3f(GOLD);
-        glLineWidth(2.0);
+        glLineWidth(2);
     }
     else
     {
         glColor3f(WHITE);
-        glLineWidth(2.0);
+        glLineWidth(2);
     }
+    glLineWidth(1);
     draw_rectangle(centre - size, centre + size, false);
     
     glut_print(obj.position.x + px_to_ui_x(obj.offset.x - obj.width_/2.0 + 6),
@@ -359,11 +360,13 @@ void Renderer::render(const SelectionTool &obj) const
     // Highlight the selected points
     glPointSize(10);
     glBegin(GL_POINTS);
-    for (int i = 0; i < obj.selection_map.size(); i++)
+    for (int i = 0; i < obj.selected.size(); i++)
     {
-        if (obj.selection_map.find(i)->second)
+        std::set<int>::iterator it;
+        for (it = obj.selected.begin(); it != obj.selected.end(); ++it)
         {
-            Vector2d pos = particles[i].position_;
+            int p_id = *it;
+            Vector2d pos = particles[p_id].position_;
             glVertex2d(pos.x, pos.y);
         }
     }

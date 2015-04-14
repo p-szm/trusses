@@ -13,9 +13,10 @@
 #include <vector>
 
 class Tool;
+class Interpreter;
 
-// * * * * * * * * * * //
-void key_down_function(unsigned char key, int x, int y);
+void key_down(unsigned char key, int x, int y);
+void command_key_down(unsigned char key, int x, int y);
 void special_key_up(int key, int x, int y);
 void special_key_down(int key, int x, int y);
 void mouse_click(int button, int state, int x, int y);
@@ -24,7 +25,6 @@ void mouse_drag(int x, int y);
 void register_callbacks();
 void idle();
 
-// * * * * * * * * * * //
 // Some helper functions to convert between the coordinates
 Vector2d px_to_m(const Vector2d& v);
 double px_to_m(double d);
@@ -44,5 +44,6 @@ struct Arrows
 extern Arrows arrows;
 extern bool command_mode;
 extern Tool* current_tool;
+extern Interpreter interpreter;
 
 #endif /* defined(__Trusses__interface__) */

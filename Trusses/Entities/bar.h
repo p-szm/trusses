@@ -15,6 +15,7 @@
 #define MELTING_POINT 1800
 #define STIFFNESS_AT_TM 0.5
 #define THERMAL_COEFF 2e-5
+#define ROOM_TEMP 288
 
 class Renderer;
 class Vector2d;

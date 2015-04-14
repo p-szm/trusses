@@ -20,7 +20,6 @@
 #include "bar.h"
 #include "obstacle.h"
 #include "button.h"
-#include "physics.h"
 #include "interface.h"
 #include "window.h"
 #include "interpreter.h"
@@ -113,7 +112,7 @@ void draw_command_line()
 {
     double cmd_size = px_to_ui_y(COMMAND_LINE_SIZE);
     
-    glColor3f(DARK_GREY);
+    glColor3f(0.3, 0.3, 0.4);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glBegin(GL_QUADS);
     glVertex2f(-1, -1);
@@ -129,7 +128,7 @@ void draw_command_line()
     glEnd();
     
     glColor3f(WHITE);
-    glut_print(-1 + px_to_ui_x(20), -1 + px_to_ui_y(10), commands[commands.size() - current_cmd - 1]);
+    glut_print(-1 + px_to_ui_x(20), -1 + px_to_ui_y(10), interpreter.command);
 }
 
 void draw_rectangle(Vector2d p1, Vector2d p2, bool filled)
@@ -255,28 +254,6 @@ void display()
     for (int i = 0; i < particles.size(); i++)
         particles.at(i).draw(renderer);
     
-    // Draw the velocity vectors
-    if (settings.get(VELOCITIES))
-    {
-        for (int i = 0; i < particles.size(); i++)
-        {
-            Particle& p = particles.at(i);
-            if (!p.fixed_)
-                draw_vector(p.velocity_, p.position_, 0.0, 0.5, 0.0);
-        }
-    }
-    
-    // Draw the acceleration vectors
-    if (settings.get(ACCELERATIONS))
-    {
-        for (int i = 0; i < particles.size(); i++)
-        {
-            Particle& p = particles.at(i);
-            if (!p.fixed_)
-                draw_vector(p.acceleration_, p.position_, 0.0, 0.5, 0.0);
-        }
-    }
-    
     // Draw the tool-specific things
     current_tool->display(renderer);
     
@@ -293,7 +270,7 @@ void display()
     for (int i = 0; i < buttons.size(); i++)
         buttons[i].draw(renderer);
     
-    display_temperature(environment_temp);
+    display_temperature(game.environment_temp);
     display_time();
     
     // Draw the command line

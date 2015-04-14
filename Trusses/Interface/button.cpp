@@ -11,6 +11,7 @@
 #include "save.h"
 #include "selection_tool.h"
 #include "obstacle_tool.h"
+#include "bars_tool.h"
 #include "renderer.h"
 #include "window.h"
 #include "game.h"
@@ -29,7 +30,7 @@ Button::Button(double w, double h, double pos_x, double pos_y, int off_x, int of
     highlighted_ = false;
     text_ = t;
     active_ = false;
-    change_state_ = true;
+    change_state_ = false;
     
     id_ = (int)buttons.size();
 }
@@ -69,16 +70,6 @@ void Button::draw(const Renderer& rend) const
 void button_ids_action(void)
 {
     settings.toggle(IDS);
-}
-
-void button_velocities_action(void)
-{
-    settings.toggle(VELOCITIES);
-}
-
-void button_accelerations_action(void)
-{
-    settings.toggle(ACCELERATIONS);
 }
 
 void button_lengths_action(void)
@@ -123,35 +114,73 @@ void button_obstacle_action(void)
     Tool::set(current_tool, new ObstacleTool);
 }
 
+void button_triangulation_action(void)
+{
+    settings.toggle(TRIANGULATION);
+}
+
+void button_bboxes_action(void)
+{
+    settings.toggle(BOUNDING_BOXES);
+}
+
+void button_enter_simulation(void)
+{
+    game.enter_simulation();
+}
+
+void button_enter_editor(void)
+{
+    game.enter_editor();
+}
+
+void button_bars_tool(void)
+{
+    Tool::set(current_tool, new BarsTool);
+}
+
 void create_buttons_editor()
 {
-    Button::create(60, 30, 1.0, 1.0, -50, -40, &button_save_action, "Save");
-    Button::create(60, 30, 1.0, 1.0, -50, -85, &button_reset_action, "Reset");
+    const int tmargin = 40;
+    const int lmargin = 50;
+    const int w = 60;
+    const int h = 30;
+    const int dy = 40;
     
-    Button::create(60, 30, 1.0, 1.0, -50, -150, &button_lengths_action, "Lengths");
-    Button::create(60, 30, 1.0, 1.0, -50, -195, &button_rel_extensions_action, "Rel ext");
-    Button::create(60, 30, 1.0, 1.0, -50, -285, &button_selection_action, "Select");
-
-    int plus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -350, &button_scale_up_action, "     +");
-    buttons[plus_button_id].change_state_ = false;
-    int minus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -395, &button_scale_down_action, "     -");
-    buttons[minus_button_id].change_state_ = false;
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin, &button_save_action, "Save");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-dy, &button_reset_action, "Reset");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-2.5*dy, &button_ids_action, "Ids");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-3.5*dy, &button_lengths_action, "Lengths");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-4.5*dy, &button_rel_extensions_action, "Rel ext");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-5.5*dy, &button_triangulation_action, "Triangles");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-6.5*dy, &button_bboxes_action, "B-boxes");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-8*dy, &button_scale_up_action, "     +");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-9*dy, &button_scale_down_action, "     -");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-10.5*dy, &button_enter_simulation, "Simulate");
     
-    Button::create(60, 30, -1.0, 1.0, 50, -40, &button_obstacle_action, "Obstacle");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin, &button_bars_tool, "Draw");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-dy, &button_selection_action, "Select");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-2*dy, &button_obstacle_action, "Obstacle");
 }
 
 void create_buttons_simulation()
 {
-    Button::create(60, 30, 1.0, 1.0, -50, -40, &button_save_action, "Save");
-    Button::create(60, 30, 1.0, 1.0, -50, -85, &button_reset_action, "Reset");
+    const int tmargin = 40;
+    const int lmargin = 50;
+    const int w = 60;
+    const int h = 30;
+    const int dy = 40;
     
-    Button::create(60, 30, 1.0, 1.0, -50, -150, &button_lengths_action, "Lengths");
-    Button::create(60, 30, 1.0, 1.0, -50, -195, &button_rel_extensions_action, "Rel ext");
-    
-    int plus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -350, &button_scale_up_action, "     +");
-    buttons[plus_button_id].change_state_ = false;
-    int minus_button_id = Button::create(60, 30, 1.0, 1.0, -50, -395, &button_scale_down_action, "     -");
-    buttons[minus_button_id].change_state_ = false;
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin, &button_save_action, "Save");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-dy, &button_reset_action, "Reset");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-2.5*dy, &button_ids_action, "Ids");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-3.5*dy, &button_lengths_action, "Lengths");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-4.5*dy, &button_rel_extensions_action, "Rel ext");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-5.5*dy, &button_triangulation_action, "Triangles");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-6.5*dy, &button_bboxes_action, "B-boxes");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-8*dy, &button_scale_up_action, "     +");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-9*dy, &button_scale_down_action, "     -");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-10.5*dy, &button_enter_editor, "Edit");
 }
 
 void highlight_buttons(double x, double y)

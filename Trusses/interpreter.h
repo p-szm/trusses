@@ -15,7 +15,11 @@
 class Interpreter
 {
 public:
-    void interpret(const std::string& cmd) const;
+    // Interprets and executes the command
+    void interpret() const;
+    
+    // Command that will be interpreted
+    std::string command;
 private:
     // Takes a string str and breaks it up into words or numbers of type T
     // which are put into target_v
@@ -37,9 +41,5 @@ private:
     template <typename T>
     bool get_numbers(const std::string& input, std::vector<T> number) const;
 };
-
-// * * * * * * * * * * //
-extern std::vector<std::string> commands;
-extern unsigned int current_cmd;
 
 #endif /* defined(__Trusses__interpreter__) */

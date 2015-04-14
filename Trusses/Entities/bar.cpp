@@ -8,7 +8,6 @@
 
 #include "bar.h"
 #include "particle.h"
-#include "physics.h"
 #include "temporary_label.h"
 #include "renderer.h"
 #include "game.h"
@@ -60,7 +59,7 @@ int Bar::create(int id1, int id2, double e, double temp)
 
 int Bar::create(int id1, int id2)
 {
-    return Bar::create(id1, id2, 0.0, ROOM_TEMPERATURE);
+    return Bar::create(id1, id2, 0.0, ROOM_TEMP);
 }
 
 void Bar::set_temperature(double t)
@@ -171,8 +170,8 @@ void Bar::impose_constraint()
 int Bar::update()
 {
     // Temperature expansion
-    if (abs_d(temperature - environment_temp) > SMALL_NUM)
-        set_temperature( temperature + game.dt_s()/10.0 * (environment_temp - temperature) );
+    if (abs_d(temperature - game.environment_temp) > SMALL_NUM)
+        set_temperature( temperature + game.dt_s()/10.0 * (game.environment_temp - temperature) );
     
     // Destroy bars which are extended by too much
     double ext = extension() / r0;

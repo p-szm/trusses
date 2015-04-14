@@ -43,6 +43,8 @@ public:
     // Returns the total simulated time in seconds
     double simulation_time_s() const;
     
+    double environment_temp;
+    
 private:
     bool simulation_is_running;
     

@@ -16,6 +16,7 @@ Window::Window(double s, double w, double h): scale(s), width(w), height(h)
     centre = Vector2d(0.0, 0.0);
     scroll_speed = 250;
     full_screen = false;
+    original_scale = scale;
 }
 
 void Window::update_centre(const Arrows& arr, const double dt)
@@ -48,4 +49,10 @@ double Window::bottom() const
 double Window::top() const
 {
     return window.height/(2.0*window.scale) + window.centre.y;
+}
+
+void Window::reset()
+{
+    scale = original_scale;
+    centre = Vector2d(0.0, 0.0);
 }

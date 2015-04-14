@@ -37,6 +37,7 @@ Game::Game()
     prev_t = t;
     delta_t = 20000;
     simulation_time = 0;
+    environment_temp = ROOM_TEMP;
 }
 
 void Game::update()
@@ -44,6 +45,7 @@ void Game::update()
     update_time();
     if (simulation_running())
         update_simulation();
+    update_labels();
 }
 
 void Game::update_time()
@@ -117,7 +119,7 @@ void Game::enter_editor()
 void Game::enter_simulation()
 {
     Tool::set(current_tool, new DragTool);
-    microsecond_time(game.t);
+    microsecond_time(t);
     simulation_is_running = true;
     
     temp_labels.clear();
@@ -130,12 +132,17 @@ void Game::enter_simulation()
 
 void Game::reset()
 {
+    // Reset the entities
     bars.clear();
     particles.clear();
     obstacles.clear();
-    game.enter_editor();
-    game.simulation_time = 0;
+    
+    enter_editor();
+    simulation_time = 0;
+    
     Tool::set(current_tool, new BarsTool);
+    
+    window.reset();
 }
 
 double Game::dt_s() const

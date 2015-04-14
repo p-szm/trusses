@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "tool.h"
-#include <map>
+#include <set>
 #include "polygon.h"
 
 class Renderer;
@@ -30,7 +30,7 @@ public:
     ~SelectionTool();
 private:
     Polygon poly;
-    std::map<int, bool> selection_map;
+    std::set<int> selected;
 };
 
 #endif /* defined(__Trusses__selection_tool__) */

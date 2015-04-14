@@ -17,7 +17,6 @@
 		CD920ED31AD5B83A00CBA69C /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD920ED11AD5B83A00CBA69C /* window.cpp */; };
 		CD9875251AA75D980035DCC2 /* interpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9875101AA75D980035DCC2 /* interpreter.cpp */; };
 		CD9875261AA75D980035DCC2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9875121AA75D980035DCC2 /* main.cpp */; };
-		CD98752A1AA75D980035DCC2 /* physics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9875181AA75D980035DCC2 /* physics.cpp */; };
 		CD98752B1AA75D980035DCC2 /* save.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD98751A1AA75D980035DCC2 /* save.cpp */; };
 		CDC345F61AC1A0B100F0E8C2 /* button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC345EE1AC1A0B100F0E8C2 /* button.cpp */; };
 		CDC345F71AC1A0B100F0E8C2 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC345F01AC1A0B100F0E8C2 /* interface.cpp */; };
@@ -66,8 +65,6 @@
 		CD9875101AA75D980035DCC2 /* interpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interpreter.cpp; path = Trusses/interpreter.cpp; sourceTree = SOURCE_ROOT; };
 		CD9875111AA75D980035DCC2 /* interpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = interpreter.h; path = Trusses/interpreter.h; sourceTree = SOURCE_ROOT; };
 		CD9875121AA75D980035DCC2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = Trusses/main.cpp; sourceTree = SOURCE_ROOT; };
-		CD9875181AA75D980035DCC2 /* physics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = physics.cpp; path = Trusses/physics.cpp; sourceTree = SOURCE_ROOT; };
-		CD9875191AA75D980035DCC2 /* physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physics.h; path = Trusses/physics.h; sourceTree = SOURCE_ROOT; };
 		CD98751A1AA75D980035DCC2 /* save.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = save.cpp; path = Trusses/save.cpp; sourceTree = SOURCE_ROOT; };
 		CD98751B1AA75D980035DCC2 /* save.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = save.h; path = Trusses/save.h; sourceTree = SOURCE_ROOT; };
 		CDC345EC1AC1A09B00F0E8C2 /* fixed_size.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fixed_size.h; path = Trusses/External/fixed_size.h; sourceTree = SOURCE_ROOT; };
@@ -154,8 +151,6 @@
 				CD9875101AA75D980035DCC2 /* interpreter.cpp */,
 				CD9875111AA75D980035DCC2 /* interpreter.h */,
 				CD9875121AA75D980035DCC2 /* main.cpp */,
-				CD9875181AA75D980035DCC2 /* physics.cpp */,
-				CD9875191AA75D980035DCC2 /* physics.h */,
 				CD98751A1AA75D980035DCC2 /* save.cpp */,
 				CD98751B1AA75D980035DCC2 /* save.h */,
 				CD651DE61AD92B5C0031DCED /* settings.cpp */,
@@ -310,7 +305,6 @@
 				CDC346071AC1A0DE00F0E8C2 /* obstacle.cpp in Sources */,
 				CD651DE81AD92B5C0031DCED /* settings.cpp in Sources */,
 				CD920ED31AD5B83A00CBA69C /* window.cpp in Sources */,
-				CD98752A1AA75D980035DCC2 /* physics.cpp in Sources */,
 				CD651DE51AD88BD30031DCED /* grid.cpp in Sources */,
 				CD02537C1AD680D80084D1CA /* renderer.cpp in Sources */,
 				CDC346171AC1A0ED00F0E8C2 /* drag_tool.cpp in Sources */,

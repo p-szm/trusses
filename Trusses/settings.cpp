@@ -29,10 +29,6 @@ Settings::Settings()
 bool& Settings::bool_member(bool_settings bool_var)
 {
     switch (bool_var) {
-        case ACCELERATIONS:
-            return accelerations;
-        case VELOCITIES:
-            return velocities;
         case LENGTHS:
             return lengths;
         case EXTENSIONS:

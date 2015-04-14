@@ -50,9 +50,7 @@ void SelectionTool::drag()
         // TODO: Only particles that are lose to the selection
         // should be checked.
         if (poly.point_inside(p.position_))
-            selection_map[p.id_] = true;
-        else
-            selection_map[p.id_] = false;
+            selected.insert(p.id_);
     }
 }
 
@@ -67,13 +65,11 @@ void SelectionTool::key_down(unsigned char key)
     if (key == 127)
     {
         // Destroy each selected particle
-        for (int i = 0; i < selection_map.size(); i++)
+        while (!selected.empty())
         {
-            if (selection_map[i])
-                Particle::destroy(i);
+            Particle::destroy(*selected.begin());
+            selected.erase(selected.begin());
         }
-        // Update the selection map
-        selection_map.clear();
         
         // Switch the tool
         Tool::set(current_tool, new BarsTool);

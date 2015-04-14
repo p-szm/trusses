@@ -13,7 +13,6 @@
 
 #include "particle.h"
 #include "bar.h"
-#include "physics.h"
 #include "save.h"
 #include "temporary_label.h"
 #include "window.h"
@@ -21,10 +20,6 @@
 #include "game.h"
 
 using namespace std;
-
-// * * * * * * * * * * //
-vector<string> commands;
-unsigned int current_cmd = 0; // 0 means current command
 
 // * * * * * * * * * * //
 template <typename T>
@@ -78,11 +73,11 @@ T Interpreter::get_number(const string& input) const
     return 0;
 }
 
-void Interpreter::interpret(const string& cmd) const
+void Interpreter::interpret() const
 {
     // Put all the words of this command into the "words" vector of strings
     vector<string> words;
-    extract<string>(cmd, words);
+    extract<string>(command, words);
     size_t words_number = words.size();
     string types = types_of_words(words);
     
@@ -314,7 +309,7 @@ void Interpreter::interpret(const string& cmd) const
             int n = get_number<double>(words[1]);
             if (n < 0.0)
                 n = 0.0;
-            environment_temp = n;
+            game.environment_temp = n;
         }
         else
             issue_label("Usage: temperature <value>", INFO_LABEL_TIME);

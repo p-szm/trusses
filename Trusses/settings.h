@@ -10,7 +10,7 @@
 #define __Trusses__settings__
 
 enum bars_color_mode_t {STRAIN_C = 0, TEMP_C};
-enum bool_settings {ACCELERATIONS, VELOCITIES, LENGTHS, EXTENSIONS, GRID, IDS, PARTICLES, BOUNDING_BOXES, TRIANGULATION, GRAVITY};
+enum bool_settings {LENGTHS, EXTENSIONS, GRID, IDS, PARTICLES, BOUNDING_BOXES, TRIANGULATION, GRAVITY};
 
 class Settings
 {

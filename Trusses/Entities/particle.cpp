@@ -7,7 +7,6 @@
 //
 
 #include "particle.h"
-#include "physics.h"
 #include "bar.h"
 #include "temporary_label.h"
 #include "renderer.h"

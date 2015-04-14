@@ -31,11 +31,16 @@ public:
     // In px per second
     int scroll_speed;
     
+    void reset();
+    
     // Return the coordinates of the visible world edges
     double left() const;
     double right() const;
     double bottom() const;
     double top() const;
+    
+private:
+    double original_scale;
 };
 
 extern Window window;
