@@ -50,8 +50,7 @@ vec3 hsv_to_rgb(vec3 hsv);
 Renderer renderer;
 
 // * * * * * * * * * * //
-void glut_print (float x, float y, std::string s)
-// Prints string at location (x,y) in a bitmap font
+void glut_print(float x, float y, std::string s)
 {
     glRasterPos2f(x, y);
     for (unsigned short i = 0; i < s.length(); i++) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, s[i]);

@@ -32,6 +32,10 @@ private:
     
     int min_dist_px;
     int div_lines_px;
+    
+    // Maximum amount of parts in which any bar
+    // can be split.
+    const int max_parts;
 };
 
 #endif /* defined(__Trusses__split_tool__) */

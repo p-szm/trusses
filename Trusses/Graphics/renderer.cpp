@@ -432,6 +432,7 @@ void Renderer::render(const SplitTool &obj) const
         Vector2d p1 = particles[b.p1_id].position_;
         Vector2d p2 = particles[b.p2_id].position_;
         
+        // Draw the bar highlight
         glColor3f(GOLD);
         glLineWidth(2);
         glBegin(GL_LINES);
@@ -452,16 +453,25 @@ void Renderer::render(const SplitTool &obj) const
         glColor4f(GOLD, 0.7);
         glLineWidth(1);
         glBegin(GL_LINES);
+        double half_len = px_to_m(obj.div_lines_px);
         for (int i = 0; i <= parts; i++)
         {
-            double half_len = px_to_m(obj.div_lines_px);
             glVertex2f(i*dl, half_len);
             glVertex2f(i*dl, -half_len);
         }
         glEnd();
         
-        glPopMatrix();
+        // Display number of parts
+        glColor3f(FUCHSIA);
+        std::stringstream s;
+        s << "Parts: ";
+        if (obj.parts != 0)
+            s << obj.parts;
+        if (obj.parts*10 < obj.max_parts)
+            s << '_';
+        glut_print(0, px_to_m(obj.div_lines_px + 10), s.str());
         
+        glPopMatrix();
     }
 }
 

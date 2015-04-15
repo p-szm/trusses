@@ -185,13 +185,15 @@ void Bar::split(int bar_id, unsigned int n_parts)
     if (!bars.exists(bar_id))
     {
         issue_label("This bar does not exist", WARNING_LABEL_TIME);
-    }
-    
-    if (n_parts < 2)
-    {
-        issue_label("Cannot divide a bar into less than two parts", WARNING_LABEL_TIME);
         return;
     }
+    if (n_parts < 1)
+    {
+        issue_label("Cannot divide a bar into less than one part", WARNING_LABEL_TIME);
+        return;
+    }
+    if (n_parts == 1)
+        return; // Done
     
     Bar& this_bar = bars[bar_id];
     
