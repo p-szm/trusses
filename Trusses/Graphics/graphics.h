@@ -36,6 +36,7 @@
 #define PURPLE 0.5, 0.0, 0.5
 
 #define GOLD 1.0, 0.84, 0.0
+#define ORANGE 1.0, 0.5, 0.0
 
 // * * * * * * * * * * //
 void display();

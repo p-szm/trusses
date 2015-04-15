@@ -11,6 +11,8 @@
 #include "renderer.h"
 #include "mouse.h"
 #include "particle.h"
+#include "bars_tool.h"
+#include "interface.h"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -52,7 +54,8 @@ void TraceTool::display(const Renderer& rend)
 
 void TraceTool::key_down(unsigned char key)
 {
-    return;
+    if (key == 13)
+        Tool::set(current_tool, new BarsTool);
 }
 
 TraceTool::TraceTool()

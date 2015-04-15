@@ -21,7 +21,7 @@ int Particle::create(double a, double b, bool fixed)
     return particles.add(Particle(a, b, fixed));
 }
 
-Particle::Particle(double a, double b, bool fixed): trace_points(500)
+Particle::Particle(double a, double b, bool fixed): trace_points(300)
 {
     position_ = Vector2d(a, b);
     velocity_ = Vector2d(0.0, 0.0);

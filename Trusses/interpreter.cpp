@@ -53,7 +53,7 @@ std::string Interpreter::types_of_words(const std::vector<std::string>& words) c
     return types;
 }
 
-bool Interpreter::is_number(const string& input) const
+bool Interpreter::is_number(const string& input)
 {
     stringstream s(input);
     double n;
@@ -64,7 +64,7 @@ bool Interpreter::is_number(const string& input) const
 }
 
 template <typename T>
-T Interpreter::get_number(const string& input) const
+T Interpreter::get_number(const string& input)
 {
     stringstream s(input);
     T n;

@@ -60,6 +60,17 @@ bool Segment::intersect(const Segment &seg, Vector2d& point)
     return intersect(seg, point, t, u);
 }
 
+double Segment::dist2(Vector2d& p) const
+{
+    Vector2d u = (p2-p1).norm();
+    return ((p-p1) - ((p-p1)*u)*u).abs2();
+}
+
+double Segment::dist(Vector2d& p) const
+{
+    return sqrt(dist(p));
+}
+
 double random(double range)
 {
     double r = 1.0 * rand() / RAND_MAX;

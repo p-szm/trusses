@@ -62,6 +62,11 @@ void command_key_down(unsigned char key, int x, int y)
         {
             if (interpreter.command.size() > 0)
                 interpreter.command.pop_back();
+            else
+            {
+                command_mode = false;
+                glutKeyboardFunc(key_down);
+            }
             break;
         }
         default:
@@ -96,7 +101,7 @@ void key_down(unsigned char key, int x, int y)
             std::exit(0);
             break;
         }
-        case 13:
+        case 127: case 8:
         {
             command_mode = true;
             glutKeyboardFunc(command_key_down);
@@ -147,9 +152,11 @@ void key_down(unsigned char key, int x, int y)
                 game.enter_simulation();
             break;
         }
+        default:
+            current_tool->key_down(key);
+            break;
     }
     
-    current_tool->key_down(key);
     glutPostRedisplay();
 }
 

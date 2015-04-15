@@ -13,6 +13,7 @@
 #include <cmath>
 
 #define SMALL_NUM 1e-5
+#define RADPERDEG 0.01745329251
 
 // * * * * * * * * * * //
 class Vector2d
@@ -47,9 +48,14 @@ public:
     Segment(Vector2d a, Vector2d b): p1(a), p2(b) {}
     Vector2d p1;
     Vector2d p2;
+    
     // Returns true if the segments intersect and false otherwise
     bool intersect(const Segment& seg, Vector2d& point);
     bool intersect(const Segment& seg, Vector2d& point, double& t, double& u);
+    
+    // The distance between the point and a line defined by the segment.
+    double dist2(Vector2d& p) const;
+    double dist(Vector2d& p) const;
 };
 
 struct vec3

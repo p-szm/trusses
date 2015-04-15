@@ -26,6 +26,7 @@
 #include "drag_tool.h"
 #include "obstacle_tool.h"
 #include "selection_tool.h"
+#include "split_tool.h"
 #include "grid.h"
 #include "window.h"
 #include "settings.h"
@@ -406,6 +407,61 @@ void Renderer::render(const TraceTool &obj) const
         glLineWidth(2);
         draw_cross(tool_pos, 16);
         draw_circle(tool_pos, px_to_m(8), 20);
+    }
+}
+
+void Renderer::render(const SplitTool &obj) const
+{
+    if (bars.exists(obj.highlighted_bar))
+    {
+        Bar& b = bars[obj.highlighted_bar];
+        Vector2d p1 = particles[b.p1_id].position_;
+        Vector2d p2 = particles[b.p2_id].position_;
+        
+        glColor4f(GOLD, 0.6);
+        glLineWidth(3);
+        glBegin(GL_LINES);
+        glVertex2f(p1.x, p1.y);
+        glVertex2f(p2.x, p2.y);
+        glEnd();
+    }
+
+    if (bars.exists(obj.selected_bar))
+    {
+        Bar& b = bars[obj.selected_bar];
+        Vector2d p1 = particles[b.p1_id].position_;
+        Vector2d p2 = particles[b.p2_id].position_;
+        
+        glColor3f(GOLD);
+        glLineWidth(2);
+        glBegin(GL_LINES);
+        glVertex2f(p1.x, p1.y);
+        glVertex2f(p2.x, p2.y);
+        glEnd();
+        
+        // Draw the split lines
+        glPushMatrix();
+        glTranslated(p1.x, p1.y, 0.0);
+        double x = p2.x - p1.x;
+        double y = p2.y - p1.y;
+        glRotated(atan2(y,x)/RADPERDEG, 0.0, 0.0, 1.0);
+        
+        int parts = (obj.parts == 0) ? 1 : obj.parts;
+        double dl = ((p2-p1)/parts).abs();
+        
+        glColor4f(GOLD, 0.7);
+        glLineWidth(1);
+        glBegin(GL_LINES);
+        for (int i = 0; i <= parts; i++)
+        {
+            double half_len = px_to_m(obj.div_lines_px);
+            glVertex2f(i*dl, half_len);
+            glVertex2f(i*dl, -half_len);
+        }
+        glEnd();
+        
+        glPopMatrix();
+        
     }
 }
 

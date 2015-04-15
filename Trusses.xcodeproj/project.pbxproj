@@ -14,6 +14,7 @@
 		CD651DE81AD92B5C0031DCED /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD651DE61AD92B5C0031DCED /* settings.cpp */; };
 		CD74D2181A52F51A000B6F31 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2171A52F51A000B6F31 /* OpenGL.framework */; };
 		CD74D21A1A52F520000B6F31 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2191A52F520000B6F31 /* GLUT.framework */; };
+		CD898EDB1ADEC46E00417488 /* split_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD898ED91ADEC46E00417488 /* split_tool.cpp */; };
 		CD920ED31AD5B83A00CBA69C /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD920ED11AD5B83A00CBA69C /* window.cpp */; };
 		CD9875251AA75D980035DCC2 /* interpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9875101AA75D980035DCC2 /* interpreter.cpp */; };
 		CD9875261AA75D980035DCC2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9875121AA75D980035DCC2 /* main.cpp */; };
@@ -61,6 +62,8 @@
 		CD74D20D1A5214CC000B6F31 /* Trusses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Trusses; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD74D2171A52F51A000B6F31 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		CD74D2191A52F520000B6F31 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		CD898ED91ADEC46E00417488 /* split_tool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = split_tool.cpp; path = Trusses/Tools/split_tool.cpp; sourceTree = SOURCE_ROOT; };
+		CD898EDA1ADEC46E00417488 /* split_tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = split_tool.h; path = Trusses/Tools/split_tool.h; sourceTree = SOURCE_ROOT; };
 		CD920ED11AD5B83A00CBA69C /* window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = window.cpp; path = Trusses/Interface/window.cpp; sourceTree = SOURCE_ROOT; };
 		CD920ED21AD5B83A00CBA69C /* window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = window.h; path = Trusses/Interface/window.h; sourceTree = SOURCE_ROOT; };
 		CD9875101AA75D980035DCC2 /* interpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interpreter.cpp; path = Trusses/interpreter.cpp; sourceTree = SOURCE_ROOT; };
@@ -184,6 +187,8 @@
 				CDC346131AC1A0ED00F0E8C2 /* tool.h */,
 				CDAB8AC91ADD23FF000A971E /* trace_tool.cpp */,
 				CDAB8ACA1ADD23FF000A971E /* trace_tool.h */,
+				CD898ED91ADEC46E00417488 /* split_tool.cpp */,
+				CD898EDA1ADEC46E00417488 /* split_tool.h */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -296,6 +301,7 @@
 			files = (
 				CDC346191AC1A0ED00F0E8C2 /* selection_tool.cpp in Sources */,
 				CD98752B1AA75D980035DCC2 /* save.cpp in Sources */,
+				CD898EDB1ADEC46E00417488 /* split_tool.cpp in Sources */,
 				CD02537B1AD680D80084D1CA /* graphics.cpp in Sources */,
 				CDC3461A1AC1A0ED00F0E8C2 /* tool.cpp in Sources */,
 				CDC345F71AC1A0B100F0E8C2 /* interface.cpp in Sources */,
