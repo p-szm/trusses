@@ -258,7 +258,7 @@ void Interpreter::interpret() const
             if (n < 0)
                 n = 0;
             if (particles.exists(n))
-                particles[n].trace_on = true;
+                particles[n].trace();
         }
         else
             issue_label("Usage: trace <particle id>", INFO_LABEL_TIME);
@@ -272,7 +272,7 @@ void Interpreter::interpret() const
             int n = get_number<int>(words[1]);
             if (n < 0)
                 n = 0;
-            if (particles.exists(n) && particles[n].trace_on)
+            if (particles.exists(n))
                 particles[n].untrace();
         }
         else

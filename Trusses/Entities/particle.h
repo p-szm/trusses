@@ -42,8 +42,9 @@ public:
     bool fixed_;
     
     // For tracing the path of the particle.
-    bool trace_on;
+    void trace();
     void untrace();
+    bool traced() const;
     
     // Numerical simulation.
     void update();
@@ -52,7 +53,7 @@ public:
     
     // Remove a particle with this id
     static int destroy(int removed_id);
-    
+
     static int create(double a, double b, bool fixed);
     
 private:
@@ -61,7 +62,8 @@ private:
     // id's of all the bars connected to this particle
     std::vector<int> bars_connected;
     
-    FixedSizeContainer<Vector2d> trace;
+    FixedSizeContainer<Vector2d> trace_points;
+    bool trace_enabled;
 };
 
 void print_particles();

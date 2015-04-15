@@ -11,6 +11,7 @@
 #include "save.h"
 #include "selection_tool.h"
 #include "obstacle_tool.h"
+#include "trace_tool.h"
 #include "bars_tool.h"
 #include "renderer.h"
 #include "window.h"
@@ -139,6 +140,11 @@ void button_bars_tool(void)
     Tool::set(current_tool, new BarsTool);
 }
 
+void button_trace_tool(void)
+{
+    Tool::set(current_tool, new TraceTool);
+}
+
 void create_buttons_editor()
 {
     const int tmargin = 40;
@@ -161,6 +167,7 @@ void create_buttons_editor()
     Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin, &button_bars_tool, "Draw");
     Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-dy, &button_selection_action, "Select");
     Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-2*dy, &button_obstacle_action, "Obstacle");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-3*dy, &button_trace_tool, "Trace");
 }
 
 void create_buttons_simulation()

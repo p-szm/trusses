@@ -35,14 +35,14 @@
 void Renderer::render(const Particle& obj) const
 {
     // Draw the trace if it is enabled
-    if (obj.trace_on)
+    if (obj.traced())
     {
         glColor3f(GOLD);
         glLineWidth(1);
         glBegin(GL_LINE_STRIP);
-        for (int i = 0; i < obj.trace.size(); i++)
+        for (int i = 0; i < obj.trace_points.size(); i++)
         {
-            Vector2d t = obj.trace.get(i);
+            Vector2d t = obj.trace_points.get(i);
             glVertex2f(t.x, t.y);
         }
         glEnd();
@@ -371,6 +371,42 @@ void Renderer::render(const SelectionTool &obj) const
         }
     }
     glEnd();
+}
+
+void Renderer::render(const TraceTool &obj) const
+{
+    Vector2d tool_pos = mouse.pos_world;
+    
+    // Snap the position vector
+    bool snapped = false;
+    int snapped_particle = -1;
+    if (mouse.particle_in_range())
+    {
+        snapped = true;
+        tool_pos = particles[mouse.closest_particle].position_;
+        snapped_particle = mouse.closest_particle;
+    }
+    
+    // Show the traced particles
+    for (int i = 0; i < particles.size(); i++)
+    {
+        Particle& p = particles.at(i);
+        if (p.traced() && snapped_particle != p.id_)
+        {
+            glColor4f(GREEN, 0.7);
+            glLineWidth(2);
+            draw_cross(p.position_, 16);
+            draw_circle(p.position_, px_to_m(8), 20);
+        }
+    }
+    
+    if (snapped)
+    {
+        glColor4f(GREEN, 1.0);
+        glLineWidth(2);
+        draw_cross(tool_pos, 16);
+        draw_circle(tool_pos, px_to_m(8), 20);
+    }
 }
 
 void Renderer::render(const Grid &obj) const

@@ -18,6 +18,7 @@ class BarsTool;
 class DragTool;
 class ObstacleTool;
 class SelectionTool;
+class TraceTool;
 class Grid;
 
 class Renderer
@@ -32,6 +33,7 @@ public:
     void render(const DragTool& obj) const;
     void render(const ObstacleTool& obj) const;
     void render(const SelectionTool& obj) const;
+    void render(const TraceTool& obj) const;
     void render(const Grid& obj) const;
 };
 

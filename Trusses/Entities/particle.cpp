@@ -21,7 +21,7 @@ int Particle::create(double a, double b, bool fixed)
     return particles.add(Particle(a, b, fixed));
 }
 
-Particle::Particle(double a, double b, bool fixed): trace(500)
+Particle::Particle(double a, double b, bool fixed): trace_points(500)
 {
     position_ = Vector2d(a, b);
     velocity_ = Vector2d(0.0, 0.0);
@@ -32,13 +32,23 @@ Particle::Particle(double a, double b, bool fixed): trace(500)
     external_acceleration_ = Vector2d(0.0, 0.0);
     mass_ = 1.0;
     fixed_ = (fixed) ? true : false;
-    trace_on = false;
+    trace_enabled = false;
+}
+
+void Particle::trace()
+{
+    trace_enabled = true;
 }
 
 void Particle::untrace()
 {
-    trace_on = false;
-    trace.clear();
+    trace_enabled = false;
+    trace_points.clear();
+}
+
+bool Particle::traced() const
+{
+    return trace_enabled;
 }
 
 void Particle::update()
@@ -52,8 +62,8 @@ void Particle::update()
         prev_position_ = position_;
         
         // Trace the previous position
-        if (trace_on)
-            trace.add(position_);
+        if (trace_enabled)
+            trace_points.add(position_);
         
         if (settings.get(GRAVITY))
             acceleration_ += Vector2d(0.0, -g);
