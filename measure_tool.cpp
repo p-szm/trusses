@@ -72,7 +72,7 @@ MeasureTool::MeasureTool()
 {
     distance = -1;
     line_width_px = 20;
-    TempLabel::create("Click a particle to trace it. Click again to stop tracing it.", 0, 1, 0, -TOP_MARGIN, TOOL_LABEL_TIME);
+    TempLabel::create("Select two points to measure the distance between them.", 0, 1, 0, -TOP_MARGIN, TOOL_LABEL_TIME);
 }
 
 MeasureTool::~MeasureTool() {}
