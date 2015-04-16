@@ -39,11 +39,14 @@ void Renderer::render(const Particle& obj) const
     // Draw the trace if it is enabled
     if (obj.traced())
     {
-        glColor3f(GOLD);
         glLineWidth(1);
         glBegin(GL_LINE_STRIP);
-        for (int i = 0; i < obj.trace_points.size(); i++)
+        size_t size = obj.trace_points.size();
+        double quad_coeff = -1.0/(size*size);
+        for (int i = 0; i < size; i++)
         {
+            // Quadratic fade out
+            glColor4f(GOLD, quad_coeff*(size-i)*(size-1) + 1);
             Vector2d t = obj.trace_points.get(i);
             glVertex2f(t.x, t.y);
         }
