@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "tool.h"
+#include "math.h"
 #include <vector>
 
 class Renderer;
@@ -29,6 +30,8 @@ public:
     ~BarsTool();
 private:
     std::vector<int> selected_particles_ids;
+    Vector2d tool_pos;
+    bool snapped;
 };
 
 #endif /* defined(__Trusses__bars_tool__) */

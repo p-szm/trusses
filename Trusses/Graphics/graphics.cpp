@@ -245,13 +245,13 @@ void display()
     for (int i = 0; i < obstacles.size(); i++)
         obstacles.at(i).draw(renderer);
     
-    // Draw the bars
-    for (int i = 0; i < bars.size(); i++)
-        bars.at(i).draw(renderer);
-    
     // Draw the particles
     for (int i = 0; i < particles.size(); i++)
         particles.at(i).draw(renderer);
+    
+    // Draw the bars
+    for (int i = 0; i < bars.size(); i++)
+        bars.at(i).draw(renderer);
     
     // Draw the tool-specific things
     current_tool->display(renderer);

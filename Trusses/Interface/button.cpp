@@ -15,6 +15,7 @@
 #include "split_tool.h"
 #include "bars_tool.h"
 #include "measure_tool.h"
+#include "delete_tool.h"
 #include "renderer.h"
 #include "window.h"
 #include "game.h"
@@ -66,96 +67,65 @@ void Button::execute_action()
 }
 
 void Button::draw(const Renderer& rend) const
-{
-    rend.render(*this);
-}
+{ rend.render(*this); }
 
-void button_ids_action(void)
-{
-    settings.toggle(IDS);
-}
+void button_ids(void)
+{ settings.toggle(IDS); }
 
-void button_lengths_action(void)
-{
-    settings.toggle(LENGTHS);
-}
+void button_lengths(void)
+{ settings.toggle(LENGTHS); }
 
-void button_rel_extensions_action(void)
-{
-    settings.toggle(EXTENSIONS);
-}
+void button_rel_extensions(void)
+{ settings.toggle(EXTENSIONS); }
 
-void button_reset_action(void)
-{
-    game.reset();
-}
+void button_reset(void)
+{ game.reset(); }
 
-void button_save_action(void)
+void button_save(void)
 {
     std::string path = "/Users/patrick/Desktop/save-";
     path += date_str() + '-' + time_str();
     save(path);
 }
 
-void button_scale_up_action(void)
-{
-    window.scale *= 1.1;
-}
+void button_scale_up(void)
+{ window.scale *= 1.1; }
 
-void button_scale_down_action(void)
-{
-    window.scale /= 1.1;
-}
+void button_scale_down(void)
+{ window.scale /= 1.1; }
 
-void button_selection_action(void)
-{
-    Tool::set(current_tool, new SelectionTool);
-}
+void button_selection_tool(void)
+{ Tool::set(current_tool, new SelectionTool); }
 
-void button_obstacle_action(void)
-{
-    Tool::set(current_tool, new ObstacleTool);
-}
+void button_obstacle_tool(void)
+{ Tool::set(current_tool, new ObstacleTool); }
 
-void button_triangulation_action(void)
-{
-    settings.toggle(TRIANGULATION);
-}
+void button_triangulation(void)
+{ settings.toggle(TRIANGULATION); }
 
-void button_bboxes_action(void)
-{
-    settings.toggle(BOUNDING_BOXES);
-}
+void button_bboxes(void)
+{ settings.toggle(BOUNDING_BOXES); }
 
 void button_enter_simulation(void)
-{
-    game.enter_simulation();
-}
+{ game.enter_simulation(); }
 
 void button_enter_editor(void)
-{
-    game.enter_editor();
-}
+{ game.enter_editor(); }
 
 void button_bars_tool(void)
-{
-    Tool::set(current_tool, new BarsTool);
-}
+{ Tool::set(current_tool, new BarsTool); }
 
 void button_trace_tool(void)
-{
-    Tool::set(current_tool, new TraceTool);
-}
+{ Tool::set(current_tool, new TraceTool); }
 
 void button_split_tool(void)
-{
-    Tool::set(current_tool, new SplitTool);
-}
+{ Tool::set(current_tool, new SplitTool); }
 
-void button_measure_action(void)
-{
-    Tool::set(current_tool, new MeasureTool);
-}
+void button_measure_tool(void)
+{ Tool::set(current_tool, new MeasureTool); }
+
+void button_delete_tool(void)
+{ Tool::set(current_tool, new DeleteTool); }
 
 void create_buttons_editor()
 {
@@ -165,23 +135,25 @@ void create_buttons_editor()
     const int h = 30;
     const int dy = 40;
     
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin, &button_save_action, "Save");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-dy, &button_reset_action, "Reset");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-2.5*dy, &button_ids_action, "Ids");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-3.5*dy, &button_lengths_action, "Lengths");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-4.5*dy, &button_rel_extensions_action, "Rel ext");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-5.5*dy, &button_triangulation_action, "Triangles");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-6.5*dy, &button_bboxes_action, "B-boxes");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-8*dy, &button_scale_up_action, "     +");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-9*dy, &button_scale_down_action, "     -");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin, &button_save, "Save");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-dy, &button_reset, "Reset");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-2.5*dy, &button_ids, "Ids");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-3.5*dy, &button_lengths, "Lengths");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-4.5*dy, &button_rel_extensions, "Rel ext");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-5.5*dy, &button_triangulation, "Triangles");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-6.5*dy, &button_bboxes, "B-boxes");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-8*dy, &button_scale_up, "     +");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-9*dy, &button_scale_down, "     -");
+    
     Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-10.5*dy, &button_enter_simulation, "Simulate");
     
     Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin, &button_bars_tool, "Draw");
-    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-dy, &button_selection_action, "Select");
-    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-2*dy, &button_obstacle_action, "Obstacle");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-dy, &button_selection_tool, "Select");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-2*dy, &button_obstacle_tool, "Obstacle");
     Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-3*dy, &button_trace_tool, "Trace");
     Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-4*dy, &button_split_tool, "Split");
-    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-5*dy, &button_measure_action, "Measure");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-5*dy, &button_measure_tool, "Measure");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-6*dy, &button_delete_tool, "Delete");
 }
 
 void create_buttons_simulation()
@@ -192,15 +164,16 @@ void create_buttons_simulation()
     const int h = 30;
     const int dy = 40;
     
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin, &button_save_action, "Save");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-dy, &button_reset_action, "Reset");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-2.5*dy, &button_ids_action, "Ids");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-3.5*dy, &button_lengths_action, "Lengths");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-4.5*dy, &button_rel_extensions_action, "Rel ext");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-5.5*dy, &button_triangulation_action, "Triangles");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-6.5*dy, &button_bboxes_action, "B-boxes");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-8*dy, &button_scale_up_action, "     +");
-    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-9*dy, &button_scale_down_action, "     -");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin, &button_save, "Save");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-dy, &button_reset, "Reset");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-2.5*dy, &button_ids, "Ids");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-3.5*dy, &button_lengths, "Lengths");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-4.5*dy, &button_rel_extensions, "Rel ext");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-5.5*dy, &button_triangulation, "Triangles");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-6.5*dy, &button_bboxes, "B-boxes");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-8*dy, &button_scale_up, "     +");
+    Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-9*dy, &button_scale_down, "     -");
+    
     Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-10.5*dy, &button_enter_editor, "Edit");
 }
 

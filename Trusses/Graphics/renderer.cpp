@@ -28,6 +28,7 @@
 #include "selection_tool.h"
 #include "split_tool.h"
 #include "measure_tool.h"
+#include "delete_tool.h"
 #include "grid.h"
 #include "window.h"
 #include "settings.h"
@@ -59,14 +60,34 @@ void Renderer::render(const Particle& obj) const
     // If fixed
     if (obj.fixed_)
     {
-        glColor3f(RED);
-        glPointSize(8);
-        glBegin(GL_POINTS);
-        glVertex2f(pos.x, pos.y);
+        double one_px_in_m = px_to_m(1);
+        
+        glLineWidth(2);
+        glColor3f(TEAL);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glBegin(GL_TRIANGLES);
+        glVertex2d(pos.x, pos.y);
+        glVertex2d(pos.x + 8*one_px_in_m, pos.y - 14*one_px_in_m);
+        glVertex2d(pos.x - 8*one_px_in_m, pos.y - 14*one_px_in_m);
+        glEnd();
+        
+        glColor3f(WHITE);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glBegin(GL_TRIANGLES);
+        glVertex2d(pos.x, pos.y);
+        glVertex2d(pos.x + 8*one_px_in_m, pos.y - 14*one_px_in_m);
+        glVertex2d(pos.x - 8*one_px_in_m, pos.y - 14*one_px_in_m);
+        glEnd();
+        
+        glBegin(GL_LINES);
+        glLineWidth(1);
+        glVertex2d(pos.x + 14*one_px_in_m, pos.y - 14*one_px_in_m);
+        glVertex2d(pos.x - 14*one_px_in_m, pos.y - 14*one_px_in_m);
         glEnd();
     }
+    
     // If show particles
-    else if (settings.get(PARTICLES))
+    if (settings.get(PARTICLES))
     {
         glColor3f(WHITE);
         glPointSize(6);
@@ -249,17 +270,6 @@ void Renderer::render(const Button& obj) const
 
 void Renderer::render(const BarsTool &obj) const
 {
-    Vector2d tool_pos = mouse.pos_world;
-    
-    // Snap the position vector
-    bool snapped = true;
-    if (mouse.particle_in_range())
-        tool_pos = particles[mouse.closest_particle].position_;
-    else if (mouse.grid_in_range())
-        tool_pos = mouse.closest_grid;
-    else
-        snapped = false;
-    
     // Draw dashed lines between the selected particles and the mouse
     if (obj.selected_particles_ids.size() != 0)
     {
@@ -276,18 +286,18 @@ void Renderer::render(const BarsTool &obj) const
             {
                 Vector2d selected_pos = particles[p_id].position_;
                 glVertex2f(selected_pos.x, selected_pos.y);
-                glVertex2f(tool_pos.x, tool_pos.y);
+                glVertex2f(obj.tool_pos.x, obj.tool_pos.y);
             }
         }
         glEnd();
         glDisable(GL_LINE_STIPPLE);
     }
     
-    if (snapped)
+    if (obj.snapped)
     {
         glColor3f(GOLD);
         glPointSize(10);
-        draw_point(tool_pos);
+        draw_point(obj.tool_pos);
     }
 }
 
@@ -560,6 +570,33 @@ void Renderer::render(const MeasureTool &obj) const
         ss << grid.to_si(obj.distance);
         glColor3f(GOLD);
         glut_print(pos.x, pos.y + px_to_m(8), ss.str());
+    }
+}
+
+void Renderer::render(const DeleteTool &obj) const
+{
+    if (particles.exists(obj.particle))
+    {
+        Vector2d pos = particles[obj.particle].position_;
+        glColor3f(RED);
+        glPointSize(10);
+        glBegin(GL_POINTS);
+        glVertex2d(pos.x, pos.y);
+        glEnd();
+    }
+    else if (bars.exists(obj.bar))
+    {
+        Bar& b = bars[obj.bar];
+        Vector2d p1 = particles[b.p1_id].position_;
+        Vector2d p2 = particles[b.p2_id].position_;
+        
+        // Draw the bar highlight
+        glColor3f(RED);
+        glLineWidth(3);
+        glBegin(GL_LINES);
+        glVertex2f(p1.x, p1.y);
+        glVertex2f(p2.x, p2.y);
+        glEnd();
     }
 }
 

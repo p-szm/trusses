@@ -11,11 +11,12 @@
 		CD02537B1AD680D80084D1CA /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD0253771AD680D80084D1CA /* graphics.cpp */; };
 		CD02537C1AD680D80084D1CA /* renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD0253791AD680D80084D1CA /* renderer.cpp */; };
 		CD651DE51AD88BD30031DCED /* grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD651DE31AD88BD30031DCED /* grid.cpp */; };
-		CD651DE81AD92B5C0031DCED /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD651DE61AD92B5C0031DCED /* settings.cpp */; };
 		CD74D2181A52F51A000B6F31 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2171A52F51A000B6F31 /* OpenGL.framework */; };
 		CD74D21A1A52F520000B6F31 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74D2191A52F520000B6F31 /* GLUT.framework */; };
 		CD898EDB1ADEC46E00417488 /* split_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD898ED91ADEC46E00417488 /* split_tool.cpp */; };
 		CD898EE11ADFD69C00417488 /* measure_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD898EDF1ADFD69C00417488 /* measure_tool.cpp */; };
+		CD898EE41ADFDCB500417488 /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD898EE21ADFDCB500417488 /* settings.cpp */; };
+		CD898EE71ADFF2E900417488 /* delete_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD898EE51ADFF2E900417488 /* delete_tool.cpp */; };
 		CD920ED31AD5B83A00CBA69C /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD920ED11AD5B83A00CBA69C /* window.cpp */; };
 		CD9875251AA75D980035DCC2 /* interpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9875101AA75D980035DCC2 /* interpreter.cpp */; };
 		CD9875261AA75D980035DCC2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9875121AA75D980035DCC2 /* main.cpp */; };
@@ -58,8 +59,6 @@
 		CD31825F1AC779E600A6AA33 /* slot_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = slot_map.h; path = Trusses/External/slot_map.h; sourceTree = SOURCE_ROOT; };
 		CD651DE31AD88BD30031DCED /* grid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = grid.cpp; path = Trusses/Graphics/grid.cpp; sourceTree = SOURCE_ROOT; };
 		CD651DE41AD88BD30031DCED /* grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = grid.h; path = Trusses/Graphics/grid.h; sourceTree = SOURCE_ROOT; };
-		CD651DE61AD92B5C0031DCED /* settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = settings.cpp; path = Trusses/settings.cpp; sourceTree = SOURCE_ROOT; };
-		CD651DE71AD92B5C0031DCED /* settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = settings.h; path = Trusses/settings.h; sourceTree = SOURCE_ROOT; };
 		CD74D20D1A5214CC000B6F31 /* Trusses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Trusses; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD74D2171A52F51A000B6F31 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		CD74D2191A52F520000B6F31 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
@@ -67,6 +66,10 @@
 		CD898EDA1ADEC46E00417488 /* split_tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = split_tool.h; path = Trusses/Tools/split_tool.h; sourceTree = SOURCE_ROOT; };
 		CD898EDF1ADFD69C00417488 /* measure_tool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = measure_tool.cpp; path = Trusses/Tools/measure_tool.cpp; sourceTree = SOURCE_ROOT; };
 		CD898EE01ADFD69C00417488 /* measure_tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = measure_tool.h; path = Trusses/Tools/measure_tool.h; sourceTree = SOURCE_ROOT; };
+		CD898EE21ADFDCB500417488 /* settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = settings.cpp; path = Trusses/Interface/settings.cpp; sourceTree = SOURCE_ROOT; };
+		CD898EE31ADFDCB500417488 /* settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = settings.h; path = Trusses/Interface/settings.h; sourceTree = SOURCE_ROOT; };
+		CD898EE51ADFF2E900417488 /* delete_tool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = delete_tool.cpp; path = Trusses/Tools/delete_tool.cpp; sourceTree = SOURCE_ROOT; };
+		CD898EE61ADFF2E900417488 /* delete_tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = delete_tool.h; path = Trusses/Tools/delete_tool.h; sourceTree = SOURCE_ROOT; };
 		CD920ED11AD5B83A00CBA69C /* window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = window.cpp; path = Trusses/Interface/window.cpp; sourceTree = SOURCE_ROOT; };
 		CD920ED21AD5B83A00CBA69C /* window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = window.h; path = Trusses/Interface/window.h; sourceTree = SOURCE_ROOT; };
 		CD9875101AA75D980035DCC2 /* interpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interpreter.cpp; path = Trusses/interpreter.cpp; sourceTree = SOURCE_ROOT; };
@@ -162,8 +165,6 @@
 				CD9875121AA75D980035DCC2 /* main.cpp */,
 				CD98751A1AA75D980035DCC2 /* save.cpp */,
 				CD98751B1AA75D980035DCC2 /* save.h */,
-				CD651DE61AD92B5C0031DCED /* settings.cpp */,
-				CD651DE71AD92B5C0031DCED /* settings.h */,
 				CD0253761AD680C30084D1CA /* Graphics */,
 				CDC345E81AC1745F00F0E8C2 /* External */,
 				CDC345E71AC1741F00F0E8C2 /* Interface */,
@@ -179,9 +180,9 @@
 			isa = PBXGroup;
 			children = (
 				CDC3460A1AC1A0ED00F0E8C2 /* bars_tool.cpp */,
-				CD898EDF1ADFD69C00417488 /* measure_tool.cpp */,
-				CD898EE01ADFD69C00417488 /* measure_tool.h */,
 				CDC3460B1AC1A0ED00F0E8C2 /* bars_tool.h */,
+				CD898EE51ADFF2E900417488 /* delete_tool.cpp */,
+				CD898EE61ADFF2E900417488 /* delete_tool.h */,
 				CDC3460C1AC1A0ED00F0E8C2 /* drag_tool.cpp */,
 				CDC3460D1AC1A0ED00F0E8C2 /* drag_tool.h */,
 				CDC3460E1AC1A0ED00F0E8C2 /* obstacle_tool.cpp */,
@@ -194,6 +195,8 @@
 				CDAB8ACA1ADD23FF000A971E /* trace_tool.h */,
 				CD898ED91ADEC46E00417488 /* split_tool.cpp */,
 				CD898EDA1ADEC46E00417488 /* split_tool.h */,
+				CD898EDF1ADFD69C00417488 /* measure_tool.cpp */,
+				CD898EE01ADFD69C00417488 /* measure_tool.h */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -225,6 +228,8 @@
 		CDC345E71AC1741F00F0E8C2 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				CD898EE21ADFDCB500417488 /* settings.cpp */,
+				CD898EE31ADFDCB500417488 /* settings.h */,
 				CDC345EE1AC1A0B100F0E8C2 /* button.cpp */,
 				CDC345EF1AC1A0B100F0E8C2 /* button.h */,
 				CDC345F01AC1A0B100F0E8C2 /* interface.cpp */,
@@ -309,6 +314,7 @@
 				CD898EDB1ADEC46E00417488 /* split_tool.cpp in Sources */,
 				CD02537B1AD680D80084D1CA /* graphics.cpp in Sources */,
 				CD898EE11ADFD69C00417488 /* measure_tool.cpp in Sources */,
+				CD898EE71ADFF2E900417488 /* delete_tool.cpp in Sources */,
 				CDC3461A1AC1A0ED00F0E8C2 /* tool.cpp in Sources */,
 				CDC345F71AC1A0B100F0E8C2 /* interface.cpp in Sources */,
 				CDC346161AC1A0ED00F0E8C2 /* bars_tool.cpp in Sources */,
@@ -320,7 +326,7 @@
 				CDC345F91AC1A0B100F0E8C2 /* temporary_label.cpp in Sources */,
 				CD0253751AD680A70084D1CA /* math.cpp in Sources */,
 				CDC346071AC1A0DE00F0E8C2 /* obstacle.cpp in Sources */,
-				CD651DE81AD92B5C0031DCED /* settings.cpp in Sources */,
+				CD898EE41ADFDCB500417488 /* settings.cpp in Sources */,
 				CD920ED31AD5B83A00CBA69C /* window.cpp in Sources */,
 				CD651DE51AD88BD30031DCED /* grid.cpp in Sources */,
 				CD02537C1AD680D80084D1CA /* renderer.cpp in Sources */,

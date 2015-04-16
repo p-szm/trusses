@@ -42,31 +42,7 @@ void SplitTool::passive()
     if (selected_bar != -1)
         return;
     
-    double min_dist = px_to_m(min_dist_px);
-    
-    highlighted_bar = -1;
-    double smallest_dist2 = std::numeric_limits<double>::max();
-    for (int i = 0; i < bars.size(); i++)
-    {
-        Bar& b = bars.at(i);
-        
-        // Check if the point is "within" the bar
-        Vector2d p1 = particles[b.p2_id].position_;
-        Vector2d p2 = particles[b.p1_id].position_;
-        
-        if ((p2-p1)*(mouse.pos_world-p1) > 0 && (p1-p2)*(mouse.pos_world-p2) > 0)
-        {
-            // Check the distance
-            Segment seg(p1, p2);
-            
-            double dist2 = seg.dist2(mouse.pos_world);
-            if (dist2 < min_dist * min_dist && dist2 < smallest_dist2)
-            {
-                highlighted_bar = b.id_;
-                smallest_dist2 = dist2;
-            }
-        }
-    }
+    highlighted_bar = mouse.find_closest_bar(min_dist_px);
 }
 
 void SplitTool::drag()

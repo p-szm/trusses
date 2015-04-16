@@ -24,7 +24,7 @@
 #define BLUE 0.0, 0.0, 1.0
 
 #define YELLOW 1.0, 1.0, 0.0
-#define AQUA 0.0, 1.0, 0.0
+#define AQUA 0.0, 1.0, 1.0
 #define FUCHSIA 1.0, 0.0, 1.0
 
 #define MAROON 0.5, 0.0, 0.0

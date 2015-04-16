@@ -11,6 +11,7 @@
 #include "interface.h"
 #include "grid.h"
 #include "particle.h"
+#include "bar.h"
 
 Mouse mouse;
 
@@ -82,4 +83,33 @@ void Mouse::particles_within(double dist, std::vector<int>& part) const
         if (dist2_m < dist2)
             part.push_back(p.id_);
     }
+}
+
+int Mouse::find_closest_bar(int px_range) const
+{
+    int bar = -1;
+    double m_range = px_to_m(px_range);
+    double smallest_dist2 = std::numeric_limits<double>::max();
+    for (int i = 0; i < bars.size(); i++)
+    {
+        Bar& b = bars.at(i);
+        
+        // Check if the point is "within" the bar
+        Vector2d p1 = particles[b.p2_id].position_;
+        Vector2d p2 = particles[b.p1_id].position_;
+        
+        if ((p2-p1)*(mouse.pos_world-p1) > 0 && (p1-p2)*(mouse.pos_world-p2) > 0)
+        {
+            // Check the distance
+            Segment seg(p1, p2);
+            
+            double dist2 = seg.dist2(mouse.pos_world);
+            if (dist2 < m_range * m_range && dist2 < smallest_dist2)
+            {
+                bar = b.id_;
+                smallest_dist2 = dist2;
+            }
+        }
+    }
+    return bar;
 }

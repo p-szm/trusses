@@ -109,7 +109,7 @@ void Game::enter_editor()
     simulation_is_running = false;
     
     temp_labels.clear();
-    TempLabel::create("Editor mode - you can draw the structure. Press \"p\" when you are done", 0, 1.0, 0, -TOP_MARGIN, MODE_LABEL_TIME);
+    TempLabel::create("Editor mode - you can draw the structure.", 0, 1.0, 0, -TOP_MARGIN, MODE_LABEL_TIME);
     buttons.clear();
     create_buttons_editor();
     
@@ -123,7 +123,7 @@ void Game::enter_simulation()
     simulation_is_running = true;
     
     temp_labels.clear();
-    TempLabel::create("Simulation mode - you can drag the joints", 0, 1.0, 0, -TOP_MARGIN, MODE_LABEL_TIME);
+    TempLabel::create("Simulation mode - you can drag the joints.", 0, 1.0, 0, -TOP_MARGIN, MODE_LABEL_TIME);
     buttons.clear();
     create_buttons_simulation();
     

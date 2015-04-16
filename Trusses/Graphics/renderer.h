@@ -21,6 +21,7 @@ class SelectionTool;
 class TraceTool;
 class SplitTool;
 class MeasureTool;
+class DeleteTool;
 class Grid;
 
 class Renderer
@@ -37,6 +38,7 @@ public:
     void render(const SelectionTool& obj) const;
     void render(const TraceTool& obj) const;
     void render(const SplitTool& obj) const;
+    void render(const DeleteTool& obj) const;
     void render(const Grid& obj) const;
     void render(const MeasureTool& obj) const;
 };

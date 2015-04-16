@@ -60,6 +60,9 @@ public:
     
     // Finds all the particles within the given range
     void particles_within(double dist, std::vector<int>& part) const;
+    
+    // Returns id of the closest bar within range, or -1 if none was found.
+    int find_closest_bar(int px_range) const;
 };
 
 extern Mouse mouse;
