@@ -27,6 +27,7 @@
 #include "obstacle_tool.h"
 #include "selection_tool.h"
 #include "split_tool.h"
+#include "measure_tool.h"
 #include "grid.h"
 #include "window.h"
 #include "settings.h"
@@ -475,6 +476,90 @@ void Renderer::render(const SplitTool &obj) const
     }
 }
 
+void Renderer::render(const MeasureTool &obj) const
+{
+    // Draw the snapped point
+    Vector2d tool_pos = mouse.pos_world;
+    
+    // Snap the position vector
+    bool snapped = true;
+    if (mouse.particle_in_range())
+        tool_pos = particles[mouse.closest_particle].position_;
+    else if (mouse.grid_in_range())
+        tool_pos = mouse.closest_grid;
+    else
+        snapped = false;
+    
+    glColor3f(GOLD);
+    glLineWidth(1);
+    size_t size = obj.selected_points.size();
+    if (snapped && (size == 0 || size == 2))
+        draw_cross(tool_pos, 10);
+    
+    // Draw the split lines
+    Vector2d p1, p2;
+    if (obj.selected_points.size() == 2)
+    {
+        p1 = obj.selected_points[0];
+        p2 = obj.selected_points[1];
+    }
+    else if (obj.selected_points.size() == 1)
+    {
+        p1 = obj.selected_points[0];
+        p2 = tool_pos;
+    }
+    else
+    {
+        return;
+    }
+    
+    glPushMatrix();
+    glTranslated(p1.x, p1.y, 0.0);
+    double x = p2.x - p1.x;
+    double len = (p1-p2).abs();
+    double y = p2.y - p1.y;
+    glRotated(atan2(y,x)/RADPERDEG, 0.0, 0.0, 1.0);
+    
+    // Draw the end lines
+    glColor4f(GOLD, 0.8);
+    glLineWidth(1);
+    glBegin(GL_LINES);
+    double half_width = px_to_m(obj.line_width_px);
+    glVertex2d(0, half_width);
+    glVertex2d(0, -half_width);
+    glVertex2d(len, half_width);
+    glVertex2d(len, -half_width);
+    glEnd();
+    
+    // Draw the middle line
+    glEnable(GL_LINE_STIPPLE);
+    glLineStipple(1, 0x00FF);
+    glBegin(GL_LINES);
+    glVertex2d(0, 0);
+    glVertex2d(len, 0);
+    glEnd();
+    glDisable(GL_LINE_STIPPLE);
+    
+    glPopMatrix();
+    
+    // Display the distance
+    if (obj.selected_points.size() == 2)
+    {
+        double squares = abs_d(obj.distance / grid.one_square_m());
+        
+        std::stringstream ss;
+        ss << squares << " squares";
+        glColor3f(GOLD);
+        Vector2d pos = 0.5*(p1+p2);
+        glut_print(pos.x, pos.y + px_to_m(24), ss.str());
+        
+        ss.str("");
+        ss << grid.to_si(obj.distance);
+        glColor3f(GOLD);
+        glut_print(pos.x, pos.y + px_to_m(8), ss.str());
+    }
+}
+
 void Renderer::render(const Grid &obj) const
 {
     if (!settings.get(GRID))
@@ -535,35 +620,11 @@ void Renderer::render(const Grid &obj) const
     
     glEnd();
     
-    // Choose the right units to display
-    double si_dist = 0.0;
-    std::string unit;
-    
-    if (m_dist < 1e-3)
-    {
-        si_dist = m_dist * 1e6;
-        unit = "um";
-    }
-    else if (m_dist < 1e-2)
-    {
-        si_dist = m_dist * 1e3;
-        unit = "mm";
-    }
-    else if (m_dist < 1.0)
-    {
-        si_dist = m_dist * 1e2;
-        unit = "cm";
-    }
-    else
-    {
-        si_dist = m_dist;
-        unit = "m";
-    }
-    
     // Draw the scale (as a number)
     std::ostringstream s;
     s.precision(2);
-    s << si_dist;
+    s << obj.to_si(obj.one_square_m());
+    
     glColor3f(GREY);
-    glut_print(m_dist, 0.0, s.str() + unit);
+    glut_print(m_dist, 0.0, s.str());
 }

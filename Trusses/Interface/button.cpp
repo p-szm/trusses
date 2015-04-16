@@ -14,6 +14,7 @@
 #include "trace_tool.h"
 #include "split_tool.h"
 #include "bars_tool.h"
+#include "measure_tool.h"
 #include "renderer.h"
 #include "window.h"
 #include "game.h"
@@ -151,6 +152,11 @@ void button_split_tool(void)
     Tool::set(current_tool, new SplitTool);
 }
 
+void button_measure_action(void)
+{
+    Tool::set(current_tool, new MeasureTool);
+}
+
 void create_buttons_editor()
 {
     const int tmargin = 40;
@@ -175,6 +181,7 @@ void create_buttons_editor()
     Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-2*dy, &button_obstacle_action, "Obstacle");
     Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-3*dy, &button_trace_tool, "Trace");
     Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-4*dy, &button_split_tool, "Split");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-5*dy, &button_measure_action, "Measure");
 }
 
 void create_buttons_simulation()
