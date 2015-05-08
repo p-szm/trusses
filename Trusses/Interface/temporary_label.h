@@ -34,7 +34,7 @@ public:
     unsigned long long int max_time;
     
     // Current time
-    unsigned long long int time = 0;
+    unsigned long long int time;
     
     // Anchored to the middle
     static int create(std::string str, double pos_x, double pos_y,

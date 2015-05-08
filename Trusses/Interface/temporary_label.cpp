@@ -15,6 +15,7 @@ SlotMap<TempLabel> temp_labels;
 TempLabel::TempLabel(std::string str, double pos_x, double pos_y, int off_x,
           int off_y, double t, bool centre_l)
 {
+    time = 0;
     text = str;
     position = Vector2d(pos_x, pos_y);
     offset = Vector2d(off_x, off_y);

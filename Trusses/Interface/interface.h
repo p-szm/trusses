@@ -34,10 +34,11 @@ double px_to_ui_y(double d);
 
 struct Arrows
 {
-    bool left = false;
-    bool right = false;
-    bool up = false;
-    bool down = false;
+    Arrows();
+    bool left;
+    bool right;
+    bool up;
+    bool down;
 };
 
 // * * * * * * * * * * //

@@ -23,6 +23,14 @@
 #include "settings.h"
 #include "tool.h"
 
+Arrows::Arrows()
+{
+    left = false;
+    right = false;
+    up = false;
+    down = false;
+}
+
 // * * * * * * * * * * //
 Arrows arrows;
 bool command_mode = false;

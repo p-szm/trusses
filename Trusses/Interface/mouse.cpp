@@ -12,8 +12,21 @@
 #include "grid.h"
 #include "particle.h"
 #include "bar.h"
+#include <limits>
 
 Mouse mouse;
+
+Mouse::Mouse()
+{
+    pos_world = Vector2d(std::numeric_limits<float>::max(),
+                                  std::numeric_limits<float>::max());
+    pos_screen = Vector2d(std::numeric_limits<float>::max(),
+                                   std::numeric_limits<float>::max());
+    pos_ui = Vector2d(std::numeric_limits<float>::max(),
+                               std::numeric_limits<float>::max());
+    closest_particle = -1;
+    min_click_dist = 10;
+}
 
 void Mouse::update(int x, int y)
 {

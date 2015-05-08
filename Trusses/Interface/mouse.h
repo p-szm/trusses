@@ -10,7 +10,6 @@
 #define __Trusses__mouse__
 
 #include <stdio.h>
-#include <limits>
 #include <vector>
 #include "math.h"
 
@@ -18,31 +17,30 @@
 class Mouse
 {
 public:
+    Mouse();
+    
     // In metres
-    Vector2d pos_world = Vector2d(std::numeric_limits<float>::max(),
-                                  std::numeric_limits<float>::max());
+    Vector2d pos_world;
     
     // In pixels, centred at the centre
-    Vector2d pos_screen = Vector2d(std::numeric_limits<float>::max(),
-                                   std::numeric_limits<float>::max());
+    Vector2d pos_screen;
     
     // In UI coords (-1, 1)
-    Vector2d pos_ui = Vector2d(std::numeric_limits<float>::max(),
-                               std::numeric_limits<float>::max());
+    Vector2d pos_ui;
     
     // Updates pos_world, pos_gl and pos_screen variables from
     // the position of mouse in pixels (starting at top left corner).
     void update(int x, int y); // In pixels
     
     // The id of the closes particle
-    int closest_particle = -1;
+    int closest_particle;
     
     // The position of the closest grid point
     Vector2d closest_grid = pos_world;
     
     // Minimum distance between the mouse and the point (in pixels)
     // for the point to be considered as "clicked".
-    int min_click_dist = 10;
+    int min_click_dist;
     
     // Checks the distance between the mouse and the point against min_click_dist
     bool in_range(Vector2d point) const;
