@@ -36,7 +36,7 @@ public:
     int closest_particle;
     
     // The position of the closest grid point
-    Vector2d closest_grid = pos_world;
+    Vector2d closest_grid;
     
     // Minimum distance between the mouse and the point (in pixels)
     // for the point to be considered as "clicked".

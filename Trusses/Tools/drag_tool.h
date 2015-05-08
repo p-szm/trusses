@@ -13,8 +13,6 @@
 #include "math.h"
 #include <vector>
 
-class Renderer;
-
 // For dragging particles in the simulation mode
 class DragTool: public Tool
 {

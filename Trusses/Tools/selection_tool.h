@@ -14,8 +14,6 @@
 #include <set>
 #include "polygon.h"
 
-class Renderer;
-
 // For selecting particles and deleting them
 class SelectionTool: public Tool
 {

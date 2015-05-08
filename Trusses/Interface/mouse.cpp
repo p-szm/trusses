@@ -26,6 +26,7 @@ Mouse::Mouse()
                                std::numeric_limits<float>::max());
     closest_particle = -1;
     min_click_dist = 10;
+    closest_grid = pos_world;
 }
 
 void Mouse::update(int x, int y)

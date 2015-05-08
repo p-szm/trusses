@@ -22,6 +22,7 @@
 #include "game.h"
 #include "settings.h"
 #include "tool.h"
+#include <cstdlib>
 
 Arrows::Arrows()
 {
@@ -69,7 +70,7 @@ void command_key_down(unsigned char key, int x, int y)
         case 127: case 8:
         {
             if (interpreter.command.size() > 0)
-                interpreter.command.pop_back();
+                interpreter.command.erase(interpreter.command.end()-1);
             break;
         }
         case 9:

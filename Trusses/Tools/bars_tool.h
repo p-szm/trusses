@@ -14,12 +14,10 @@
 #include "math.h"
 #include <vector>
 
-class Renderer;
-
 // For drawing particles and bars
 class BarsTool: public Tool
 {
-    friend Renderer;
+    friend class Renderer;
 public:
     void mouse_click(int button, int state);
     void passive();

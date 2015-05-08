@@ -7,6 +7,8 @@
 //
 
 #include "polygon.h"
+#include <limits>
+#include <stdexcept>
 
 Polygon::Polygon() {}
 

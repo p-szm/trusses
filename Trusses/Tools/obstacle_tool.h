@@ -13,8 +13,6 @@
 #include "tool.h"
 #include "polygon.h"
 
-class Renderer;
-
 // For drawing obstacles
 class ObstacleTool: public Tool
 {
