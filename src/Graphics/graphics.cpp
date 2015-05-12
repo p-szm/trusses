@@ -34,7 +34,6 @@
 void glut_print (float x, float y, std::string s);
 void display_fps(double dt);
 void display_time();
-void display_temperature(double temp);
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b);
 void draw_command_line();
 void draw_rectangle(Vector2d p1, Vector2d p2, bool filled);
@@ -73,19 +72,6 @@ void display_time()
     s.precision(1);
     s << "Time: " << std::fixed << game.simulation_time_s() << " s";
     glut_print(0, -1 + px_to_ui_y(BOTTOM_MARGIN), s.str());
-}
-
-void display_temperature(double temp)
-{    
-    if (temp > MELTING_POINT)
-        glColor3f(RED);
-    else
-        glColor3f(WHITE);
-    
-    std::ostringstream s;
-    s.precision(5);
-    s << "T = " << int(temp) << " K";
-    glut_print(1 - px_to_ui_x(80), -1 + px_to_ui_y(BOTTOM_MARGIN), s.str());
 }
 
 void draw_vector(Vector2d v, Vector2d start, float r, float g, float b)
@@ -269,7 +255,6 @@ void display()
     for (int i = 0; i < buttons.size(); i++)
         buttons[i].draw(renderer);
     
-    display_temperature(game.environment_temp);
     display_time();
     
     // Draw the command line

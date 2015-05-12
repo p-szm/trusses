@@ -208,28 +208,6 @@ void Interpreter::interpret() const
                 n2 = 0;
             Bar::create(n1, n2);
         }
-        else if (types == "wnwn" && words[2] == "stiffness")
-        {
-            double new_stiffness = get_number<double>(words[3]);
-            if (new_stiffness < 0.0)
-                new_stiffness = 0.0;
-            else if (new_stiffness > 1.0)
-                new_stiffness = 1.0;
-            
-            if (is_number(words[1]))
-            {
-                int bar_id = get_number<int>(words[1]);
-                if (bar_id < 0)
-                    bar_id = 0;
-                if (bars.exists(bar_id))
-                    bars[bar_id].stiffness = new_stiffness;
-            }
-            else if (words[1] == "*")
-            {
-                for (int i = 0; i < bars.size(); i++)
-                    bars.at(i).stiffness = new_stiffness;
-            }
-        }
         else
             issue_label("Usage: bar <int> <int>", INFO_LABEL_TIME);
     }
@@ -299,20 +277,6 @@ void Interpreter::interpret() const
         }
         else
             issue_label("Usage: remove bar/particle <id>", INFO_LABEL_TIME);
-    }
-    
-    else if (first_word == "temperature")
-    {
-        if (types == "wn")
-        {
-            // Interpret negative numbers to 0
-            int n = get_number<double>(words[1]);
-            if (n < 0.0)
-                n = 0.0;
-            game.environment_temp = n;
-        }
-        else
-            issue_label("Usage: temperature <value>", INFO_LABEL_TIME);
     }
     
     // TODO: accept only positive integers

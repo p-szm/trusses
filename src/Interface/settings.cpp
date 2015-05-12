@@ -22,7 +22,6 @@ Settings::Settings()
     show_particles = true;
     draw_bounding_boxes = false;
     draw_triangulation = false;
-    bars_color_mode = STRAIN_C;
     gravity = true;
 }
 

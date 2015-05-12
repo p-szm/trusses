@@ -114,44 +114,16 @@ void Renderer::render(const Bar& obj) const
     int mult = 5;
     
     // Color bars according to their strain
-    if (settings.bars_color_mode == STRAIN_C)
-    {
-        // Relative extension
-        double strain = obj.get_strain();
-        if (strain > 1.0)
-            strain = 1.0;
-        else if (strain < -1.0)
-            strain = -1.0;
-        
-        if (strain > 0.0)
-            glColor3f(1.0, 1.0 - mult * strain / MAX_STRAIN, 1.0 - mult * strain / MAX_STRAIN);
-        else
-            glColor3f(1.0 + mult * strain / MAX_STRAIN, 1.0, 1.0);
-    }
-    // Color bars according to their temperature
-    // TODO: Color it appropriately: black-red-yellow-white
-    else if (settings.bars_color_mode == TEMP_C)
-    {
-        double temp_fraction = (obj.get_temperature() - ROOM_TEMP) / (MELTING_POINT - ROOM_TEMP);
-        if (temp_fraction > 0.0)
-            glColor3f(1.0, 1.0 - temp_fraction, 1.0 - temp_fraction); // red
-        else
-            glColor3f(1.0 + temp_fraction, 1.0, 1.0); // cyan
-        
-        // TODO
-        vec3 color;
-        double temp_chunk = MELTING_POINT / 3.0;
-        double temp = obj.get_temperature();
-        if (temp <= temp_chunk)
-            color = vec3(temp / temp_chunk, 0, 0);
-        else if (temp <= 2 * temp_chunk)
-            color = vec3(1.0, (temp - temp_chunk) / temp_chunk, 0.0);
-        else if (temp <= 3 * temp_chunk)
-            color = vec3(1.0, 1.0, (temp - 2 * temp_chunk) / temp_chunk);
-        else
-            color = vec3(1.0, 1.0, 1.0);
-        glColor3f(color.x, color.y, color.z);
-    }
+    double strain = obj.get_strain();
+    if (strain > 1.0)
+        strain = 1.0;
+    else if (strain < -1.0)
+        strain = -1.0;
+    
+    if (strain > 0.0)
+        glColor3f(1.0, 1.0 - mult * strain / MAX_STRAIN, 1.0 - mult * strain / MAX_STRAIN);
+    else
+        glColor3f(1.0 + mult * strain / MAX_STRAIN, 1.0, 1.0);
     
     Vector2d start = particles[obj.p1_id].position_;
     Vector2d end = particles[obj.p2_id].position_;

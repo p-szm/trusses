@@ -153,7 +153,7 @@ int load(std::string filename)
             read_numbers(line, v);
             
             if (v.size() == 4)
-                Bar::create(particles_map[v[0]], particles_map[v[1]], v[2], v[3]);
+                Bar::create(particles_map[v[0]], particles_map[v[1]], v[2]);
             else if (v.size() == 2)
                 Bar::create(particles_map[v[0]], particles_map[v[1]]);
         }
@@ -204,11 +204,11 @@ void save(std::string filename)
     file << std::endl;
     
     // Print bars
-    // b-bar_id particle1_id particle2_id strain temperature
+    // b-bar_id particle1_id particle2_id strain
     for (int i = 0; i < bars.size(); i++)
     {
         Bar& b = bars.at(i);
-        file << 'b' << b.id_ << ' ' << b.p1_id << ' ' << b.p2_id << ' ' << b.get_strain() << ' ' << b.get_temperature() << std::endl;
+        file << 'b' << b.id_ << ' ' << b.p1_id << ' ' << b.p2_id << ' ' << b.get_strain() << ' ' << std::endl;
     }
     file << std::endl;
     

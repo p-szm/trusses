@@ -76,7 +76,10 @@ void DragTool::display(const Renderer& rend)
 
 void DragTool::key_down(unsigned char key)
 {
-    return;
+    if (key == 43 || key == 61)
+        mouse.min_click_dist++;
+    else if (key == 45 && mouse.min_click_dist > 0)
+        mouse.min_click_dist--;
 }
 
 DragTool::DragTool()

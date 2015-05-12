@@ -37,7 +37,6 @@ Game::Game()
     prev_t = t;
     delta_t = 20000;
     simulation_time = 0;
-    environment_temp = ROOM_TEMP;
 }
 
 void Game::update()
@@ -78,7 +77,7 @@ void Game::update_simulation()
     for (int i = 0; i < bars.size(); i++)
     {
         Bar& b = bars.at(i);
-        if (b.update())
+        if (b.is_fractured())
             bars_to_destroy.push_back(b.id_);
     }
     

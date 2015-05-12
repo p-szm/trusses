@@ -14,7 +14,81 @@
 
 SlotMap<Bar> bars;
 
-int Bar::create(int id1, int id2, double e, double temp)
+Bar::Bar(int id1, int id2, double e): p1_id(id1), p2_id(id2)
+{
+    stiffness = 1.0;
+    set_strain(e);
+}
+
+Vector2d Bar::unit12() const
+{
+    return (particles[p2_id].position_ - particles[p1_id].position_).norm();
+}
+
+Vector2d Bar::unit21() const
+{
+    return -unit12();
+}
+
+double Bar::length() const
+{
+    Vector2d pos1 = particles[p1_id].position_;
+    Vector2d pos2 = particles[p2_id].position_;
+    return (pos1 - pos2).abs();
+}
+
+double Bar::extension() const
+{
+    return length() - r0;
+}
+
+void Bar::set_strain(double e)
+{
+    r0 = length() / (e + 1.0);
+}
+
+double Bar::get_strain() const
+{
+    return extension() / r0;
+}
+
+bool Bar::is_fractured() const
+{
+    return abs_d(get_strain()) > MAX_STRAIN;
+}
+
+void Bar::impose_constraint()
+{
+    Particle& p1 = particles[p1_id];
+    Particle& p2 = particles[p2_id];
+    
+    double ext = extension();
+    
+    double im1 = 1/p1.mass_;
+    double im2 = 1/p1.mass_;
+    float mult1 = (im1 / (im1 + im2)) * stiffness;
+    float mult2 = stiffness - mult1;
+    
+    // If one particle is fixed, the other should move two times
+    // farther in the direction of the fixed particle.
+    if (!p1.fixed_ && !p2.fixed_)
+    {
+        p1.position_ += mult1 * ext * unit12();
+        p2.position_ += mult2 * ext * unit21();
+    }
+    else if (!p1.fixed_) // and p2 is fixed
+        p1.position_ += 2 * mult1 * ext * unit12();
+    else if (!p2.fixed_) // and p1 is fixed
+        p2.position_ += 2 * mult2 * ext * unit21();
+    // else both are fixed
+}
+
+int Bar::create(int id1, int id2)
+{
+    return Bar::create(id1, id2, 0.0);
+}
+
+int Bar::create(int id1, int id2, double e)
 {
     if (!particles.exists(id1) || !particles.exists(id2))
     {
@@ -27,27 +101,19 @@ int Bar::create(int id1, int id2, double e, double temp)
         issue_label("Cannot create a bar connecting the same particle", WARNING_LABEL_TIME);
         return -1;
     }
-    
-    // TODO
-    // Write a method that searches contents of a vector (or use an existing one)
+
     int no_bars = (int)particles[id1].bars_connected.size();
     for (int i = 0; i < no_bars; i++)
     {
         int bar_id = particles[id1].bars_connected[i];
-        if ( bars[bar_id].p1_id == id2 || bars[bar_id].p2_id == id2)
+        if (bars[bar_id].p1_id == id2 || bars[bar_id].p2_id == id2)
         {
             issue_label("Bar between these particles already exists", WARNING_LABEL_TIME);
             return -1;
         }
     }
     
-    Bar new_bar(id1, id2);
-    
-    // This sets temperature, r0 and stiffness
-    new_bar.temperature = temp; // Load every bar at room temperature (for now)
-    new_bar.set_strain(e);
-    new_bar.stiffness = -(1.0 - STIFFNESS_AT_TM) * new_bar.temperature / MELTING_POINT + 1.0; // Stiffness is 1 at 0K
-    
+    Bar new_bar(id1, id2, e);
     int new_id = bars.add(new_bar);
     
     // Particles have to know which bars are connected to them
@@ -55,34 +121,6 @@ int Bar::create(int id1, int id2, double e, double temp)
     particles[id2].bars_connected.push_back(new_id);
 
     return new_id;
-}
-
-int Bar::create(int id1, int id2)
-{
-    return Bar::create(id1, id2, 0.0, ROOM_TEMP);
-}
-
-void Bar::set_temperature(double t)
-{
-    temperature = t;
-    r0 = r_0K * (1 + THERMAL_COEFF * temperature); // Assume linear expansion with temperature
-    stiffness = -(1.0 - STIFFNESS_AT_TM) * temperature / MELTING_POINT + 1.0; // Stiffness is 1 at 0K
-}
-
-double Bar::get_temperature() const
-{
-    return temperature;
-}
-
-void Bar::set_strain(double e)
-{
-    r0 = length() / (e + 1.0);
-    r_0K = r0 / (1 + THERMAL_COEFF * temperature);
-}
-
-double Bar::get_strain() const
-{
-    return extension() / r0;
 }
 
 int Bar::destroy(int obj_id)
@@ -118,68 +156,6 @@ int Bar::destroy(int obj_id)
     return 0;
 }
 
-double Bar::length() const
-{
-    Vector2d pos1 = particles[p1_id].position_;
-    Vector2d pos2 = particles[p2_id].position_;
-    double ans = (pos1 - pos2).abs();
-    return ans;
-}
-
-Vector2d Bar::unit12() const
-{
-    return (particles[p1_id].position_ - particles[p2_id].position_).norm();
-}
-
-Vector2d Bar::unit21() const
-{
-    return -unit12();
-}
-
-double Bar::extension() const
-{
-    return length() - r0;
-}
-
-void Bar::impose_constraint()
-{
-    Particle& p1 = particles[p1_id];
-    Particle& p2 = particles[p2_id];
-    
-    double ext = extension();
-    
-    double im1 = 1/p1.mass_;
-    double im2 = 1/p1.mass_;
-    float mult1 = (im1 / (im1 + im2)) * stiffness;
-    float mult2 = stiffness - mult1;
-    
-    // If one particle is fixed, the other should move two times farther in the direction of the fixed particle.
-    if (!p1.fixed_ && !p2.fixed_)
-    {
-        p1.position_ += mult1 * ext * unit21();
-        p2.position_ += mult2 * ext * unit12();
-    }
-    else if (!p1.fixed_) // and p2 is fixed
-        p1.position_ += 2 * mult1 * ext * unit21();
-    else if (!p2.fixed_) // and p1 is fixed
-        p2.position_ += 2 * mult2 * ext * unit12();
-    // else both are fixed
-}
-
-// Returns 1 if bar will be destroyed, 0 otherwise
-int Bar::update()
-{
-    // Temperature expansion
-    if (abs_d(temperature - game.environment_temp) > SMALL_NUM)
-        set_temperature( temperature + game.dt_s()/10.0 * (game.environment_temp - temperature) );
-    
-    // Destroy bars which are extended by too much
-    double ext = extension() / r0;
-    if (abs_d(ext) > MAX_STRAIN || (temperature >= MELTING_POINT && random(1.0) > (1 - (temperature - MELTING_POINT) / 10000.0)))
-        return 1;
-    return 0;
-}
-
 void Bar::split(int bar_id, unsigned int n_parts)
 {
     if (!bars.exists(bar_id))
@@ -202,9 +178,7 @@ void Bar::split(int bar_id, unsigned int n_parts)
     Vector2d pos_start = particles[id_start].position_;
     Vector2d pos_end = particles[id_end].position_;
     
-    double temp = this_bar.temperature;
     double new_r0 = this_bar.r0 / n_parts;
-    double new_r_0K = this_bar.r_0K / n_parts;
     Vector2d Dr = (pos_end - pos_start) / n_parts;
     
     // Create new particles
@@ -233,10 +207,12 @@ void Bar::split(int bar_id, unsigned int n_parts)
             new_bar_id = Bar::create(new_ids[i-1], new_ids[i]);
         
         bars[new_bar_id].r0 = new_r0;
-        bars[new_bar_id].r_0K = new_r_0K;
-        bars[new_bar_id].temperature = temp;
     }
-    
+}
+
+void Bar::draw(const Renderer& rend) const
+{
+    rend.render(*this);
 }
 
 void print_bars()
@@ -245,9 +221,4 @@ void print_bars()
     {
         std::cout << "Bar " << bars.at(i).id_ << std::endl;
     }
-}
-
-void Bar::draw(const Renderer& rend) const
-{
-    rend.render(*this);
 }

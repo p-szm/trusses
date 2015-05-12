@@ -117,14 +117,6 @@ void key_down(unsigned char key, int x, int y)
             glutKeyboardFunc(command_key_down);
             break;
         }
-        case 'c':
-        {
-            if (settings.bars_color_mode == STRAIN_C)
-                settings.bars_color_mode = TEMP_C;
-            else if (settings.bars_color_mode == TEMP_C)
-                settings.bars_color_mode = STRAIN_C;
-            break;
-        }
         case 'f':
         {
             window.full_screen = !window.full_screen;
