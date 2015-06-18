@@ -13,6 +13,8 @@
 
 class Renderer;
 
+enum ToolName {BARS, DELETE, DRAG, MEASURE, OBSTACLE, SELECTION, SPLIT, TRACE, NONE};
+
 // In world coordinates
 class Tool
 {
@@ -24,7 +26,13 @@ public:
     virtual void key_down(unsigned char key) = 0;
     
     static void set(Tool*& tool, Tool* new_tool);
+    Tool();
     virtual ~Tool();
+    
+    ToolName get_name();
+
+protected:
+    ToolName name;
 };
 
 #endif /* defined(__Trusses__tool__) */

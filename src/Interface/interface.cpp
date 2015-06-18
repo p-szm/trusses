@@ -85,6 +85,7 @@ void command_key_down(unsigned char key, int x, int y)
             break;
         }
     }
+    refresh_buttons();
     glutPostRedisplay();
 }
 
@@ -159,6 +160,7 @@ void key_down(unsigned char key, int x, int y)
             break;
     }
     
+    refresh_buttons();
     glutPostRedisplay();
 }
 
@@ -175,6 +177,7 @@ void special_key_down(int key, int x, int y)
         arrows.left = true;
     if (key == GLUT_KEY_RIGHT)
         arrows.right = true;
+    refresh_buttons();
 }
 
 void special_key_up(int key, int x, int y)
@@ -190,6 +193,7 @@ void special_key_up(int key, int x, int y)
         arrows.left = false;
     if (key == GLUT_KEY_RIGHT)
         arrows.right = false;
+    refresh_buttons();
 }
 
 void mouse_click(int button, int state, int x, int y)
@@ -202,7 +206,7 @@ void mouse_click(int button, int state, int x, int y)
         int pressed_button_id = -1;
         for (int i = 0; i < buttons.size() && pressed_button_id == -1; i++)
         {
-            if (buttons[i].highlighted_)
+            if (buttons[i].is_highlighted())
             {
                 buttons[i].execute_action();
                 return;
@@ -212,6 +216,7 @@ void mouse_click(int button, int state, int x, int y)
     
     // Use the current tool
     current_tool->mouse_click(button, state);
+    refresh_buttons();
     glutPostRedisplay();
 }
 

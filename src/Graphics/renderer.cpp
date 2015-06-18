@@ -62,28 +62,12 @@ void Renderer::render(const Particle& obj) const
     {
         double one_px_in_m = px_to_m(1);
         
-        glLineWidth(2);
         glColor3f(TEAL);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        glBegin(GL_TRIANGLES);
-        glVertex2d(pos.x, pos.y);
-        glVertex2d(pos.x + 8*one_px_in_m, pos.y - 14*one_px_in_m);
-        glVertex2d(pos.x - 8*one_px_in_m, pos.y - 14*one_px_in_m);
-        glEnd();
+        draw_circle(pos, one_px_in_m * 7, 20, true);
         
-        glColor3f(WHITE);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        glBegin(GL_TRIANGLES);
-        glVertex2d(pos.x, pos.y);
-        glVertex2d(pos.x + 8*one_px_in_m, pos.y - 14*one_px_in_m);
-        glVertex2d(pos.x - 8*one_px_in_m, pos.y - 14*one_px_in_m);
-        glEnd();
-        
-        glBegin(GL_LINES);
         glLineWidth(1);
-        glVertex2d(pos.x + 14*one_px_in_m, pos.y - 14*one_px_in_m);
-        glVertex2d(pos.x - 14*one_px_in_m, pos.y - 14*one_px_in_m);
-        glEnd();
+        glColor3f(WHITE);
+        draw_circle(pos, one_px_in_m * 7, 20);
     }
     
     // If show particles
@@ -220,7 +204,7 @@ void Renderer::render(const Button& obj) const
     
     if (obj.active_)
     {
-        glColor3f(YELLOW);
+        glColor3f(GOLD);
         glLineWidth(2.0);
     }
     else if (obj.highlighted_)

@@ -13,6 +13,11 @@ Settings settings;
 
 Settings::Settings()
 {
+    reset();
+}
+
+void Settings::reset()
+{
     accelerations = false;
     velocities = false;
     lengths = false;
@@ -23,11 +28,14 @@ Settings::Settings()
     draw_bounding_boxes = false;
     draw_triangulation = false;
     gravity = true;
+    
+    save_path = "";
 }
 
 bool& Settings::bool_member(bool_settings bool_var)
 {
-    switch (bool_var) {
+    switch (bool_var)
+    {
         case LENGTHS:
             return lengths;
         case EXTENSIONS:
@@ -45,7 +53,18 @@ bool& Settings::bool_member(bool_settings bool_var)
         case GRAVITY:
             return gravity;
         default:
-            throw std::invalid_argument("Variable does not exist.");
+            throw std::invalid_argument("Unknown setting");
+    }
+}
+
+std::string& Settings::string_member(string_settings string_var)
+{
+    switch (string_var)
+    {
+        case SAVE_PATH:
+            return save_path;
+        default:
+            throw std::invalid_argument("Unknown setting");
     }
 }
 
@@ -55,14 +74,26 @@ void Settings::set(bool_settings bool_var, bool state)
     member = state;
 }
 
-void Settings::toggle(bool_settings bool_var)
+void Settings::set(string_settings string_var, std::string str)
 {
-    bool& member = bool_member(bool_var);
-    member = !member;
+    std::string& member = string_member(string_var);
+    member = str;
 }
 
 bool Settings::get(bool_settings bool_var)
 {
     bool& member = bool_member(bool_var);
     return member;
+}
+
+std::string& Settings::get(string_settings string_var)
+{
+    std::string& member = string_member(string_var);
+    return member;
+}
+
+void Settings::toggle(bool_settings bool_var)
+{
+    bool& member = bool_member(bool_var);
+    member = !member;
 }

@@ -83,6 +83,7 @@ void BarsTool::key_down(unsigned char key)
 
 BarsTool::BarsTool()
 {
+    name = BARS;
     tool_pos = Vector2d(0, 0);
     snapped = false;
 }

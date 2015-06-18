@@ -60,6 +60,7 @@ void TraceTool::key_down(unsigned char key)
 
 TraceTool::TraceTool()
 {
+    name = TRACE;
     TempLabel::create("Click a particle to trace it. Click again to stop tracing it.", 0, 1, 0, -TOP_MARGIN, TOOL_LABEL_TIME);
 }
 

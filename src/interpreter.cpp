@@ -126,7 +126,7 @@ void Interpreter::interpret() const
             // Check if the path is absolute or relative.
             // If it is relative, assume that it means the save directory.
             if (filepath.find("/") == -1)
-                filepath = SAVE_PATH + filepath;
+                filepath = settings.get(SAVE_PATH) + filepath;
             
             // Try to load the file
             if (load(filepath))
@@ -140,13 +140,13 @@ void Interpreter::interpret() const
     {
         if (words_number == 1)
         {
-            string path = SAVE_PATH;
+            string path = settings.get(SAVE_PATH);
             path += "save-" + date_str() + '-' + time_str();
             save(path);
         }
         else if (words_number == 2)
         {
-            string path = SAVE_PATH;
+            string path = settings.get(SAVE_PATH);
             path += words[1]; // TODO: SECURITY: Check if the filaname is valid
             save(path);
         }

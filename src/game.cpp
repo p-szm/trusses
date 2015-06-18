@@ -17,6 +17,7 @@
 #include "temporary_label.h"
 #include "button.h"
 #include "mouse.h"
+#include "settings.h"
 
 #define RELAX_ITER 30
 
@@ -142,6 +143,7 @@ void Game::reset()
     Tool::set(current_tool, new BarsTool);
     
     window.reset();
+    settings.reset();
 }
 
 double Game::dt_s() const

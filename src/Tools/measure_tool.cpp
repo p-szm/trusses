@@ -70,6 +70,7 @@ void MeasureTool::key_down(unsigned char key)
 
 MeasureTool::MeasureTool()
 {
+    name = MEASURE;
     distance = -1;
     line_width_px = 20;
     TempLabel::create("Select two points to measure the distance between them.", 0, 1, 0, -TOP_MARGIN, TOOL_LABEL_TIME);

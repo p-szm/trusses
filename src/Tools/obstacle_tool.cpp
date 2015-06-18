@@ -58,6 +58,7 @@ void ObstacleTool::key_down(unsigned char key)
 
 ObstacleTool::ObstacleTool()
 {
+    name = OBSTACLE;
     TempLabel::create("Draw an obstacle", 0, 1, 0, -TOP_MARGIN, TOOL_LABEL_TIME);
 }
 

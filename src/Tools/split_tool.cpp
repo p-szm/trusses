@@ -95,6 +95,7 @@ void SplitTool::key_down(unsigned char key)
 
 SplitTool::SplitTool(): max_parts(100)
 {
+    name = SPLIT;
     min_dist_px = 20;
     div_lines_px = 40;
     highlighted_bar = -1;

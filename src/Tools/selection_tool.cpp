@@ -78,6 +78,7 @@ void SelectionTool::key_down(unsigned char key)
 
 SelectionTool::SelectionTool()
 {
+    name = SELECTION;
     TempLabel::create("Create a selection by dragging. Delete with backspace.", 0, 1, 0, -TOP_MARGIN, TOOL_LABEL_TIME);
 }
 

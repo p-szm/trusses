@@ -63,6 +63,7 @@ void DeleteTool::key_down(unsigned char key)
 
 DeleteTool::DeleteTool()
 {
+    name = DELETE;
     particle = -1;
     bar = -1;
     bar_range_px = 20;

@@ -14,4 +14,14 @@ void Tool::set(Tool*& tool, Tool* new_tool)
     tool = new_tool;
 }
 
+ToolName Tool::get_name()
+{
+    return name;
+}
+
+Tool::Tool()
+{
+    name = NONE;
+}
+
 Tool::~Tool() {}

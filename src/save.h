@@ -11,8 +11,6 @@
 
 #include <iostream>
 
-#define SAVE_PATH "/Users/patrick/workspace/saves/"
-
 class Vector2d;
 
 // * * * * * * * * * * //

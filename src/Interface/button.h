@@ -11,6 +11,7 @@
 
 #include <vector>
 #include "various_math.h"
+#include "tool.h"
 
 class Renderer;
 
@@ -20,25 +21,57 @@ class Button
 public:
     int id_;
     std::string text_;
-    bool highlighted_; // Highlighted when the mouse is hovered over it
-    bool active_; // State of the button
-    static int create(double w, double h, double pos_x, double pos_y, int off_x, int off_y, void (*a)(void), std::string t);
-    bool is_hit(double x, double y);// Checks if x and y are inside the button's limits. x and y are in gl coords
-    void execute_action(); // Executes the action and changes the button's state
+    
+    // Should be called when events that can change the button state
+    // happen
+    friend void refresh_buttons();
+    
+    // Highlights buttons if the mouse is hovered over them
+    friend void highlight_buttons(double x, double y);
+    
+    static int create(double w, double h, double pos_x, double pos_y,
+                      int off_x, int off_y, void (*a)(),
+                      bool (*ac)(), std::string t);
+    
+    // Checks if x and y are inside the button's limits.
+    // x and y are in gl coords
+    bool is_hit(double x, double y);
+    
+    // True if the button is highlighted. Equivalent to the is_hit function,
+    // but much faster (but is_hit must be called first each frame).
+    bool is_highlighted();
+    
+    // Executes the button's action
+    void execute_action();
+    
     void draw(const Renderer& rend) const;
-    friend void create_buttons_editor(); // It needs to access the private change_state_ variable
-    friend void create_buttons_simulation();
     
 private:
-    void (*action)(void); // This will be executed when the button is clicked
-    double width_; // In px
-    double height_; // In px
-    bool change_state_; // If false this button can be clicked multiple times without changing its state
+    // This will be executed when the button is clicked
+    void (*action)();
     
-    Vector2d position; // In gl coordinates, anchored to the button's centre
-    Vector2d offset; // In pixels
+    // True if the button is in the active state
+    bool (*active_on)();
     
-    Button(double w, double h, double pos_x, double pos_y, int off_x, int off_y, void (*a)(void), std::string t);
+    // Highlighted when the mouse is hovered over it
+    bool highlighted_;
+    
+    // State of the button
+    bool active_;
+    
+    // In px
+    double width_;
+    double height_;
+    
+    // In gl coordinates, anchored to the button's centre
+    Vector2d position;
+    
+    // In pixels
+    Vector2d offset;
+    
+    Button(double w, double h, double pos_x, double pos_y,
+           int off_x, int off_y, void (*a)(),
+           bool (*ac)(), std::string t);
 };
 
 extern std::vector<Button> buttons;
@@ -46,5 +79,6 @@ extern std::vector<Button> buttons;
 void create_buttons_editor();
 void create_buttons_simulation();
 void highlight_buttons(double x, double y);
+void refresh_buttons();
 
 #endif /* defined(__Trusses__button__) */
