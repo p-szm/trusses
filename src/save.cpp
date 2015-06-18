@@ -152,7 +152,7 @@ int load(std::string filename)
             std::vector<double> v;
             read_numbers(line, v);
             
-            if (v.size() == 4)
+            if (v.size() == 3)
                 Bar::create(particles_map[v[0]], particles_map[v[1]], v[2]);
             else if (v.size() == 2)
                 Bar::create(particles_map[v[0]], particles_map[v[1]]);
