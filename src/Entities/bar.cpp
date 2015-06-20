@@ -11,6 +11,7 @@
 #include "temporary_label.h"
 #include "renderer.h"
 #include "game.h"
+#include "various_math.h"
 
 SlotMap<Bar> bars;
 

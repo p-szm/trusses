@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <vector>
-#include "various_math.h"
+#include "vector2d.h"
 
 // Stores the position of the mouse in different coordinates
 class Mouse

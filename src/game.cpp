@@ -18,6 +18,7 @@
 #include "button.h"
 #include "mouse.h"
 #include "settings.h"
+#include "various_math.h"
 
 #define RELAX_ITER 30
 

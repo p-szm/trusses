@@ -34,6 +34,7 @@
 #include "settings.h"
 #include "mouse.h"
 #include "interface.h"
+#include "various_math.h"
 
 void Renderer::render(const Particle& obj) const
 {

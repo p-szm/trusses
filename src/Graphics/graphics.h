@@ -8,7 +8,7 @@
 
 #ifndef __Trusses__graphics__
 #define __Trusses__graphics__
-#include "various_math.h"
+#include "vector2d.h"
 
 #define COMMAND_LINE_SIZE 30
 #define WORLD_VIEW -window.width/(2.0*window.get_scale()) + window.centre.x, window.width/(2.0*window.get_scale()) + window.centre.x, -window.height/(2.0*window.get_scale()) + window.centre.y, window.height/(2.0*window.get_scale()) + window.centre.y

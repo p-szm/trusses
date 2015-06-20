@@ -10,7 +10,7 @@
 #define __Trusses__particle__
 
 #include <vector>
-#include "various_math.h"
+#include "vector2d.h"
 #include "slot_map.h"
 #include "fixed_size.h"
 

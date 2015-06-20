@@ -14,6 +14,7 @@
 #include "bar.h"
 #include <limits>
 #include "settings.h"
+#include "segment.h"
 
 Mouse mouse;
 

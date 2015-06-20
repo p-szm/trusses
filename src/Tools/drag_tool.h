@@ -10,7 +10,7 @@
 #define __Trusses__drag_tool__
 
 #include "tool.h"
-#include "various_math.h"
+#include "vector2d.h"
 #include <vector>
 
 // For dragging particles in the simulation mode

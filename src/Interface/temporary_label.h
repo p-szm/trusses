@@ -10,7 +10,7 @@
 #define __Trusses__temporary_label__
 
 #include <iostream>
-#include "various_math.h"
+#include "vector2d.h"
 #include "slot_map.h"
 
 #define MODE_LABEL_TIME 4000000

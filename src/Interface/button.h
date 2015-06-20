@@ -10,7 +10,7 @@
 #define __Trusses__button__
 
 #include <vector>
-#include "various_math.h"
+#include "vector2d.h"
 #include "tool.h"
 
 class Renderer;

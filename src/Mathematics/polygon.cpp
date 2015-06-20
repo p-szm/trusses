@@ -9,6 +9,7 @@
 #include "polygon.h"
 #include <limits>
 #include <stdexcept>
+#include "segment.h"
 
 Polygon::Polygon() {}
 

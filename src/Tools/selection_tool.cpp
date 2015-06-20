@@ -13,6 +13,7 @@
 #include "particle.h"
 #include "bars_tool.h"
 #include "renderer.h"
+#include "various_math.h"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else

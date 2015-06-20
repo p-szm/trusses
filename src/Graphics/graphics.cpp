@@ -43,9 +43,6 @@ void draw_point(Vector2d pos);
 void draw_horizon();
 
 // * * * * * * * * * * //
-vec3 hsv_to_rgb(vec3 hsv);
-
-// * * * * * * * * * * //
 Renderer renderer;
 
 // * * * * * * * * * * //
@@ -158,38 +155,6 @@ void draw_cross(Vector2d pos, int size_px)
     glVertex2f(pos.x, pos.y + px_to_m(size_px));
     glVertex2f(pos.x , pos.y - px_to_m(size_px));
     glEnd();
-}
-
-// * * * * * * * * * * //
-// This is not currently used
-vec3 hsv_to_rgb(vec3 hsv) // H is in the range [0,360] degs
-{
-    // TODO: check if given hsv is valid
-    
-    double C = hsv.z * hsv.y;
-    double B = fmod((hsv.x/60.0), 2.0) - 1;
-    double X = C * (1 - abs_d(B));
-    double m = hsv.z - C;
-    int n = (int)hsv.x / 60;
-    
-    vec3 rgb;
-    if (n == 0)
-        rgb = vec3(C, X, 0);
-    else if (n == 1)
-        rgb = vec3(X, C, 0);
-    else if (n == 2)
-        rgb = vec3(0, C, X);
-    else if (n == 3)
-        rgb = vec3(0, X, C);
-    else if (n == 4)
-        rgb = vec3(X, 0, C);
-    else if (n == 5)
-        rgb = vec3(C, 0, X);
-    
-    rgb.x += m;
-    rgb.y += m;
-    rgb.z += m;
-    return rgb;
 }
 
 void draw_point(Vector2d pos)

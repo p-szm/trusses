@@ -9,7 +9,7 @@
 #ifndef __Trusses__window__
 #define __Trusses__window__
 
-#include "various_math.h"
+#include "vector2d.h"
 
 struct Arrows;
 

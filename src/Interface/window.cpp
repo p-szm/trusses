@@ -8,6 +8,7 @@
 
 #include "window.h"
 #include "interface.h"
+#include "various_math.h"
 
 Window window(1000, 700, 50);
 

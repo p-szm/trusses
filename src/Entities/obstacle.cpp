@@ -10,6 +10,7 @@
 #include "particle.h"
 #include "renderer.h"
 #include "temporary_label.h"
+#include "segment.h"
 
 SlotMap<Obstacle> obstacles;
 

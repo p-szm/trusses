@@ -9,7 +9,7 @@
 #ifndef __Trusses__interface__
 #define __Trusses__interface__
 
-#include "various_math.h"
+#include "vector2d.h"
 #include <vector>
 
 class Tool;
