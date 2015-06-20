@@ -13,6 +13,7 @@
 #include "particle.h"
 #include "bar.h"
 #include <limits>
+#include "settings.h"
 
 Mouse mouse;
 
@@ -49,7 +50,7 @@ void Mouse::update(int x, int y)
     }
     
     // Update the closest grid
-    double grid_dist_m = grid.spacing / window.scale;
+    double grid_dist_m = grid.spacing / window.get_scale();
     double closest_x = round(pos_world.x / grid_dist_m) * grid_dist_m;
     double closest_y = round(pos_world.y / grid_dist_m) * grid_dist_m;
     closest_grid = Vector2d(closest_x, closest_y);
@@ -57,7 +58,7 @@ void Mouse::update(int x, int y)
 
 bool Mouse::in_range(Vector2d point) const
 {
-    if ((point - pos_world).abs2() * window.scale * window.scale < min_click_dist * min_click_dist)
+    if ((point - pos_world).abs2() * window.get_scale() * window.get_scale() < min_click_dist * min_click_dist)
         return true;
     return false;
 }
@@ -73,8 +74,12 @@ Vector2d Mouse::snap()
 
 bool Mouse::grid_in_range() const
 {
+    if (!settings.get(GRID))
+        return false;
+    
     if (in_range(closest_grid))
         return true;
+    
     return false;
 }
 

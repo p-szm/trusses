@@ -50,7 +50,8 @@ public:
     // wasn't snapped.
     Vector2d snap();
     
-    // True if the closest grid-point is in range
+    // True if the closest grid-point is in range.
+    // If the grid is turned off it always returns false.
     bool grid_in_range() const;
     
     // True if the closest particle is in range

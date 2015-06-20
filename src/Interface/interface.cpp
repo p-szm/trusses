@@ -40,7 +40,7 @@ Interpreter interpreter;
 
 // * * * * * * * * * * //
 Vector2d px_to_m(const Vector2d& v) {return Vector2d(px_to_m(v.x), px_to_m(v.y));}
-double px_to_m(double d) {return d / window.scale;}
+double px_to_m(double d) {return d / window.get_scale();}
 Vector2d px_to_ui(const Vector2d& v) {return Vector2d(px_to_ui_x(v.x), px_to_ui_y(v.y));}
 double px_to_ui_x(double d) {return d / (window.width/2.0);}
 double px_to_ui_y(double d) {return d / (window.height/2.0);}
@@ -248,6 +248,6 @@ void register_callbacks()
 void idle()
 {
     game.update();
-    window.update_centre(arrows, game.dt_s());
+    window.update(arrows, game.dt_s());
     glutPostRedisplay();
 }

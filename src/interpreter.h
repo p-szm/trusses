@@ -28,6 +28,13 @@ public:
     template <typename T>
     static T get_number(const std::string& input);
     
+    // True if the input can be translated to bool
+    static bool is_bool(const std::string& input);
+    
+    // Get the bool (if the bool cant be extracted the
+    // return value is undefined)
+    static bool get_bool(const std::string& input);
+    
 private:
     // Takes a string str and breaks it up into words or numbers of type T
     // which are put into target_v

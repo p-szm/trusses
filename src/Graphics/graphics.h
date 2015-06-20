@@ -11,7 +11,7 @@
 #include "various_math.h"
 
 #define COMMAND_LINE_SIZE 30
-#define WORLD_VIEW -window.width/(2.0*window.scale) + window.centre.x, window.width/(2.0*window.scale) + window.centre.x, -window.height/(2.0*window.scale) + window.centre.y, window.height/(2.0*window.scale) + window.centre.y
+#define WORLD_VIEW -window.width/(2.0*window.get_scale()) + window.centre.x, window.width/(2.0*window.get_scale()) + window.centre.x, -window.height/(2.0*window.get_scale()) + window.centre.y, window.height/(2.0*window.get_scale()) + window.centre.y
 #define UI_VIEW -1, 1, -1, 1
 
 #define BLACK 0.0, 0.0, 0.0

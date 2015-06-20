@@ -17,6 +17,8 @@
 #include "graphics.h"
 #include "interface.h"
 #include "game.h"
+#include "save.h"
+#include <cstdlib>
 
 // TODO: Velocities are wrong
 // TODO: Important! Check strain signs
@@ -32,6 +34,16 @@ int main(int argc, char * argv[])
     setup_graphics(argc, argv);
     register_callbacks();
     game.enter_editor();
+    
+    // Load the structure from a file if the -f option is used
+    if (argc == 3 && std::string(argv[1]) == "-f")
+    {
+        if (load(argv[2]))
+        {
+            std::cout << "Could not load the file" << std::endl;
+            std::exit(1);
+        }
+    }
     
     glutMainLoop();
     

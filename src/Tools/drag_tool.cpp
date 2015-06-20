@@ -63,7 +63,7 @@ void DragTool::drag()
         }
         else
         {
-            p.external_acceleration_ = dragging_force * (mouse.pos_world - p.position_) / (window.scale * no_part);
+            p.external_acceleration_ = dragging_force * (mouse.pos_world - p.position_) / (window.get_scale() * no_part);
         }
     }
     mouse_previous = mouse.pos_world;

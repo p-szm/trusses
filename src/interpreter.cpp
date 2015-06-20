@@ -73,6 +73,20 @@ T Interpreter::get_number(const string& input)
     return 0;
 }
 
+bool Interpreter::is_bool(const std::string& input)
+{
+    return (input == "True" || input == "true" || input == "1" ||
+            input == "False" || input == "false" || input == "0");
+}
+
+bool Interpreter::get_bool(const std::string &input)
+{
+    if (input == "True" || input == "true" || input == "1")
+        return true;
+    else
+        return false;
+}
+
 void Interpreter::interpret() const
 {
     // Put all the words of this command into the "words" vector of strings
@@ -167,14 +181,14 @@ void Interpreter::interpret() const
     else if (first_word == "scale")
     {
         if (words_number == 1)
-            cout << "scale=" << window.scale << endl;
+            cout << "scale=" << window.get_scale() << endl;
         else if (types == "wn")
         {
             double new_scale = get_number<double>(words[1]);
             if (new_scale <= 0.0)
                 issue_label("Scale has to be positive", WARNING_LABEL_TIME);
             else
-                window.scale = new_scale;
+                window.set_scale(new_scale);
         }
         else
             issue_label("Usage: scale <double>", INFO_LABEL_TIME);

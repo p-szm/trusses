@@ -120,7 +120,7 @@ void action_reset()
 // Save
 void action_save()
 {
-    std::string path = "/Users/patrick/Desktop/save-";
+    std::string path = settings.get(SAVE_PATH);
     path += date_str() + '-' + time_str();
     save(path);
 }
@@ -128,12 +128,12 @@ void action_save()
 // Scale
 void action_scale_up()
 {
-    window.scale *= 1.1;
+    window.scale_by(1.1);
 }
 
 void action_scale_down()
 {
-    window.scale /= 1.1;
+    window.scale_by(1/1.1);
 }
 
 // Triangulation
@@ -156,6 +156,17 @@ void action_bboxes()
 bool active_bboxes()
 {
     return settings.get(BOUNDING_BOXES);
+}
+
+// Grid
+void action_grid()
+{
+    settings.toggle(GRID);
+}
+
+bool active_grid()
+{
+    return settings.get(GRID);
 }
 
 // Simulate
@@ -267,13 +278,15 @@ void create_buttons_editor()
     
     Button::create(w, h, -1.0, 1.0, lmargin, -tmargin-10.5*dy, &action_simulate, NULL, "Simulate");
     
-    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin, &action_bars_tool, &active_bars_tool, "Draw");
-    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-dy, &action_selection_tool, &active_selection_tool, "Select");
-    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-2*dy, &action_obstacle_tool, &active_obstacle_tool, "Obstacle");
-    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-3*dy, &action_trace_tool, &active_trace_tool, "Trace");
-    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-4*dy, &action_split_tool, &active_split_tool, "Split");
-    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-5*dy, &action_measure_tool, &active_measure_tool, "Measure");
-    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-6*dy, &action_delete_tool, &active_delete_tool, "Delete");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin, &action_grid, &active_grid, "Grid");
+    
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-1.5*dy, &action_bars_tool, &active_bars_tool, "Draw");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-2.5*dy, &action_selection_tool, &active_selection_tool, "Select");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-3.5*dy, &action_obstacle_tool, &active_obstacle_tool, "Obstacle");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-4.5*dy, &action_trace_tool, &active_trace_tool, "Trace");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-5.5*dy, &action_split_tool, &active_split_tool, "Split");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-6.5*dy, &action_measure_tool, &active_measure_tool, "Measure");
+    Button::create(w, h, 1.0, 1.0, -lmargin, -tmargin-7.5*dy, &action_delete_tool, &active_delete_tool, "Delete");
     
     refresh_buttons();
 }
