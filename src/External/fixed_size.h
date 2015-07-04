@@ -1,3 +1,11 @@
+//
+//  fixed_size.h
+//  Trusses
+//
+//  Created by Patrick Szmucer on 23/01/2015.
+//  Copyright (c) 2015 Patrick Szmucer. All rights reserved.
+//
+
 #include <vector>
 #include <stdexcept>
 
