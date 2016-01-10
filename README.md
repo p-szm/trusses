@@ -10,6 +10,10 @@ cmake ..
 make
 ```
 
+## Screenshots
+
+![Screenshot](img/trusses_screenshot.png)
+
 ## Controls  
 Left-click to create joints which can then be connected with bars. Press "Simulate" to start the simulation, and "Edit" to pause it.
 Additional tools are available by clicking on different buttons.
