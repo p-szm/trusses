@@ -14,8 +14,10 @@ bool Segment::intersect(const Segment& seg, Vector2d& point, double& t, double& 
     // Check the bounding boxes of the segments first,
     // that is don't check for the intersection if the segments
     // are too far away.
-    if (min(p1.x, p2.x) > max(seg.p1.x, seg.p2.x) || max(p1.x, p2.x) < min(seg.p1.x, p2.x)
-        || min(p1.y, p2.y) > max(seg.p1.y, seg.p2.y) || max(p1.y, p2.y) < min(seg.p1.y, seg.p2.y))
+    if (min(p1.x, p2.x) > max(seg.p1.x, seg.p2.x) || 
+        max(p1.x, p2.x) < min(seg.p1.x, seg.p2.x) || 
+        min(p1.y, p2.y) > max(seg.p1.y, seg.p2.y) || 
+        max(p1.y, p2.y) < min(seg.p1.y, seg.p2.y))
         return false;
     
     Vector2d p = p1;
